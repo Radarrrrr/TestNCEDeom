@@ -28,6 +28,7 @@
 }
 
 
+//TO DO: 这些按钮相关的东西还要再研究，不知道怎么才能把按钮和资源挂起来
 //- (UNNotificationContentExtensionMediaPlayPauseButtonType)mediaPlayPauseButtonType
 //{
 //    return UNNotificationContentExtensionMediaPlayPauseButtonTypeDefault;
