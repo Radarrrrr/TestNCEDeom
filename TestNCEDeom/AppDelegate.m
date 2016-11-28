@@ -18,25 +18,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    
-//    //iOS10特有
-//    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-//    //center.delegate = self;
-//    [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionSound) completionHandler:^(BOOL granted, NSError * _Nullable error) {
-//        
-//        if (granted) {
-//            // 点击允许
-//            NSLog(@"注册成功");
-//            [[UIApplication sharedApplication] registerForRemoteNotifications];
-//        } else {
-//            // 点击不允许
-//            NSLog(@"注册失败");
-//        }
-//        
-//    }];
-
-
-
 
     return YES;
 }
