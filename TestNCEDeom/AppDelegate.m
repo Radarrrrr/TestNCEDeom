@@ -57,10 +57,17 @@
 #pragma mark - APNS
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    NSString *newToken1 = [NSString stringWithFormat:@"%@",deviceToken];
-    NSString *newToken2 = [newToken1 substringWithRange:NSMakeRange(1, [newToken1 length]-2)];
-    NSString *newToken3 = [newToken2 stringByReplacingOccurrencesOfString:@" " withString:@""];
-    NSLog(@"Received token from Apple: %@",newToken3);
+//    NSString *newToken1 = [NSString stringWithFormat:@"%@",deviceToken];
+//    //NSString *newToken2 = [newToken1 substringWithRange:NSMakeRange(1, [newToken1 length]-2)];
+//    //NSString *newToken3 = [newToken2 stringByReplacingOccurrencesOfString:@" " withString:@""];
+//    NSLog(@"Received token from Apple: %@",newToken1);
+    
+    NSString *deviceTokenSt = [[[[deviceToken description]
+                                 stringByReplacingOccurrencesOfString:@"<" withString:@""]
+                                 stringByReplacingOccurrencesOfString:@">" withString:@""]
+                                 stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSLog(@"deviceTokenSt:%@",deviceTokenSt);
+    
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error 
