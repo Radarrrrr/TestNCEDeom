@@ -12,7 +12,7 @@
 #define UNCSTRVALID(str)   [RDUserNotifyCenter checkStringValid:str]   //检查一个字符串是否有效
 
 
-@interface RDUserNotifyCenter ()
+@interface RDUserNotifyCenter () 
 
 @property (nonatomic, strong) NSMutableDictionary *bindingActionsDic; //数据结构：@{@"categoryID":@[action1, action2, ....], ....}
 
@@ -261,6 +261,9 @@
             } else{ // 点击不允许
                 NSLog(@"消息通知注册失败");
             }
+            
+            //触发appDelegate获取devicetoken
+            [[UIApplication sharedApplication] registerForRemoteNotifications];
             
             if(completion)
             {

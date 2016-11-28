@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import <UserNotifications/UserNotifications.h>
 
 @interface AppDelegate ()
 
@@ -17,6 +18,26 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+//    //iOS10特有
+//    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+//    //center.delegate = self;
+//    [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionSound) completionHandler:^(BOOL granted, NSError * _Nullable error) {
+//        
+//        if (granted) {
+//            // 点击允许
+//            NSLog(@"注册成功");
+//            [[UIApplication sharedApplication] registerForRemoteNotifications];
+//        } else {
+//            // 点击不允许
+//            NSLog(@"注册失败");
+//        }
+//        
+//    }];
+
+
+
+
     return YES;
 }
 
@@ -48,11 +69,24 @@
 }
 
 
+
+
+
+/***********************************************************************************************************/
+#pragma mark - APNS
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
+    NSString *newToken1 = [NSString stringWithFormat:@"%@",deviceToken];
+    NSString *newToken2 = [newToken1 substringWithRange:NSMakeRange(1, [newToken1 length]-2)];
+    NSString *newToken3 = [newToken2 stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSLog(@"Received token from Apple: %@",newToken3);
 }
 
-
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error 
+{
+    NSLog(@"register APNS failed reason: %@", error.description);
+}
+/***********************************************************************************************************/
 
 
 
