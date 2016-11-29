@@ -54,6 +54,7 @@
          },
          "category":"myNotificationCategory",
          "badge":1,
+         "mutable-content":1, //iOS10非常重要
          "sound":"default"
     },
     "goto_page":"cms://page_id=14374",
