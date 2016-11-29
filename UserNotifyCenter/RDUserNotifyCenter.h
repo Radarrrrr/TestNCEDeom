@@ -29,6 +29,40 @@
 */
 
 
+/*远程推送的消息通知数据结构如下：
+ 
+ //现有payload格式
+{
+    "aps":
+    {
+        "alert":"xxxxx",
+        "badge":"1",
+        "sound":"default"
+    },
+    "goto_page" = "cms://page_id=14374"
+}
+ 
+ //新版payload格式
+{
+    "aps":
+    {
+         "alert":
+         {
+             "title":"hello",
+             "subtitle":"Session 01",
+             "body":"it is a beautiful day"
+         },
+         "category":"myNotificationCategory",
+         "badge":1,
+         "sound":"default"
+    },
+    "goto_page":"cms://page_id=14374",
+    "image":"https://picjumbo.imgix.net/HNCK8461.jpg?q=40&w=200&sharp=30",
+    "source_url":"xxxxxxxxxxx"
+}
+ 
+ 
+*/
 
 
 #import <Foundation/Foundation.h>
@@ -103,7 +137,8 @@
      @"category_id":@"xxxxx",                //[可选]此通知可以使用的下拉展开窗口的类型 
      @"attach":@"xxxxx",                     //[可选]通知带的图片附件
      @"repeats":@"1",                        //[可选]是否重复，使用0和1 //默认 0
-     @"sound":@"xxxxx"                       //[可选]提示声音文件名，必须来自程序内置的，不写则使用默认声音
+     @"sound":@"xxxxx",                      //[可选]提示声音文件名，必须来自程序内置的，不写则使用默认声音
+     ...                                     //[可选]可以随意添加更多数据，比如链接字典等，都会挂在userInfo里边   
   }
  */
 - (void)scheduleTimeIntervalLocalNotify:(NSDictionary *)info completion:(void(^)(NSString *notifyid))completion; //只用info来规划本地通知, 规划成功以后会返回notifyid, 规划不成功则会返回nil，info也会加入到content.userInfo，用来接到通知以后使用
@@ -119,7 +154,8 @@
     @"category_id":@"xxxxx",                //[可选]此通知可以使用的下拉展开窗口的类型 
     @"attach":@"xxxxx",                     //[可选]通知带的图片附件
     @"repeats":@"1",                        //[可选]是否重复，使用0和1 //默认 0
-    @"sound":@"xxxxx"                       //[可选]提示声音文件名，必须来自程序内置的，不写则使用默认声音
+    @"sound":@"xxxxx",                      //[可选]提示声音文件名，必须来自程序内置的，不写则使用默认声音
+    ...                                     //[可选]可以随意添加更多数据，比如链接字典等，都会挂在userInfo里边 
   }
 */
 - (void)scheduleCalendarLocalNotify:(NSDictionary *)info completion:(void(^)(NSString *notifyid))completion; //只用info来规划本地通知, 规划成功以后会返回notifyid, 规划不成功则会返回nil，info也会加入到content.userInfo，用来接到通知以后使用

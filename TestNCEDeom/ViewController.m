@@ -41,19 +41,19 @@
     
     
     //规划本地通知
-    NSDictionary *info = @{ 
-                              @"fire_timeinterval"  :@"3",   
-                              @"fire_msg"   :@"这是一个本地通知的测试",                   
-                              @"link_url"   :@"check://",                   
-                              @"category_id":@"myNotificationCategory"               
-                              //@"attach"     :@"xxxxx",                    
-                              //@"repeats"    :@"1",                        
-                              //@"sound"      :@"xxxxx"                     
-                          };
-    
-    [[RDUserNotifyCenter sharedCenter] scheduleTimeIntervalLocalNotify:info completion:^(NSString *notifyid) {
-        //do sth...
-    }];
+//    NSDictionary *info = @{ 
+//                              @"fire_timeinterval"  :@"3",   
+//                              @"fire_msg"   :@"这是一个本地通知的测试",                   
+//                              @"link_url"   :@"check://",                   
+//                              @"category_id":@"myNotificationCategory"               
+//                              //@"attach"     :@"xxxxx",                    
+//                              //@"repeats"    :@"1",                        
+//                              //@"sound"      :@"xxxxx"                     
+//                          };
+//    
+//    [[RDUserNotifyCenter sharedCenter] scheduleTimeIntervalLocalNotify:info completion:^(NSString *notifyid) {
+//        //do sth...
+//    }];
     
 }
 
@@ -70,7 +70,21 @@
 
 - (void)didReceiveNotificationResponse:(UNNotificationResponse*)response content:(UNNotificationContent*)content isLocal:(BOOL)blocal
 {
+    NSString     *actionID      = response.actionIdentifier;
+    NSString     *categoryID    = content.categoryIdentifier;
+    NSDictionary *userInfo      = content.userInfo;
     
+    
+    if([response.actionIdentifier isEqualToString:@"com.apple.UNNotificationDefaultActionIdentifier"])
+    {
+        //点击内容窗口进来的
+        NSLog(@"点击内容窗口进来的");
+    }
+    else
+    {
+        //点击自定义Action按钮进来的
+        NSLog(@"点击自定义Action按钮进来的 actionID: %@", response.actionIdentifier);
+    }
     
 }
 
