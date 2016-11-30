@@ -77,12 +77,10 @@
 		0C879C0A1DD4C2B400C3E86E /* RDUserNotifyCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDUserNotifyCenter.h; sourceTree = "<group>"; };
 		0C879C0B1DD4C2B400C3E86E /* RDUserNotifyCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDUserNotifyCenter.m; sourceTree = "<group>"; };
 		0C8B17AA1DE852B800FC3305 /* TestNCEDeom.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestNCEDeom.entitlements; sourceTree = "<group>"; };
-		0C8B17AB1DE85CE000FC3305 /* NotificationViewController.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationViewController.entitlements; sourceTree = "<group>"; };
 		0C8B17B71DED5E3800FC3305 /* NotificationService.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationService.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C8B17B91DED5E3800FC3305 /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
 		0C8B17BA1DED5E3800FC3305 /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
 		0C8B17BC1DED5E3800FC3305 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0C8B17C31DED680800FC3305 /* NotificationService.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationService.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,7 +169,6 @@
 		0C879BDB1DD4692900C3E86E /* NotificationViewController */ = {
 			isa = PBXGroup;
 			children = (
-				0C8B17AB1DE85CE000FC3305 /* NotificationViewController.entitlements */,
 				0C879BDC1DD4692900C3E86E /* NotificationViewController.h */,
 				0C879BDD1DD4692900C3E86E /* NotificationViewController.m */,
 				0C879BDF1DD4692900C3E86E /* MainInterface.storyboard */,
@@ -192,7 +189,6 @@
 		0C8B17B81DED5E3800FC3305 /* NotificationService */ = {
 			isa = PBXGroup;
 			children = (
-				0C8B17C31DED680800FC3305 /* NotificationService.entitlements */,
 				0C8B17B91DED5E3800FC3305 /* NotificationService.h */,
 				0C8B17BA1DED5E3800FC3305 /* NotificationService.m */,
 				0C8B17BC1DED5E3800FC3305 /* Info.plist */,
@@ -295,7 +291,7 @@
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -570,7 +566,6 @@
 		0C8B17C01DED5E3800FC3305 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = NotificationService/NotificationService.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = ZTW9XPA927;
 				INFOPLIST_FILE = NotificationService/Info.plist;
@@ -585,7 +580,6 @@
 		0C8B17C11DED5E3800FC3305 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = NotificationService/NotificationService.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = ZTW9XPA927;
 				INFOPLIST_FILE = NotificationService/Info.plist;
