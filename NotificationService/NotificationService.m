@@ -29,7 +29,7 @@
     // 重写一些东西
     self.bestAttemptContent.title = @"我是标题";
     self.bestAttemptContent.subtitle = @"我是子标题";
-    self.bestAttemptContent.body = @"来自徐不同";
+    self.bestAttemptContent.body = @"Y的终于调通了";
     
     // 附件
 //    NSDictionary *dict =  self.bestAttemptContent.userInfo;
