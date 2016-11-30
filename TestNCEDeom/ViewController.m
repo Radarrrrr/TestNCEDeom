@@ -31,7 +31,7 @@
     [[RDUserNotifyCenter sharedCenter] prepareBindingActions];
 
     [[RDUserNotifyCenter sharedCenter] appendAction:@"action1" actionTitle:@"进去看看" options:UNNotificationActionOptionForeground toCategory:@"myNotificationCategory"];
-    [[RDUserNotifyCenter sharedCenter] appendAction:@"action2" actionTitle:@"取消" options:UNNotificationActionOptionForeground toCategory:@"myNotificationCategory"];
+    [[RDUserNotifyCenter sharedCenter] appendAction:@"action2" actionTitle:@"取消" options:UNNotificationActionOptionDestructive toCategory:@"myNotificationCategory"];
     
 //    [[RDUserNotifyCenter sharedCenter] appendAction:@"action11" actionTitle:@"第11个anction显示" options:UNNotificationActionOptionForeground toCategory:@"category_the_second"];
 //    [[RDUserNotifyCenter sharedCenter] appendAction:@"action12" actionTitle:@"第12个anction显示" options:UNNotificationActionOptionForeground toCategory:@"category_the_second"];
