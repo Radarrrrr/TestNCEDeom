@@ -7,6 +7,8 @@
 //
 
 #import "NotificationService.h"
+#import "RDUserNotifyCenter.h"
+
 
 @interface NotificationService ()
 

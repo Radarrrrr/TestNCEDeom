@@ -74,6 +74,14 @@
 
 
 
+
+#pragma mark -
+#pragma mark 一些通用的宏，用来全局使用，统一改动
+#define RDUserNotifyCenter_App_Group_Suit @"group.com.dangdang.app"
+
+
+
+
 @protocol RDUserNotifyCenterDelegate <NSObject>
 @optional
 
@@ -173,9 +181,13 @@
 
 
 //一些配套方法
-+ (NSString *)md5NotifyID:(NSString *)notifyIdStr;                  //字符串做md5，仅供本类使用，不做别的用途，别处使用需要使用通用方法里边的
++ (NSString *)md5NotifyID:(NSString *)notifyIdStr;                  //字符串做md5，仅供外部调用本类时，拼一个id，和本地做对应，不做别的用途，别处使用需要使用通用方法里边的
 + (NSDateComponents *)compoFromDateString:(NSString *)dateString;   //根据日期格式获得NSDateComponents对象 //格式必须为: @"YY-MM-dd HH:mm:ss"
 + (NSDateComponents *)compoFromDate:(NSDate*)date;                  //根据日期对象获得NSDateComponents对象
+
++ (void)saveDataToGroup:(id)data;
++ (id)loadDataFromGroup;
+
 
 
 @end

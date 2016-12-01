@@ -77,6 +77,9 @@
 		0C3522111DEFCFC900D9DBEF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		0C3522131DEFCFC900D9DBEF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0C35221B1DEFD54300D9DBEF /* launch_image@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "launch_image@2x.jpg"; sourceTree = "<group>"; };
+		0C35221D1DF0064A00D9DBEF /* NotificationViewController.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationViewController.entitlements; sourceTree = "<group>"; };
+		0C35221E1DF0065600D9DBEF /* NotificationService.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationService.entitlements; sourceTree = "<group>"; };
+		0C35221F1DF0066200D9DBEF /* NotifyExtensionProduct.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotifyExtensionProduct.entitlements; sourceTree = "<group>"; };
 		0C879BB71DD468CF00C3E86E /* TestNCEDeom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestNCEDeom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C879BBB1DD468CF00C3E86E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		0C879BBD1DD468CF00C3E86E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -142,6 +145,7 @@
 		0C35220C1DEFCFC900D9DBEF /* NotifyExtensionProduct */ = {
 			isa = PBXGroup;
 			children = (
+				0C35221F1DF0066200D9DBEF /* NotifyExtensionProduct.entitlements */,
 				0C35220D1DEFCFC900D9DBEF /* NotificationViewController.h */,
 				0C35220E1DEFCFC900D9DBEF /* NotificationViewController.m */,
 				0C3522101DEFCFC900D9DBEF /* MainInterface.storyboard */,
@@ -220,6 +224,7 @@
 		0C879BDB1DD4692900C3E86E /* NotificationViewController */ = {
 			isa = PBXGroup;
 			children = (
+				0C35221D1DF0064A00D9DBEF /* NotificationViewController.entitlements */,
 				0C879BDC1DD4692900C3E86E /* NotificationViewController.h */,
 				0C879BDD1DD4692900C3E86E /* NotificationViewController.m */,
 				0C879BDF1DD4692900C3E86E /* MainInterface.storyboard */,
@@ -240,6 +245,7 @@
 		0C8B17B81DED5E3800FC3305 /* NotificationService */ = {
 			isa = PBXGroup;
 			children = (
+				0C35221E1DF0065600D9DBEF /* NotificationService.entitlements */,
 				0C8B17B91DED5E3800FC3305 /* NotificationService.h */,
 				0C8B17BA1DED5E3800FC3305 /* NotificationService.m */,
 				0C8B17BC1DED5E3800FC3305 /* Info.plist */,
@@ -335,12 +341,20 @@
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = ZTW9XPA927;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 					0C879BB61DD468CF00C3E86E = {
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = ZTW9XPA927;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
@@ -354,6 +368,9 @@
 						DevelopmentTeam = ZTW9XPA927;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
 							com.apple.Push = {
 								enabled = 0;
 							};
@@ -364,6 +381,9 @@
 						DevelopmentTeam = ZTW9XPA927;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
 							com.apple.Push = {
 								enabled = 0;
 							};
@@ -525,6 +545,7 @@
 		0C3522171DEFCFC900D9DBEF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = NotifyExtensionProduct/NotifyExtensionProduct.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = ZTW9XPA927;
 				INFOPLIST_FILE = NotifyExtensionProduct/Info.plist;
@@ -539,6 +560,8 @@
 		0C3522181DEFCFC900D9DBEF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = NotifyExtensionProduct/NotifyExtensionProduct.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = ZTW9XPA927;
 				INFOPLIST_FILE = NotifyExtensionProduct/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -671,6 +694,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = NO;
+				CODE_SIGN_ENTITLEMENTS = NotificationViewController/NotificationViewController.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = ZTW9XPA927;
 				INFOPLIST_FILE = NotificationViewController/Info.plist;
@@ -685,6 +709,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = NO;
+				CODE_SIGN_ENTITLEMENTS = NotificationViewController/NotificationViewController.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = ZTW9XPA927;
 				INFOPLIST_FILE = NotificationViewController/Info.plist;
@@ -698,6 +723,7 @@
 		0C8B17C01DED5E3800FC3305 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = NotificationService/NotificationService.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = ZTW9XPA927;
 				INFOPLIST_FILE = NotificationService/Info.plist;
@@ -712,6 +738,7 @@
 		0C8B17C11DED5E3800FC3305 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = NotificationService/NotificationService.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = ZTW9XPA927;
 				INFOPLIST_FILE = NotificationService/Info.plist;
@@ -733,6 +760,7 @@
 				0C3522181DEFCFC900D9DBEF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0C879BB21DD468CF00C3E86E /* Build configuration list for PBXProject "TestNCEDeom" */ = {
 			isa = XCConfigurationList;
