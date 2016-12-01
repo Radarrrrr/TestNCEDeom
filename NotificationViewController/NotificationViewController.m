@@ -11,6 +11,7 @@
 #import <UserNotificationsUI/UserNotificationsUI.h>
 #import "RDUserNotifyCenter.h"
 
+
 @interface NotificationViewController () <UNNotificationContentExtension>
 
 
@@ -25,9 +26,11 @@
 }
 
 - (void)didReceiveNotification:(UNNotification *)notification {
-    int i=0;
+   
     
-    //[RDUserNotifyCenter loadDataFromGroup:@"dddd"];
+    id data = [RDUserNotifyCenter loadDataFromGroup:notification.request.identifier];
+    UIImage *image = [UIImage imageWithData:data];
+    int i=0;
 }
 
 

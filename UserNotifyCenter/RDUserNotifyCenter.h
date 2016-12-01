@@ -10,6 +10,9 @@
 //注：获取devicetoken的方法，仍然是在appDelegate中使用:
 //   - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 
+//特别注意：必须在每个Target里面，点击buildSettings 然后把Require Only App-Extension-Safe API 然后把YES改为NO，否则可能遇到如下问题：
+//'sharedApplication' is unavailable: not available on iOS (App Extension) - Use view controller based
+
 
 
 /*

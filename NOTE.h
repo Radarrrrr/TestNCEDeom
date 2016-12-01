@@ -14,7 +14,7 @@
 
 
 /*
-使用自定义category，推送图片，下拉展示自定义界面
+使用自定义category，推送图片，下拉展示自定义界面，在自定义界面里边，通过group共享数据，自行绘制图片展示
 {"aps":{"alert":"it is a beautiful day","badge":1,"mutable-content":"1","category":"myNotificationCategory","sound":"default"},"goto_page":"cms://page_id=14374","image":"https://picjumbo.imgix.net/HNCK8461.jpg?q=40&w=200&sharp=30"}
 */
 

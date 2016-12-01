@@ -10,7 +10,6 @@
 #import "RDUserNotifyCenter.h"
 
 
-
 @interface NotificationService ()
 
 @property (nonatomic, strong) void (^contentHandler)(UNNotificationContent *contentToDeliver);
@@ -60,7 +59,7 @@
             id data = [NSData dataWithContentsOfURL:attach.URL];
             UIImage *image = [UIImage imageWithData:data];
             
-            //[RDUserNotifyCenter saveDataToGroup:data forNotifyID:request.identifier];
+            [RDUserNotifyCenter saveDataToGroup:data forNotifyID:request.identifier];
             int i=0;
             //------------------
             

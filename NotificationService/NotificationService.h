@@ -7,6 +7,7 @@
 //
 
 #import <UserNotifications/UserNotifications.h>
+#import <UIKit/UIKit.h>
 
 @interface NotificationService : UNNotificationServiceExtension
 

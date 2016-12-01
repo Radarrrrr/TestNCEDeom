@@ -13,6 +13,9 @@
 		0C3522121DEFCFC900D9DBEF /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C3522101DEFCFC900D9DBEF /* MainInterface.storyboard */; };
 		0C3522161DEFCFC900D9DBEF /* NotifyExtensionProduct.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 0C3522091DEFCFC900D9DBEF /* NotifyExtensionProduct.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0C35221C1DEFD54300D9DBEF /* launch_image@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0C35221B1DEFD54300D9DBEF /* launch_image@2x.jpg */; };
+		0C35223F1DF0410000D9DBEF /* RDUserNotifyCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C879C0B1DD4C2B400C3E86E /* RDUserNotifyCenter.m */; };
+		0C3522401DF0411D00D9DBEF /* RDUserNotifyCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C879C0B1DD4C2B400C3E86E /* RDUserNotifyCenter.m */; };
+		0C3522411DF0419B00D9DBEF /* RDUserNotifyCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C879C0B1DD4C2B400C3E86E /* RDUserNotifyCenter.m */; };
 		0C879BBC1DD468CF00C3E86E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C879BBB1DD468CF00C3E86E /* main.m */; };
 		0C879BBF1DD468CF00C3E86E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C879BBE1DD468CF00C3E86E /* AppDelegate.m */; };
 		0C879BC21DD468CF00C3E86E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C879BC11DD468CF00C3E86E /* ViewController.m */; };
@@ -25,7 +28,6 @@
 		0C879BE11DD4692900C3E86E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C879BDF1DD4692900C3E86E /* MainInterface.storyboard */; };
 		0C879BE51DD4692900C3E86E /* NotificationViewController.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 0C879BD51DD4692900C3E86E /* NotificationViewController.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0C879C0C1DD4C2B400C3E86E /* RDUserNotifyCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C879C0B1DD4C2B400C3E86E /* RDUserNotifyCenter.m */; };
-		0C879C0D1DD4C2B400C3E86E /* RDUserNotifyCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C879C0B1DD4C2B400C3E86E /* RDUserNotifyCenter.m */; };
 		0C8B17BB1DED5E3800FC3305 /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C8B17BA1DED5E3800FC3305 /* NotificationService.m */; };
 		0C8B17BF1DED5E3800FC3305 /* NotificationService.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 0C8B17B71DED5E3800FC3305 /* NotificationService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -456,6 +458,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C3522401DF0411D00D9DBEF /* RDUserNotifyCenter.m in Sources */,
 				0C35220F1DEFCFC900D9DBEF /* NotificationViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -475,7 +478,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C879C0D1DD4C2B400C3E86E /* RDUserNotifyCenter.m in Sources */,
+				0C35223F1DF0410000D9DBEF /* RDUserNotifyCenter.m in Sources */,
 				0C879BDE1DD4692900C3E86E /* NotificationViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -484,6 +487,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C3522411DF0419B00D9DBEF /* RDUserNotifyCenter.m in Sources */,
 				0C8B17BB1DED5E3800FC3305 /* NotificationService.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -547,6 +551,7 @@
 		0C3522171DEFCFC900D9DBEF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
 				CODE_SIGN_ENTITLEMENTS = NotifyExtensionProduct/NotifyExtensionProduct.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = ZTW9XPA927;
@@ -562,6 +567,7 @@
 		0C3522181DEFCFC900D9DBEF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
 				CODE_SIGN_ENTITLEMENTS = NotifyExtensionProduct/NotifyExtensionProduct.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = ZTW9XPA927;
@@ -725,6 +731,7 @@
 		0C8B17C01DED5E3800FC3305 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
 				CODE_SIGN_ENTITLEMENTS = NotificationService/NotificationService.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = ZTW9XPA927;
@@ -740,6 +747,7 @@
 		0C8B17C11DED5E3800FC3305 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
 				CODE_SIGN_ENTITLEMENTS = NotificationService/NotificationService.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = ZTW9XPA927;

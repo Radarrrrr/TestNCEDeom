@@ -25,22 +25,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "NotificationViewController/NotificationViewController.m"
-            timestampString = "502280749.011882"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "29"
-            endingLineNumber = "29"
-            landmarkName = "-didReceiveNotification:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "UserNotifyCenter/RDUserNotifyCenter.m"
             timestampString = "502274537.617855"
             startingColumnNumber = "9223372036854775807"
@@ -48,22 +32,6 @@
             startingLineNumber = "187"
             endingLineNumber = "187"
             landmarkName = "+saveDataToGroup:forNotifyID:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "NotificationService/NotificationService.m"
-            timestampString = "502280749.011882"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "65"
-            endingLineNumber = "65"
-            landmarkName = "-didReceiveNotificationRequest:withContentHandler:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -84,11 +52,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NotificationService/NotificationService.m"
-            timestampString = "502280737.289558"
+            timestampString = "502284811.439932"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
             landmarkName = "-didReceiveNotificationRequest:withContentHandler:"
             landmarkType = "7">
          </BreakpointContent>
