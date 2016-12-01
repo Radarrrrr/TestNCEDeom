@@ -85,7 +85,6 @@
 //    [[UNUserNotificationCenter currentNotificationCenter] getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> * _Nonnull categories) {
 //        NSLog(@"%ld", categories.count);
 //    }];
-    
 }
 
 

@@ -22,34 +22,27 @@
     self.bestAttemptContent = [request.content mutableCopy];
     
     // Modify the notification content here...
-    self.bestAttemptContent.title = [NSString stringWithFormat:@"%@ [modified]", self.bestAttemptContent.title];
+//    self.bestAttemptContent.title = [NSString stringWithFormat:@"%@ [modified]", self.bestAttemptContent.title];
+//    
+//    // 重写一些东西
+    self.bestAttemptContent.title = @"我是标题，这说明我拦截了通知了";
+//    self.bestAttemptContent.subtitle = @"我是子标题";
+//    self.bestAttemptContent.body = @"Y的终于调通了";
     
     
-    self.contentHandler(self.bestAttemptContent);
     
-    return;
     
-    // 重写一些东西
-    self.bestAttemptContent.title = @"我是标题";
-    self.bestAttemptContent.subtitle = @"我是子标题";
-    self.bestAttemptContent.body = @"Y的终于调通了";
+    // 这里添加一些点击事件，可以在收到通知的时候，添加，也可以在拦截通知的这个扩展中添加
+    //self.bestAttemptContent.categoryIdentifier = @"myNotificationCategory";
+    
     
     // 附件
     NSDictionary *dict =  self.bestAttemptContent.userInfo;
-//    NSDictionary *notiDict = dict[@"aps"];
-//    NSString *imgUrl = [NSString stringWithFormat:@"%@",notiDict[@"imageAbsoluteString"]];
-    
     NSString *imgUrl = dict[@"image"];
     if(!imgUrl || [imgUrl isEqualToString:@""]) 
     {
         self.contentHandler(self.bestAttemptContent);
     }
-    
-    
-    // 这里添加一些点击事件，可以在收到通知的时候，添加，也可以在拦截通知的这个扩展中添加
-//    self.bestAttemptContent.categoryIdentifier = @"category1";
-    
-    
     
     //放在最后
     [self loadAttachmentForUrlString:imgUrl withType:@"jpg" completionHandle:^(UNNotificationAttachment *attach) {
@@ -85,13 +78,13 @@
     //下载图片
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[session downloadTaskWithURL:attachmentURL
-                completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
+                completionHandler:^(NSURL *temporaryFileLocation, NSURLResponse *response, NSError *error) {
                     if (error != nil) {
                         NSLog(@"%@", error.localizedDescription);
                     } else {
                         NSFileManager *fileManager = [NSFileManager defaultManager];
-                        NSURL *localURL = [NSURL fileURLWithPath:[location.path stringByAppendingString:fileExt]];
-                        [fileManager moveItemAtURL:location toURL:localURL error:&error];
+                        NSURL *localURL = [NSURL fileURLWithPath:[temporaryFileLocation.path stringByAppendingString:fileExt]];
+                        [fileManager moveItemAtURL:temporaryFileLocation toURL:localURL error:&error];
                         
                         NSError *attachmentError = nil;
                         attachment = [UNNotificationAttachment attachmentWithIdentifier:@"" URL:localURL options:nil error:&attachmentError];

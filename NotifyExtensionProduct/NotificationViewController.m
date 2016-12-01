@@ -9,6 +9,7 @@
 #import "NotificationViewController.h"
 #import <UserNotifications/UserNotifications.h>
 #import <UserNotificationsUI/UserNotificationsUI.h>
+#import "RDUserNotifyCenter.h"
 
 @interface NotificationViewController () <UNNotificationContentExtension>
 
