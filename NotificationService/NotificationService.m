@@ -53,6 +53,7 @@
         
         if (attach) {
             self.bestAttemptContent.attachments = [NSArray arrayWithObject:attach];
+            self.bestAttemptContent.launchImageName = @"launch_image@2x.jpg";
         }
         self.contentHandler(self.bestAttemptContent);
         
@@ -78,15 +79,16 @@
     NSURL *attachmentURL = [NSURL URLWithString:urlStr];
     NSString *fileExt = [self fileExtensionForMediaType:type];
     
+    //下载图片
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[session downloadTaskWithURL:attachmentURL
-                completionHandler:^(NSURL *temporaryFileLocation, NSURLResponse *response, NSError *error) {
+                completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
                     if (error != nil) {
                         NSLog(@"%@", error.localizedDescription);
                     } else {
                         NSFileManager *fileManager = [NSFileManager defaultManager];
-                        NSURL *localURL = [NSURL fileURLWithPath:[temporaryFileLocation.path stringByAppendingString:fileExt]];
-                        [fileManager moveItemAtURL:temporaryFileLocation toURL:localURL error:&error];
+                        NSURL *localURL = [NSURL fileURLWithPath:[location.path stringByAppendingString:fileExt]];
+                        [fileManager moveItemAtURL:location toURL:localURL error:&error];
                         
                         NSError *attachmentError = nil;
                         attachment = [UNNotificationAttachment attachmentWithIdentifier:@"" URL:localURL options:nil error:&attachmentError];
@@ -96,7 +98,6 @@
                     }
                     
                     completionHandler(attachment);
-                    
                     
                 }] resume];
     
