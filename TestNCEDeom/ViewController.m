@@ -40,6 +40,7 @@
     
     
     
+    
     //规划本地通知
 //    NSDictionary *info = @{ 
 //                              @"fire_timeinterval"  :@"3",   
@@ -54,6 +55,28 @@
 //    [[RDUserNotifyCenter sharedCenter] scheduleTimeIntervalLocalNotify:info completion:^(NSString *notifyid) {
 //        //do sth...
 //    }];
+    
+    
+    
+    //全量规划本地通知
+//    [[RDUserNotifyCenter sharedCenter] scheduleLocalNotify:nil 
+//                                              timeInterval:@"3" 
+//                                                   repeats:NO 
+//                                                     title:@"这是一个标题" 
+//                                                  subtitle:@"这是一个副标题"
+//                                                      body:@"这是通知文本正文" 
+//                                                attachment:@"launch_image@2x.jpg" 
+//                                                lauchImage:@"launch_image@2x.jpg" 
+//                                                     sound:nil 
+//                                                     badge:1 
+//                                                      info:nil 
+//                                               useCategory:nil 
+//                                                  notifyid:@"123456788" 
+//                                                completion:^(NSError *error) {
+//                                                    //do sth...
+//                                                }
+//     ];
+    
     
 }
 

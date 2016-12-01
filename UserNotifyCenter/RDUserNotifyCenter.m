@@ -427,7 +427,7 @@
         }
         else
         {
-            //没写后缀，默认就是.json
+            //没写后缀，默认就是.png
             name = attachmentName;
             type = @"png";
         }

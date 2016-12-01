@@ -119,7 +119,7 @@
                    subtitle:(NSString *)subtitle
                        body:(NSString *)body
                  attachment:(NSString *)attachmentName        //附件图片的名字即可，里边会自动在bundle里边找
-                 lauchImage:(NSString *)lauchImageName        //下拉放大的时候展示的图片，也是在bundle里边找
+                 lauchImage:(NSString *)lauchImageName        //下拉放大的时候展示的图片，也是在bundle里边找, PS://如果想显示这个图片，则必须不使用自定义category，即需要categoryid=nil
                       sound:(NSString *)soundName
                       badge:(NSInteger)badge
                        info:(NSDictionary *)infoDic           //用来记录要传递的内容，跳转字典等都放这里

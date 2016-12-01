@@ -25,6 +25,9 @@
     self.bestAttemptContent.title = [NSString stringWithFormat:@"%@ [modified]", self.bestAttemptContent.title];
     
     
+    self.contentHandler(self.bestAttemptContent);
+    
+    return;
     
     // 重写一些东西
     self.bestAttemptContent.title = @"我是标题";
@@ -53,13 +56,13 @@
         
         if (attach) {
             self.bestAttemptContent.attachments = [NSArray arrayWithObject:attach];
-            self.bestAttemptContent.launchImageName = @"launch_image@2x.jpg";
+            //self.bestAttemptContent.launchImageName = @"launch_image@2x.jpg";
         }
         self.contentHandler(self.bestAttemptContent);
         
     }];
     
-//    self.contentHandler(self.bestAttemptContent);
+
 }
 
 - (void)serviceExtensionTimeWillExpire {
