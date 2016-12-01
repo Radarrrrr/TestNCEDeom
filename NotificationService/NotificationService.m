@@ -27,7 +27,7 @@
 //    self.bestAttemptContent.title = [NSString stringWithFormat:@"%@ [modified]", self.bestAttemptContent.title];
 //    
 //    // 重写一些东西
-    self.bestAttemptContent.title = @"我是标题，我拦截到通知了";
+    self.bestAttemptContent.title = @"我是新标题，说明我拦截到通知了";
 //    self.bestAttemptContent.subtitle = @"我是子标题";
 //    self.bestAttemptContent.body = @"Y的终于调通了";
     
@@ -40,7 +40,8 @@
     
     // 附件
     NSDictionary *dict =  self.bestAttemptContent.userInfo;
-    NSString *imgUrl = dict[@"image"];
+    NSDictionary *apsDict = dict[@"aps"];    
+    NSString *imgUrl = apsDict[@"attach"];
     if(!imgUrl || [imgUrl isEqualToString:@""]) 
     {
         self.contentHandler(self.bestAttemptContent);
@@ -54,14 +55,14 @@
             //self.bestAttemptContent.launchImageName = @"launch_image@2x.jpg";
             
             
-            //------------------
-            //save image
-            id data = [NSData dataWithContentsOfURL:attach.URL];
-            UIImage *image = [UIImage imageWithData:data];
-            
-            [RDUserNotifyCenter saveDataToGroup:data forNotifyID:request.identifier];
-            int i=0;
-            //------------------
+//            //------------------
+//            //save image
+//            id data = [NSData dataWithContentsOfURL:attach.URL];
+//            UIImage *image = [UIImage imageWithData:data];
+//            
+//            [RDUserNotifyCenter saveDataToGroup:data forNotifyID:request.identifier];
+//            int i=0;
+//            //------------------
             
         }
         self.contentHandler(self.bestAttemptContent);
@@ -95,6 +96,19 @@
                     if (error != nil) {
                         NSLog(@"%@", error.localizedDescription);
                     } else {
+                        
+                        
+//                        //------------------
+//                        //save image
+//                        id data = [NSData dataWithContentsOfURL:temporaryFileLocation];
+//                        UIImage *image = [UIImage imageWithData:data];
+//                        
+//                        [RDUserNotifyCenter saveDataToGroup:data forNotifyID:@"222222"];
+//                        int i=0;
+//                        //------------------
+                        
+                        
+                        
                         NSFileManager *fileManager = [NSFileManager defaultManager];
                         NSURL *localURL = [NSURL fileURLWithPath:[temporaryFileLocation.path stringByAppendingString:fileExt]];
                         [fileManager moveItemAtURL:temporaryFileLocation toURL:localURL error:&error];

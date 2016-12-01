@@ -178,28 +178,87 @@
 }
 
 
-+ (void)saveDataToGroup:(id)data forNotifyID:(NSString*)notifyid
+//+ (void)saveDataToGroup:(id)data forNotifyID:(NSString*)notifyid
+//{
+//    if(!data) return;
+//    if(!UNCSTRVALID(notifyid)) return;
+//    
+//    //TO DO: 这里还没有处理清空，可能会因为通知越来越多而导致越存越大
+//    //向group里边写入数据，group中所有的extension都可以使用
+//    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:RDUserNotifyCenter_App_Group_Suit];
+//    [shared setObject:data forKey:notifyid];
+//    [shared synchronize];
+//}
+//+ (id)loadDataFromGroup:(NSString*)notifyid
+//{
+//    if(!UNCSTRVALID(notifyid)) return nil;
+//    
+//    //从group里边取出数据使用
+//    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:RDUserNotifyCenter_App_Group_Suit];
+//    id data = [shared objectForKey:notifyid];
+//    
+//    return data;
+//}
+
+
++ (void)saveDataToGroup:(id)data forKey:(NSString*)key
 {
     if(!data) return;
-    if(!UNCSTRVALID(notifyid)) return;
+    if(!UNCSTRVALID(key)) return;
     
+    //TO DO: 这里还没有处理清空，可能会因为通知越来越多而导致越存越大
     //向group里边写入数据，group中所有的extension都可以使用
     NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:RDUserNotifyCenter_App_Group_Suit];
-    [shared setObject:data forKey:notifyid];
+    [shared setObject:data forKey:key];
     [shared synchronize];
 }
-+ (id)loadDataFromGroup:(NSString*)notifyid
++ (id)loadDataFromGroup:(NSString*)key
 {
-    if(!UNCSTRVALID(notifyid)) return nil;
+    if(!UNCSTRVALID(key)) return nil;
     
     //从group里边取出数据使用
     NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:RDUserNotifyCenter_App_Group_Suit];
-    id data = [shared objectForKey:notifyid];
+    id data = [shared objectForKey:key];
     
     return data;
 }
 
 
++ (void)downAndSaveDataToGroup:(NSString*)dataUrl keyInstead:(NSString*)keyInstead completion:(void(^)(id data))completion
+{
+    if(!UNCSTRVALID(dataUrl)) return;
+    
+    //下载数据
+    NSURL *downUrl = [NSURL URLWithString:dataUrl];
+    if(!downUrl) return;
+    
+    //下载图片
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    [[session downloadTaskWithURL:downUrl
+                completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
+                    
+                    id data = nil;
+                    
+                    if(!error)
+                    {
+                        data = [NSData dataWithContentsOfURL:location];
+                    
+                        NSString *key = dataUrl;
+                        if(UNCSTRVALID(keyInstead))
+                        {
+                            key = keyInstead;
+                        }
+                        
+                        [self saveDataToGroup:data forKey:key];
+                    }  
+                    
+                    if(completion)
+                    {
+                        completion(data);
+                    }
+                    
+                }] resume];
+}
 
 
 

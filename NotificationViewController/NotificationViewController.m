@@ -28,9 +28,9 @@
 - (void)didReceiveNotification:(UNNotification *)notification {
    
     
-    id data = [RDUserNotifyCenter loadDataFromGroup:notification.request.identifier];
-    UIImage *image = [UIImage imageWithData:data];
-    int i=0;
+//    id data = [RDUserNotifyCenter loadDataFromGroup:notification.request.identifier];
+//    UIImage *image = [UIImage imageWithData:data];
+//    int i=0;
 }
 
 

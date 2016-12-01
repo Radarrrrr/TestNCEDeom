@@ -18,3 +18,37 @@
 {"aps":{"alert":"it is a beautiful day","badge":1,"mutable-content":"1","category":"myNotificationCategory","sound":"default"},"goto_page":"cms://page_id=14374","image":"https://picjumbo.imgix.net/HNCK8461.jpg?q=40&w=200&sharp=30"}
 */
 
+
+
+
+
+//建议使用的推送结构
+{
+    "aps":
+    {
+        "alert":
+        {
+            "title":"我是原装标题",
+            "subtitle":"我是副标题",
+            "body":"it is a beautiful day"
+        },
+        "badge":1,
+        "sound":"default",
+        "mutable-content":"1",
+        "category":"myNotificationCategory",
+        "attach":"https://picjumbo.imgix.net/HNCK8461.jpg?q=40&w=200&sharp=30"
+    },
+    "goto_page":"cms://page_id=14374"
+}
+
+
+/*
+//完整版推送通知，
+{"aps":{"alert":{"title":"我是原装标题","subtitle":"我是副标题","body":"it is a beautiful day"},"badge":1,"sound":"default","mutable-content":"1","category":"myNotificationCategory","attach":"https://picjumbo.imgix.net/HNCK8461.jpg?q=40&w=200&sharp=30"},"goto_page":"cms://page_id=14374"}
+
+*/
+
+
+
+
+
