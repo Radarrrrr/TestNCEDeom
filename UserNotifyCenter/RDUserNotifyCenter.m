@@ -178,6 +178,32 @@
 }
 
 
++ (void)saveDataToGroup:(id)data forNotifyID:(NSString*)notifyid
+{
+    if(!data) return;
+    if(!UNCSTRVALID(notifyid)) return;
+    
+    //向group里边写入数据，group中所有的extension都可以使用
+    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:RDUserNotifyCenter_App_Group_Suit];
+    [shared setObject:data forKey:notifyid];
+    [shared synchronize];
+}
++ (id)loadDataFromGroup:(NSString*)notifyid
+{
+    if(!UNCSTRVALID(notifyid)) return nil;
+    
+    //从group里边取出数据使用
+    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:RDUserNotifyCenter_App_Group_Suit];
+    id data = [shared objectForKey:notifyid];
+    
+    return data;
+}
+
+
+
+
+
+
 
 
 

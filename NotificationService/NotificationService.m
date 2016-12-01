@@ -10,6 +10,7 @@
 #import "RDUserNotifyCenter.h"
 
 
+
 @interface NotificationService ()
 
 @property (nonatomic, strong) void (^contentHandler)(UNNotificationContent *contentToDeliver);
@@ -27,7 +28,7 @@
 //    self.bestAttemptContent.title = [NSString stringWithFormat:@"%@ [modified]", self.bestAttemptContent.title];
 //    
 //    // 重写一些东西
-    self.bestAttemptContent.title = @"我是标题，这说明我拦截了通知了";
+    self.bestAttemptContent.title = @"我是标题，我拦截到通知了";
 //    self.bestAttemptContent.subtitle = @"我是子标题";
 //    self.bestAttemptContent.body = @"Y的终于调通了";
     
@@ -52,6 +53,17 @@
         if (attach) {
             self.bestAttemptContent.attachments = [NSArray arrayWithObject:attach];
             //self.bestAttemptContent.launchImageName = @"launch_image@2x.jpg";
+            
+            
+            //------------------
+            //save image
+            id data = [NSData dataWithContentsOfURL:attach.URL];
+            UIImage *image = [UIImage imageWithData:data];
+            
+            //[RDUserNotifyCenter saveDataToGroup:data forNotifyID:request.identifier];
+            int i=0;
+            //------------------
+            
         }
         self.contentHandler(self.bestAttemptContent);
         

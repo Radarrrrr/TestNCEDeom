@@ -26,6 +26,8 @@
 
 - (void)didReceiveNotification:(UNNotification *)notification {
     int i=0;
+    
+    //[RDUserNotifyCenter loadDataFromGroup:@"dddd"];
 }
 
 

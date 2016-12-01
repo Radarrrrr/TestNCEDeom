@@ -80,6 +80,7 @@
 		0C35221D1DF0064A00D9DBEF /* NotificationViewController.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationViewController.entitlements; sourceTree = "<group>"; };
 		0C35221E1DF0065600D9DBEF /* NotificationService.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationService.entitlements; sourceTree = "<group>"; };
 		0C35221F1DF0066200D9DBEF /* NotifyExtensionProduct.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotifyExtensionProduct.entitlements; sourceTree = "<group>"; };
+		0C35222A1DF0178B00D9DBEF /* NOTE.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NOTE.h; sourceTree = "<group>"; };
 		0C879BB71DD468CF00C3E86E /* TestNCEDeom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestNCEDeom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C879BBB1DD468CF00C3E86E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		0C879BBD1DD468CF00C3E86E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -165,6 +166,7 @@
 		0C879BAE1DD468CF00C3E86E = {
 			isa = PBXGroup;
 			children = (
+				0C35222A1DF0178B00D9DBEF /* NOTE.h */,
 				0C35221A1DEFD54300D9DBEF /* images */,
 				0C879C061DD4C22000C3E86E /* UserNotifyCenter */,
 				0C879BB91DD468CF00C3E86E /* TestNCEDeom */,

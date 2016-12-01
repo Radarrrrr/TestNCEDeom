@@ -185,8 +185,8 @@
 + (NSDateComponents *)compoFromDateString:(NSString *)dateString;   //根据日期格式获得NSDateComponents对象 //格式必须为: @"YY-MM-dd HH:mm:ss"
 + (NSDateComponents *)compoFromDate:(NSDate*)date;                  //根据日期对象获得NSDateComponents对象
 
-+ (void)saveDataToGroup:(id)data;
-+ (id)loadDataFromGroup;
++ (void)saveDataToGroup:(id)data forNotifyID:(NSString*)notifyid;   //根据通知的id存储数据到group里边
++ (id)loadDataFromGroup:(NSString*)notifyid;                        //根据通知的id从group里边取出存储的数据
 
 
 
