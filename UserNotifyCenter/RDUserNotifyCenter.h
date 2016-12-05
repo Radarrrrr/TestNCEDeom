@@ -10,9 +10,10 @@
 //注2: 获取devicetoken的方法，仍然是在appDelegate中使用:
 //   - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 
-//注3: 本类默认使用attach字段当作推送过来的图片的指定字段，如果接口用了别的，让接口改吧，因为iOS10这个事情应该由客户端发起，并且之前也没有这个字段的需求，所以可以由客户端指定
+//注3: 推送的payload中，所有字段必须不能重名，否则会选择最前面的字段使用
+//注4: 本类默认使用attach字段当作推送过来的图片的指定字段，如果接口用了别的，让接口改吧，因为iOS10这个事情应该由客户端发起，并且之前也没有这个字段的需求，所以可以由客户端指定
 
-//注4: attach字段所带过来的url里边，一定要带上类型后缀，比如.jpg .png .gif .mp3 .m4a .mp4 .m4v，不一定在最后，中间也可以。
+//注5: attach字段所带过来的url里边，一定要带上类型后缀，比如.jpg .png .gif .mp3 .m4a .mp4 .m4v，不一定在最后，中间也可以。
 //     本类会自动检测url中，只要出现了这几种类型，自会处理，如果什么都没带，按照.jpg处理
 
 //特别注意：必须在每个Target里面，点击buildSettings 然后把Require Only App-Extension-Safe API 然后把YES改为NO，否则可能遇到如下问题：
@@ -86,7 +87,7 @@
 #pragma mark 一些通用的宏，用来全局使用，统一改动
 //TO DO: 用程序获得group suit,才能全自动！
 //TO DO: 想办法把这两个宏都弄成自动的才行
-#define RDUserNotifyCenter_App_Group_Suit       @"group.com.dangdang.app"       //app group的suitname，必须和设置里边制定的相同
+#define RDUserNotifyCenter_app_group_suite      @"group.com.dangdang.app"       //app group的suitname，必须和设置里边制定的相同
 #define RDUserNotifyCenter_default_attach_key   @"attach"                       //通知payload里边，默认的attachment文件的字段，建议接口端按照这个字段设定，否则需要客户端由此宏修改来指定
 
 
@@ -228,8 +229,9 @@
 
 
 //数据读取
-+ (id)loadDataFromGroup:(NSString*)urlorKey;          //根据通知的id从group里边取出存储的数据，key有可能是url也可能是自定义的，取决于存的时候用的是哪个
-
+//根据key从group里边取出存储的数据，key有可能是url也可能是自定义的, 如果明确知道存储的时候用的是什么key，那么notify字段可以设定为nil，反之则会模糊查找，使用key对应的url来读取。
+//PS:notify可以是UNNotificationRequest类型，也可以是UNNotification，也可以是UNNotificationContent类型，也可以是userInfo字典本身，方法内会自动检测
++ (id)loadDataFromGroup:(NSString*)loadKey forNotification:(id)notify;  
 
 
 

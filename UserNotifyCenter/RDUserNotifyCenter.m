@@ -996,7 +996,7 @@
     //- (void)removePersistentDomainForName:(NSString *)domainName;
     
     //向group里边写入数据，group中所有的extension都可以使用
-    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:RDUserNotifyCenter_App_Group_Suit];
+    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:RDUserNotifyCenter_app_group_suite];
     [shared setObject:data forKey:key];
     [shared synchronize];
 }
@@ -1020,13 +1020,46 @@
     if(!UNCSTRVALID(urlorKey)) return nil;
     
     //从group里边取出数据使用
-    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:RDUserNotifyCenter_App_Group_Suit];
+    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:RDUserNotifyCenter_app_group_suite];
     id data = [shared objectForKey:urlorKey];
     
     return data;
 }
 
 
++ (id)loadDataFromGroup:(NSString*)loadKey forNotification:(id)notify
+{
+    if(!UNCSTRVALID(loadKey)) return nil;
+    
+    
+    id data = [self loadDataFromGroup:loadKey];
+//    if(!data)
+//    {
+//        id value = [RDUserNotifyCenter getValueForKey:@"attach" inNotification:notification];
+//        //TO DO: 完成这个逻辑
+//    }
+    
+    return data;
+}
+
+
+//+ (id)fuzzyLoadDataFromGroup:(NSString*)key forNotification:(id)notify
+//{
+//    //不能明确存储的时候用的key是什么，那么就模糊查找吧
+//    NSString *theKey = loadKey;
+//    
+//    //先看是否直接使用url读取
+////    if([urlorKey hasPrefix:@"http://"] || [urlorKey hasPrefix:@"https://"])
+////    {
+////        loadKey = urlorKey;
+////    }
+//    
+//    //如果不是url，就看是否是payload的key，获取到url以后再读取
+//    id value = [self getValueForKey:<#(NSString *)#> inNotification:<#(id)#>];
+//    
+//    
+//    //如果都不是，那可能是用户自定义的，那就直接用这个自定义key获取
+//}
 
 
 

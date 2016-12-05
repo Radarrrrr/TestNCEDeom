@@ -39,45 +39,53 @@
     //self.bestAttemptContent.categoryIdentifier = @"myNotificationCategory";
     
     
-    // 附件
-    NSDictionary *dict =  self.bestAttemptContent.userInfo;
-    NSDictionary *apsDict = dict[@"aps"];    
-    NSString *imgUrl = apsDict[@"attach"];
-    if(!imgUrl || [imgUrl isEqualToString:@""]) 
-    {
-        self.contentHandler(self.bestAttemptContent);
-    }
     
-    
-//    [RDUserNotifyCenter downAndSaveDataToGroup:imgUrl keyInstead:@"attach" completion:^(id data) {
-//        <#code#>
-//    }];
-    
-    
-    
-    
-    //放在最后
-    [self loadAttachmentForUrlString:imgUrl withType:@"jpg" completionHandle:^(UNNotificationAttachment *attach) {
+    //获取attachment并且存入group
+    [RDUserNotifyCenter downAndSaveAttachmentForNotifyRequest:request completion:^(UNNotificationAttachment *attach) {
         
-        if (attach) {
+        if(attach)
+        {
             self.bestAttemptContent.attachments = [NSArray arrayWithObject:attach];
-            //self.bestAttemptContent.launchImageName = @"launch_image@2x.jpg";
-            
-            
-//            //------------------
-//            //save image
-//            id data = [NSData dataWithContentsOfURL:attach.URL];
-//            UIImage *image = [UIImage imageWithData:data];
-//            
-//            [RDUserNotifyCenter saveDataToGroup:data forNotifyID:request.identifier];
-//            int i=0;
-//            //------------------
-            
         }
         self.contentHandler(self.bestAttemptContent);
-        
     }];
     
+    
+    
+    return;
+    //下面的是例子代码的--------
+    
+    // 附件
+//    NSDictionary *dict =  self.bestAttemptContent.userInfo;
+//    NSDictionary *apsDict = dict[@"aps"];    
+//    NSString *imgUrl = apsDict[@"attach"];
+//    if(!imgUrl || [imgUrl isEqualToString:@""]) 
+//    {
+//        self.contentHandler(self.bestAttemptContent);
+//    }
+//
+//    //放在最后
+//    [self loadAttachmentForUrlString:imgUrl withType:@"jpg" completionHandle:^(UNNotificationAttachment *attach) {
+//        
+//        if (attach) {
+//            self.bestAttemptContent.attachments = [NSArray arrayWithObject:attach];
+//            //self.bestAttemptContent.launchImageName = @"launch_image@2x.jpg";
+//            
+//            
+////            //------------------
+////            //save image
+////            id data = [NSData dataWithContentsOfURL:attach.URL];
+////            UIImage *image = [UIImage imageWithData:data];
+////            
+////            [RDUserNotifyCenter saveDataToGroup:data forNotifyID:request.identifier];
+////            int i=0;
+////            //------------------
+//            
+//        }
+//        self.contentHandler(self.bestAttemptContent);
+//        
+//    }];
+//    
 
 }
 

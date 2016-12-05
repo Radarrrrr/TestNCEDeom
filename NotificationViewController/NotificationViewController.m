@@ -29,9 +29,12 @@
    
     //TO DO: 这里要考虑是否可以使用RULImageView直接加载一个url图片？？
     
-//    id data = [RDUserNotifyCenter loadDataFromGroup:notification.request.identifier];
-//    UIImage *image = [UIImage imageWithData:data];
-//    int i=0;
+//    NSString *keyurl = [RDUserNotifyCenter getValueForKey:@"attach" inNotification:notification];
+//    id data = [RDUserNotifyCenter loadDataFromGroup:keyurl];
+    
+    id data = [RDUserNotifyCenter loadDataFromGroup:@"attach" forNotification:notification];
+    UIImage *image = [UIImage imageWithData:data];
+    int i=0;
 }
 
 
