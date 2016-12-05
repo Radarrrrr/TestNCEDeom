@@ -153,6 +153,7 @@
  @{ 
      @"fire_timeinterval":@"5",              //触发时间延时 //注意，repeats的规则是下一次触发点是本次触发以后的timeinterval时间以后
      @"fire_msg":@"xxxxx",                   //触发时的显示信息
+ 
      @"link_url":@"xxxxx",                   //[可选]跳转字典
      @"category_id":@"xxxxx",                //[可选]此通知可以使用的下拉展开窗口的类型 
      @"attach":@"xxxxx",                     //[可选]通知带的图片附件
@@ -170,6 +171,7 @@
  @{ 
     @"fire_date":@"YY-MM-dd HH:mm:ss",      //触发事件 //注意，repeats的规则是寻找下一次可以触发的时间点，所以如果每日触发，则不能写年、月、日，以此类推，以空格为界，分别向中间减少元素 如 MM-dd HH:mm  写的时候一定要注意前后不能出现空格，否则会出错
     @"fire_msg":@"xxxxx",                   //触发时的显示信息
+ 
     @"link_url":@"xxxxx",                   //[可选]跳转字典
     @"category_id":@"xxxxx",                //[可选]此通知可以使用的下拉展开窗口的类型 
     @"attach":@"xxxxx",                     //[可选]通知带的图片附件

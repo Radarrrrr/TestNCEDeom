@@ -16,6 +16,7 @@
 		0C35223F1DF0410000D9DBEF /* RDUserNotifyCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C879C0B1DD4C2B400C3E86E /* RDUserNotifyCenter.m */; };
 		0C3522401DF0411D00D9DBEF /* RDUserNotifyCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C879C0B1DD4C2B400C3E86E /* RDUserNotifyCenter.m */; };
 		0C3522411DF0419B00D9DBEF /* RDUserNotifyCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C879C0B1DD4C2B400C3E86E /* RDUserNotifyCenter.m */; };
+		0C3522451DF5586800D9DBEF /* attach_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C3522441DF5586800D9DBEF /* attach_image.png */; };
 		0C879BBC1DD468CF00C3E86E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C879BBB1DD468CF00C3E86E /* main.m */; };
 		0C879BBF1DD468CF00C3E86E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C879BBE1DD468CF00C3E86E /* AppDelegate.m */; };
 		0C879BC21DD468CF00C3E86E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C879BC11DD468CF00C3E86E /* ViewController.m */; };
@@ -83,6 +84,7 @@
 		0C35221E1DF0065600D9DBEF /* NotificationService.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationService.entitlements; sourceTree = "<group>"; };
 		0C35221F1DF0066200D9DBEF /* NotifyExtensionProduct.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotifyExtensionProduct.entitlements; sourceTree = "<group>"; };
 		0C35222A1DF0178B00D9DBEF /* NOTE.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NOTE.h; sourceTree = "<group>"; };
+		0C3522441DF5586800D9DBEF /* attach_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = attach_image.png; sourceTree = "<group>"; };
 		0C879BB71DD468CF00C3E86E /* TestNCEDeom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestNCEDeom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C879BBB1DD468CF00C3E86E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		0C879BBD1DD468CF00C3E86E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 		0C35221A1DEFD54300D9DBEF /* images */ = {
 			isa = PBXGroup;
 			children = (
+				0C3522441DF5586800D9DBEF /* attach_image.png */,
 				0C35221B1DEFD54300D9DBEF /* launch_image@2x.jpg */,
 			);
 			path = images;
@@ -429,6 +432,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C3522451DF5586800D9DBEF /* attach_image.png in Resources */,
 				0C35221C1DEFD54300D9DBEF /* launch_image@2x.jpg in Resources */,
 				0C879BCA1DD468CF00C3E86E /* LaunchScreen.storyboard in Resources */,
 				0C879BC71DD468CF00C3E86E /* Assets.xcassets in Resources */,

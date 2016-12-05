@@ -58,23 +58,23 @@
     
     
     //全量规划本地通知
-//    [[RDUserNotifyCenter sharedCenter] scheduleLocalNotify:nil 
-//                                              timeInterval:@"3" 
-//                                                   repeats:NO 
-//                                                     title:@"这是一个标题" 
-//                                                  subtitle:@"这是一个副标题"
-//                                                      body:@"这是通知文本正文" 
-//                                                attachment:@"launch_image@2x.jpg" 
-//                                                lauchImage:@"launch_image@2x.jpg" 
-//                                                     sound:nil 
-//                                                     badge:1 
-//                                                      info:nil 
-//                                               useCategory:nil 
-//                                                  notifyid:@"123456788" 
-//                                                completion:^(NSError *error) {
-//                                                    //do sth...
-//                                                }
-//     ];
+    [[RDUserNotifyCenter sharedCenter] scheduleLocalNotify:nil 
+                                              timeInterval:@"3" 
+                                                   repeats:NO 
+                                                     title:@"这是一个标题" 
+                                                  subtitle:@"这是一个副标题"
+                                                      body:@"这是通知文本正文" 
+                                                attachment:@"attach_image.png" 
+                                                lauchImage:@"launch_image@2x.jpg" 
+                                                     sound:nil 
+                                                     badge:1 
+                                                      info:nil 
+                                               useCategory:nil 
+                                                  notifyid:@"123456788" 
+                                                completion:^(NSError *error) {
+                                                    //do sth...
+                                                }
+     ];
     
     
 }
