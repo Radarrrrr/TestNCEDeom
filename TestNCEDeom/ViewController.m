@@ -19,7 +19,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-
     //注册
     [[RDUserNotifyCenter sharedCenter] registerUserNotification:self completion:^(BOOL success) {
         //do sth..

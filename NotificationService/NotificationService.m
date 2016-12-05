@@ -32,7 +32,8 @@
 //    self.bestAttemptContent.body = @"Y的终于调通了";
     
     
-    
+//    self.contentHandler(self.bestAttemptContent);
+//    return;
     
     // 这里添加一些点击事件，可以在收到通知的时候，添加，也可以在拦截通知的这个扩展中添加
     //self.bestAttemptContent.categoryIdentifier = @"myNotificationCategory";
@@ -46,6 +47,14 @@
     {
         self.contentHandler(self.bestAttemptContent);
     }
+    
+    
+//    [RDUserNotifyCenter downAndSaveDataToGroup:imgUrl keyInstead:@"attach" completion:^(id data) {
+//        <#code#>
+//    }];
+    
+    
+    
     
     //放在最后
     [self loadAttachmentForUrlString:imgUrl withType:@"jpg" completionHandle:^(UNNotificationAttachment *attach) {

@@ -27,6 +27,7 @@
 
 - (void)didReceiveNotification:(UNNotification *)notification {
    
+    //TO DO: 这里要考虑是否可以使用RULImageView直接加载一个url图片？？
     
 //    id data = [RDUserNotifyCenter loadDataFromGroup:notification.request.identifier];
 //    UIImage *image = [UIImage imageWithData:data];

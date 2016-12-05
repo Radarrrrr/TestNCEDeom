@@ -6,9 +6,14 @@
 //  Copyright © 2016年 Radar. All rights reserved.
 //
 
-//注：本类必须iOS10以上使用
-//注：获取devicetoken的方法，仍然是在appDelegate中使用:
+//注1: 本类必须iOS10以上使用
+//注2: 获取devicetoken的方法，仍然是在appDelegate中使用:
 //   - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+
+//注3: 本类默认使用attach字段当作推送过来的图片的指定字段，如果接口用了别的，让接口改吧，因为iOS10这个事情应该由客户端发起，并且之前也没有这个字段的需求，所以可以由客户端指定
+
+//注4: attach字段所带过来的url里边，一定要带上类型后缀，比如.jpg .png .gif .mp3 .m4a .mp4 .m4v，不一定在最后，中间也可以。
+//     本类会自动检测url中，只要出现了这几种类型，自会处理，如果什么都没带，按照.jpg处理
 
 //特别注意：必须在每个Target里面，点击buildSettings 然后把Require Only App-Extension-Safe API 然后把YES改为NO，否则可能遇到如下问题：
 //'sharedApplication' is unavailable: not available on iOS (App Extension) - Use view controller based
@@ -34,7 +39,7 @@
 
 /*远程推送的消息通知数据结构如下：
  
- //现有payload格式
+//现有payload格式
 {
     "aps":
     {
@@ -45,24 +50,23 @@
     "goto_page" = "cms://page_id=14374"
 }
  
- //新版payload格式
+//建议使用的新版payload格式，请注意，payload内部字段不可以相同
 {
     "aps":
     {
-         "alert":
-         {
-             "title":"hello",
-             "subtitle":"Session 01",
-             "body":"it is a beautiful day"
-         },
-         "category":"myNotificationCategory",
-         "badge":1,
-         "mutable-content":1, //iOS10非常重要
-         "sound":"default"
+        "alert":
+        {
+            "title":"我是原装标题",
+            "subtitle":"我是副标题",
+            "body":"it is a beautiful day"
+        },
+        "badge":1,
+        "sound":"default",
+        "mutable-content":"1",
+        "category":"myNotificationCategory",
+        "attach":"https://picjumbo.imgix.net/HNCK8461.jpg?q=40&w=200&sharp=30"
     },
-    "goto_page":"cms://page_id=14374",
-    "image":"https://picjumbo.imgix.net/HNCK8461.jpg?q=40&w=200&sharp=30",
-    "source_url":"xxxxxxxxxxx"
+    "goto_page":"cms://page_id=14374"
 }
  
  
@@ -80,8 +84,10 @@
 
 #pragma mark -
 #pragma mark 一些通用的宏，用来全局使用，统一改动
-#define RDUserNotifyCenter_App_Group_Suit @"group.com.dangdang.app"
-
+//TO DO: 用程序获得group suit,才能全自动！
+//TO DO: 想办法把这两个宏都弄成自动的才行
+#define RDUserNotifyCenter_App_Group_Suit       @"group.com.dangdang.app"       //app group的suitname，必须和设置里边制定的相同
+#define RDUserNotifyCenter_default_attach_key   @"attach"                       //通知payload里边，默认的attachment文件的字段，建议接口端按照这个字段设定，否则需要客户端由此宏修改来指定
 
 
 
@@ -107,6 +113,9 @@
 
 
 
+
+
+#pragma mark - 注册通知，绑定action，规划本地通知
 //注册通知，本地+远程，需要在适当的时候调用一次本方法，app才会开启通知功能 //特别注意，此方法必须在程序启动的时候调用一次，不管以前是否注册过，否则会收不到通知 //单独写此方法是因为很多app在第一次使用的时候，要紧跟着开启定位，通知，数据，三个提醒，太烦人了以至于用户很容易点错。
 - (void)registerUserNotification:(id)delegate completion:(void (^)(BOOL success))completion;
 
@@ -115,7 +124,6 @@
 - (void)prepareBindingActions;
 - (void)appendAction:(NSString *)actionID actionTitle:(NSString *)title options:(UNNotificationActionOptions)options toCategory:(NSString *)categoryID;
 - (void)bindingActions; //prepare和binding必须配套使用
-
 
 
 
@@ -183,19 +191,43 @@
 + (void)checkHasScheduledById:(NSString *)notifyid feedback:(void(^)(BOOL scheduled))completion;             //通过notifyid判断是否已经添加
 
 
-//一些配套方法
+
+
+
+#pragma mark - 注册和规划使用通知相关的一些配套方法
 + (NSString *)md5NotifyID:(NSString *)notifyIdStr;                  //字符串做md5，仅供外部调用本类时，拼一个id，和本地做对应，不做别的用途，别处使用需要使用通用方法里边的
 + (NSDateComponents *)compoFromDateString:(NSString *)dateString;   //根据日期格式获得NSDateComponents对象 //格式必须为: @"YY-MM-dd HH:mm:ss"
-+ (NSDateComponents *)compoFromDate:(NSDate*)date;                  //根据日期对象获得NSDateComponents对象
++ (NSDateComponents *)compoFromDate:(NSDate *)date;                  //根据日期对象获得NSDateComponents对象
 
 
-//Extension间数据读取及共享相关方法
-//+ (void)saveDataToGroup:(id)data forNotifyID:(NSString*)notifyid;   //根据通知的id存储数据到group里边
-//+ (id)loadDataFromGroup:(NSString*)notifyid;                        //根据通知的id从group里边取出存储的数据
+//PS:不用管payload的结构和层级关系，只管输入想要找的字段key就行了，里边会遍历找到对应的key
+//PS:如果返回的类型是NSNumber类型，那么会自动转换成NSString类型输出，这么做的目的是因为有些字段在接口端可能会是数字也有的可能会是字符串推过来，所以统一进行一下强转，外面不要再判断类型了，这里只会返回NSString类型以及NSDiction和NSArray类型。
+//PS:notify可以是UNNotificationRequest类型，也可以是UNNotification，也可以是UNNotificationContent类型，也可以是userInfo字典本身，方法内会自动检测
++ (id)getValueForKey:(NSString*)key inNotification:(id)notify;   //从notification中获取key对应的value
 
-+ (void)downAndSaveDataToGroup:(NSString*)dataUrl keyInstead:(NSString*)keyInstead completion:(void(^)(id data))completion; //使用dataUrl下载对应的数据，存储为NSData形式，如果keyInstead存在，则使用keyInstead作为存储的key，否则使用dataUrl作为key存储
 
-//+ (void)saveNotificationToGroup:(id)notifySource 
+
+
+#pragma mark - 给UNNotificationServiceExtension配套的方法
+//从通知中获取attachment，默认使用aps字典中的"attach"字段当作attachment，类型会自动检测，获取完成以后会用"attach"作为key来存储到group里边，
+//PS: "attach" 由宏 RDUserNotifyCenter_default_attach_key指定，可通过修改宏来自定义attach的字段使用哪个，不需要指定路径，方法内部会自动检索
++ (void)downAndSaveAttachmentForNotifyRequest:(UNNotificationRequest *)request completion:(void(^)(UNNotificationAttachment *attach))completion;
+
+
+
+
+#pragma mark - Extension间数据读取及共享相关方法
+//数据下载和存储
++ (void)downLoadData:(NSString*)dataUrl completion:(void(^)(id data))completion;            //用dataUrl下载对应的数据并返回
++ (void)saveDataToGroup:(id)data forKey:(NSString*)key;                                     //根据通知的id存储数据到group里边
++ (void)downAndSaveDataToGroup:(NSString *)dataUrl completion:(void(^)(id data))completion; //下载dataUrl对应的数据，并存储到Group里边，使用dataUrl作为key存储，返回下载的数据
+
+
+//数据读取
++ (id)loadDataFromGroup:(NSString*)urlorKey;          //根据通知的id从group里边取出存储的数据，key有可能是url也可能是自定义的，取决于存的时候用的是哪个
+
+
+
 
 
 

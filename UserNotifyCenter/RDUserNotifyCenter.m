@@ -21,8 +21,7 @@
 
 @implementation RDUserNotifyCenter
 
-#pragma mark -
-#pragma mark 内部使用的方法
+
 - (id)init{
     self = [super init];
     if(self){
@@ -41,6 +40,11 @@
     return center;
 }
 
+
+
+
+#pragma mark -
+#pragma mark 本类内部方法
 + (NSDate*)dateFromString:(NSString*)dateString useFormat:(NSString*)format
 {
     if(!dateString || [dateString isEqualToString:@""]) return nil;
@@ -79,188 +83,54 @@
     return YES;
 }
 
-+ (NSString *)md5NotifyID:(NSString *)notifyIdStr 
+
+//在data数据源里，找到key对应的数据value，并返回 //PS: data只能是字典或数组类型
++ (id)getValueForKey:(NSString*)key inData:(id)data
 {
-    const char *cStr =[notifyIdStr UTF8String];
-    unsigned char result[16];
-    CC_MD5(cStr, (int)strlen(cStr), result);
-    return[NSString stringWithFormat:
-           @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
-           result[0], result[1], result[2], result[3],
-           result[4], result[5], result[6], result[7],
-           result[8], result[9], result[10], result[11],
-           result[12], result[13], result[14], result[15]
-           ];
-}
-
-+ (NSDateComponents *)compoFromDateString:(NSString *)dateString
-{
-    //YY-MM-dd HH:mm:ss  年月日和时分秒之间使用空格分隔，用来和目前常用格式标准统一
-    if(!UNCSTRVALID(dateString)) return nil;
-    
-    //前后去空格,回车和换行，容错
-    NSString *useString = [dateString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    
-    NSArray *daytimeArr = [useString componentsSeparatedByString:@" "];
-    if(!daytimeArr || daytimeArr.count < 1 || daytimeArr.count > 2) return nil;
-    
-    //组合compo
-    NSDateComponents *compo = [[NSDateComponents alloc] init];
-    
-    NSString *daystr  = nil;  //YY-MM-dd
-    NSString *timestr = nil;  //HH:mm:ss
-    
-    //注：只有年月日是无法提醒的，必须最低精确到小时才行
-    if(daytimeArr.count == 1) //只有一段，说明只有时间，可能需要重复
-    {
-        daystr  = nil;
-        timestr = [daytimeArr objectAtIndex:0]; 
-    }
-    else    //有两段，说明有年月日，并且也有时间，可能不需要重复
-    {
-        daystr  = [daytimeArr objectAtIndex:0];
-        timestr = [daytimeArr objectAtIndex:1]; 
-    }
-    
-    
-    //设定日期
-    if(UNCSTRVALID(daystr))
-    {
-        NSArray *dayArr = [daystr componentsSeparatedByString:@"-"];
-        if(!dayArr || dayArr.count < 1 || dayArr.count > 3) return nil; //最多三个，已经进这里了，就不能没有了，外面可以没有
-        
-        //最少也是得有"天"
-        compo.day = [(NSString*)[dayArr objectAtIndex:(dayArr.count-1)] integerValue];
-        
-        if(dayArr.count > 1)
-        {
-            compo.month = [(NSString*)[dayArr objectAtIndex:(dayArr.count-2)] integerValue];
-        }
-        
-        if(dayArr.count == 3)
-        {
-            compo.year = [(NSString*)[dayArr objectAtIndex:0] integerValue];
-        }
-    }
-    
-    //设定时间
-    if(UNCSTRVALID(timestr))
-    {
-        NSArray *timeArr = [timestr componentsSeparatedByString:@":"];
-        if(!timeArr || timeArr.count < 1 || timeArr.count > 3) return nil; //最多三个，不能没有
-        
-        //最少也是得有"小时"
-        compo.hour = [(NSString*)[timeArr objectAtIndex:0] integerValue]; 
-        
-        if(timeArr.count > 1)
-        {
-            compo.minute = [(NSString*)[timeArr objectAtIndex:1] integerValue];
-        }
-        
-        if(timeArr.count == 3)
-        {
-            compo.second = [(NSString*)[timeArr objectAtIndex:2] integerValue];
-        }
-    }
-    
-    return compo;
-}
-
-+ (NSDateComponents *)compoFromDate:(NSDate*)date
-{
-    if(!date) return nil;
-    
-    NSString *dateString = [RDUserNotifyCenter stringFromDate:date useFormat:@"YY-MM-dd HH:mm:ss"];
-    if(!UNCSTRVALID(dateString)) return nil;
-    
-    NSDateComponents *compo = [RDUserNotifyCenter compoFromDateString:dateString];
-    return compo;
-}
-
-
-//+ (void)saveDataToGroup:(id)data forNotifyID:(NSString*)notifyid
-//{
-//    if(!data) return;
-//    if(!UNCSTRVALID(notifyid)) return;
-//    
-//    //TO DO: 这里还没有处理清空，可能会因为通知越来越多而导致越存越大
-//    //向group里边写入数据，group中所有的extension都可以使用
-//    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:RDUserNotifyCenter_App_Group_Suit];
-//    [shared setObject:data forKey:notifyid];
-//    [shared synchronize];
-//}
-//+ (id)loadDataFromGroup:(NSString*)notifyid
-//{
-//    if(!UNCSTRVALID(notifyid)) return nil;
-//    
-//    //从group里边取出数据使用
-//    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:RDUserNotifyCenter_App_Group_Suit];
-//    id data = [shared objectForKey:notifyid];
-//    
-//    return data;
-//}
-
-
-+ (void)saveDataToGroup:(id)data forKey:(NSString*)key
-{
-    if(!data) return;
-    if(!UNCSTRVALID(key)) return;
-    
-    //TO DO: 这里还没有处理清空，可能会因为通知越来越多而导致越存越大
-    //向group里边写入数据，group中所有的extension都可以使用
-    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:RDUserNotifyCenter_App_Group_Suit];
-    [shared setObject:data forKey:key];
-    [shared synchronize];
-}
-+ (id)loadDataFromGroup:(NSString*)key
-{
+    if(!data) return nil;
     if(!UNCSTRVALID(key)) return nil;
+    if(![data isKindOfClass:[NSDictionary class]] && ![data isKindOfClass:[NSArray class]]) return nil;
     
-    //从group里边取出数据使用
-    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:RDUserNotifyCenter_App_Group_Suit];
-    id data = [shared objectForKey:key];
+    id value = nil;
     
-    return data;
+    //开始解析
+    if([data isKindOfClass:[NSDictionary class]])
+    {
+        NSArray *keys = [data allKeys];
+        for(NSString *akey in keys)
+        {
+            if([akey compare:key] == NSOrderedSame)
+            {
+                value = [data objectForKey:key];
+                break;
+            }
+            else
+            {
+                id adata = [data objectForKey:akey];
+                id avalue = [self getValueForKey:key inData:adata];
+                if(avalue)
+                {
+                    value = avalue;
+                    break;
+                }
+            }
+        }
+    }
+    else if([data isKindOfClass:[NSArray class]])
+    {
+        for(id adata in data)
+        {
+            id avalue = [self getValueForKey:key inData:adata];
+            if(avalue)
+            {
+                value = avalue;
+                break;
+            }
+        }
+    }
+    
+    return value;
 }
-
-
-+ (void)downAndSaveDataToGroup:(NSString*)dataUrl keyInstead:(NSString*)keyInstead completion:(void(^)(id data))completion
-{
-    if(!UNCSTRVALID(dataUrl)) return;
-    
-    //下载数据
-    NSURL *downUrl = [NSURL URLWithString:dataUrl];
-    if(!downUrl) return;
-    
-    //下载图片
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-    [[session downloadTaskWithURL:downUrl
-                completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
-                    
-                    id data = nil;
-                    
-                    if(!error)
-                    {
-                        data = [NSData dataWithContentsOfURL:location];
-                    
-                        NSString *key = dataUrl;
-                        if(UNCSTRVALID(keyInstead))
-                        {
-                            key = keyInstead;
-                        }
-                        
-                        [self saveDataToGroup:data forKey:key];
-                    }  
-                    
-                    if(completion)
-                    {
-                        completion(data);
-                    }
-                    
-                }] resume];
-}
-
-
 
 
 
@@ -321,7 +191,7 @@
 
 
 #pragma mark -
-#pragma mark 对外开放方法
+#pragma mark 注册通知，绑定action，规划本地通知
 - (void)registerUserNotification:(id)delegate completion:(void (^)(BOOL success))completion
 {
     if ([[UIDevice currentDevice].systemVersion floatValue] < 10.0) 
@@ -514,12 +384,12 @@
         {
             //没写后缀，默认就是.png
             name = attachmentName;
-            type = @"png";
+            type = @"jpg";
         }
         
         NSError *aerror = nil;
         NSString *attachPath = [[NSBundle mainBundle] pathForResource:name ofType:type];   
-        UNNotificationAttachment *attach = [UNNotificationAttachment attachmentWithIdentifier:name URL:[NSURL fileURLWithPath:attachPath] options:nil error:&aerror];
+        UNNotificationAttachment *attach = [UNNotificationAttachment attachmentWithIdentifier:@"" URL:[NSURL fileURLWithPath:attachPath] options:nil error:&aerror];
         if(!aerror) 
         {
             content.attachments = @[attach];
@@ -798,6 +668,368 @@
         }
     }];
 }
+
+
+
+
+
+
+#pragma mark - 
+#pragma mark 注册和规划使用通知相关的一些配套方法
++ (NSString *)md5NotifyID:(NSString *)notifyIdStr 
+{
+    const char *cStr =[notifyIdStr UTF8String];
+    unsigned char result[16];
+    CC_MD5(cStr, (int)strlen(cStr), result);
+    return[NSString stringWithFormat:
+           @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
+           result[0], result[1], result[2], result[3],
+           result[4], result[5], result[6], result[7],
+           result[8], result[9], result[10], result[11],
+           result[12], result[13], result[14], result[15]
+           ];
+}
+
++ (NSDateComponents *)compoFromDateString:(NSString *)dateString
+{
+    //YY-MM-dd HH:mm:ss  年月日和时分秒之间使用空格分隔，用来和目前常用格式标准统一
+    if(!UNCSTRVALID(dateString)) return nil;
+    
+    //前后去空格,回车和换行，容错
+    NSString *useString = [dateString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    NSArray *daytimeArr = [useString componentsSeparatedByString:@" "];
+    if(!daytimeArr || daytimeArr.count < 1 || daytimeArr.count > 2) return nil;
+    
+    //组合compo
+    NSDateComponents *compo = [[NSDateComponents alloc] init];
+    
+    NSString *daystr  = nil;  //YY-MM-dd
+    NSString *timestr = nil;  //HH:mm:ss
+    
+    //注：只有年月日是无法提醒的，必须最低精确到小时才行
+    if(daytimeArr.count == 1) //只有一段，说明只有时间，可能需要重复
+    {
+        daystr  = nil;
+        timestr = [daytimeArr objectAtIndex:0]; 
+    }
+    else    //有两段，说明有年月日，并且也有时间，可能不需要重复
+    {
+        daystr  = [daytimeArr objectAtIndex:0];
+        timestr = [daytimeArr objectAtIndex:1]; 
+    }
+    
+    
+    //设定日期
+    if(UNCSTRVALID(daystr))
+    {
+        NSArray *dayArr = [daystr componentsSeparatedByString:@"-"];
+        if(!dayArr || dayArr.count < 1 || dayArr.count > 3) return nil; //最多三个，已经进这里了，就不能没有了，外面可以没有
+        
+        //最少也是得有"天"
+        compo.day = [(NSString*)[dayArr objectAtIndex:(dayArr.count-1)] integerValue];
+        
+        if(dayArr.count > 1)
+        {
+            compo.month = [(NSString*)[dayArr objectAtIndex:(dayArr.count-2)] integerValue];
+        }
+        
+        if(dayArr.count == 3)
+        {
+            compo.year = [(NSString*)[dayArr objectAtIndex:0] integerValue];
+        }
+    }
+    
+    //设定时间
+    if(UNCSTRVALID(timestr))
+    {
+        NSArray *timeArr = [timestr componentsSeparatedByString:@":"];
+        if(!timeArr || timeArr.count < 1 || timeArr.count > 3) return nil; //最多三个，不能没有
+        
+        //最少也是得有"小时"
+        compo.hour = [(NSString*)[timeArr objectAtIndex:0] integerValue]; 
+        
+        if(timeArr.count > 1)
+        {
+            compo.minute = [(NSString*)[timeArr objectAtIndex:1] integerValue];
+        }
+        
+        if(timeArr.count == 3)
+        {
+            compo.second = [(NSString*)[timeArr objectAtIndex:2] integerValue];
+        }
+    }
+    
+    return compo;
+}
+
++ (NSDateComponents *)compoFromDate:(NSDate *)date
+{
+    if(!date) return nil;
+    
+    NSString *dateString = [RDUserNotifyCenter stringFromDate:date useFormat:@"YY-MM-dd HH:mm:ss"];
+    if(!UNCSTRVALID(dateString)) return nil;
+    
+    NSDateComponents *compo = [RDUserNotifyCenter compoFromDateString:dateString];
+    return compo;
+}
+
+
++ (id)getValueForKey:(NSString *)key inNotification:(id)notify
+{
+    if(!UNCSTRVALID(key)) return nil;
+    if(!notify) return nil;
+    
+    //notify 可以是 UNNotificationRequest类型，也可以是UNNotification，也可以是UNNotificationContent，也可以是userInfo字典本身
+    NSDictionary *infoDic = nil;
+    
+    if([notify isKindOfClass:[UNNotificationRequest class]])
+    {
+        infoDic = [(UNNotificationRequest*)notify content].userInfo;
+    }
+    else if([notify isKindOfClass:[UNNotificationContent class]])
+    {
+        infoDic = [(UNNotificationContent*)notify userInfo];
+    }
+    else if([notify isKindOfClass:[UNNotification class]])
+    {
+        infoDic = [(UNNotification*)notify request].content.userInfo;
+    }
+    else if([notify isKindOfClass:[NSDictionary class]])
+    {
+        infoDic = (NSDictionary*)notify;
+    }
+    
+    //如果不是以上指定的四种类型，那么直接返回错误了
+    if(!infoDic) return nil;
+    
+    //开始查找
+    id value = [self getValueForKey:key inData:infoDic];
+    
+    //如果value不是字符串，则硬转为字符串返回
+    if(value && [value isKindOfClass:[NSNumber class]])
+    {
+        value = [value stringValue];
+    }
+    
+    return value;
+}
+
+
+
+
+#pragma mark - 
+#pragma mark 给UNNotificationServiceExtension配套的方法
++ (void)downAndSaveAttachmentForNotifyRequest:(UNNotificationRequest *)request completion:(void(^)(UNNotificationAttachment *attach))completion
+{
+    //根据 RDUserNotifyCenter_default_attach_key 指定的attach字段找到并下载存储attachment
+    if(!request || !request.content.userInfo)
+    {
+        if(completion)
+        {
+            completion(nil);
+        }
+    }
+    
+    //找到attach，虽然尽量限定aps里边，但是很难保证接口不任性，所以还是把所有的字段都检索一遍，找到attach字段，还得检查一下是否是url
+    NSString *attachStr = [self getValueForKey:RDUserNotifyCenter_default_attach_key inNotification:request];
+    if(!attachStr || ![attachStr isKindOfClass:[NSString class]] || [attachStr isEqualToString:@""]) 
+    {
+        //attach的数据value必须得是字符串
+        if(completion)
+        {
+            completion(nil);
+        }
+    }
+    
+    //检查一下是否http或者https的url，如果是，就读取url，如果不是，就当作本地文件处理，查找本地文件里边是否有该文件，
+    if([attachStr hasPrefix:@"http://"] || [attachStr hasPrefix:@"https://"])
+    {
+        //是url，下载并存储, 创建attachment并返回
+        [self downLoadDataForURL:attachStr completion:^(NSURL *fileUrl) {
+            
+            //存储到group
+            id data = [NSData dataWithContentsOfURL:fileUrl];
+            [self saveDataToGroup:data forKey:attachStr];
+            
+            //创建attachment
+            UNNotificationAttachment *attachment = [UNNotificationAttachment attachmentWithIdentifier:@"" URL:fileUrl options:nil error:nil];
+            if(completion)
+            {
+                completion(attachment);
+            }
+        }];
+    }
+    else
+    {
+        //当app bundle里边的内置文件使用
+        //拆分附件名称
+        NSString *name;
+        NSString *type;
+        
+        NSRange range = [attachStr rangeOfString:@"." options:NSBackwardsSearch];
+        if(range.length != 0)
+        {
+            //有后缀
+            name = [attachStr substringToIndex:range.location];
+            type = [attachStr substringFromIndex:range.location+1];
+        }
+        else
+        {
+            //没写后缀，默认就是.png
+            name = attachStr;
+            type = @"jpg";
+        }
+        
+        NSString *attachPath = [[NSBundle mainBundle] pathForResource:name ofType:type];   
+        UNNotificationAttachment *attachment = [UNNotificationAttachment attachmentWithIdentifier:@"" URL:[NSURL fileURLWithPath:attachPath] options:nil error:nil];
+        if(completion)
+        {
+            completion(attachment);
+        }
+    }
+    
+}
+
++ (void)downLoadDataForURL:(NSString*)dataUrl completion:(void(^)(NSURL *fileUrl))completion
+{
+    if(!UNCSTRVALID(dataUrl)) return;
+    
+    //下载数据，但不存储，返回fileurl文件地址路径
+    NSURL *downUrl = [NSURL URLWithString:dataUrl];
+    if(!downUrl) return;
+    
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    [[session downloadTaskWithURL:downUrl
+                completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
+                    
+                    NSURL *fileUrl = nil;
+                    
+                    if(!error)
+                    {
+                        //先找到对应的类型及后缀
+                        NSString *fileExt = [self fileExtForURL:dataUrl];
+                        
+                        NSFileManager *fileManager = [NSFileManager defaultManager];
+                        fileUrl = [NSURL fileURLWithPath:[location.path stringByAppendingString:fileExt]];
+                        BOOL ret = [fileManager moveItemAtURL:location toURL:fileUrl error:&error];
+                        if(!ret)
+                        {
+                            fileUrl = nil;
+                        }
+                    }  
+                    
+                    //回上层
+                    if(completion)
+                    {
+                        completion(fileUrl);
+                    }
+                    
+                }] resume];
+}
+
++ (NSString *)fileExtForURL:(NSString *)dataUrl 
+{
+    //把attachStr做全小写处理，用于在串里边找.jpg .png .gif .mp3 .m4a .mp4 .m4v这几种后缀，如果都没有，默认使用.jpg类型
+    if(!UNCSTRVALID(dataUrl)) return nil;
+    
+    NSString *ext = @".jpg";
+    NSString *useUrl = [dataUrl lowercaseString];
+    
+    
+    NSArray *checkArr = @[@".jpg", @".png", @".gif", @".mp3", @".m4a", @".mp4", @".m4v"];
+    
+    for(NSString *check in checkArr)
+    {
+        NSRange range = [useUrl rangeOfString:check options:NSBackwardsSearch];
+        if(range.length != 0)
+        {
+            ext = check;
+            break;
+        }
+    }
+
+    return ext;
+}
+
+
+
+
+
+
+#pragma mark - Extension间数据读取及共享相关方法
++ (void)downLoadData:(NSString*)dataUrl completion:(void(^)(id data))completion
+{
+    if(!UNCSTRVALID(dataUrl)) return;
+    
+    //下载数据
+    NSURL *downUrl = [NSURL URLWithString:dataUrl];
+    if(!downUrl) return;
+    
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    [[session downloadTaskWithURL:downUrl
+                completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
+                    
+                    id data = nil;
+                    
+                    if(!error)
+                    {
+                        data = [NSData dataWithContentsOfURL:location];
+                    }  
+                    
+                    //回上层
+                    if(completion)
+                    {
+                        completion(data);
+                    }
+                    
+                }] resume];
+}
++ (void)saveDataToGroup:(id)data forKey:(NSString*)key
+{
+    if(!data) return;
+    if(!UNCSTRVALID(key)) return;
+    
+    
+    //TO DO: 这里还没有处理清空，可能会因为通知越来越多而导致越存越大
+    //TO DO: 需要调研是否每次返回的location都是固定地址，然后生成的fileurl是否相同，关系到存储的东西是否会被下一次的覆盖
+    //- (void)removePersistentDomainForName:(NSString *)domainName;
+    
+    //向group里边写入数据，group中所有的extension都可以使用
+    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:RDUserNotifyCenter_App_Group_Suit];
+    [shared setObject:data forKey:key];
+    [shared synchronize];
+}
++ (void)downAndSaveDataToGroup:(NSString *)dataUrl completion:(void(^)(id data))completion
+{
+    if(!UNCSTRVALID(dataUrl)) return;
+    
+    [self downLoadData:dataUrl completion:^(id data) {
+        [self saveDataToGroup:data forKey:dataUrl];
+        
+        if(completion)
+        {
+            completion(data);
+        }
+    }];
+}
+
+
++ (id)loadDataFromGroup:(NSString*)urlorKey
+{
+    if(!UNCSTRVALID(urlorKey)) return nil;
+    
+    //从group里边取出数据使用
+    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:RDUserNotifyCenter_App_Group_Suit];
+    id data = [shared objectForKey:urlorKey];
+    
+    return data;
+}
+
+
+
+
+
 
 
 
