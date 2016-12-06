@@ -1031,13 +1031,17 @@
 {
     if(!UNCSTRVALID(loadKey)) return nil;
     
-    
+    //先按照直接key存储的读取
     id data = [self loadDataFromGroup:loadKey];
-//    if(!data)
-//    {
-//        id value = [RDUserNotifyCenter getValueForKey:@"attach" inNotification:notification];
-//        //TO DO: 完成这个逻辑
-//    }
+    if(!data && notify)
+    {
+        //看是不是按照url存的，找到loadkey对应的url，如果loadkey也不是payload里边的key，那么就返回空了
+        id value = [RDUserNotifyCenter getValueForKey:loadKey inNotification:notify];
+        if(value && [value isKindOfClass:[NSString class]] && ![(NSString*)value isEqualToString:@""])
+        {
+            data = [self loadDataFromGroup:(NSString*)value];
+        }
+    }
     
     return data;
 }
