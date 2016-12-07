@@ -27,14 +27,33 @@
 
 - (void)didReceiveNotification:(UNNotification *)notification {
    
-    //TO DO: 这里要考虑是否可以使用RULImageView直接加载一个url图片？？
+    //从group里边按照url读取数据
+    //    NSString *keyurl = [RDUserNotifyCenter getValueForKey:@"attach" inNotification:notification];
+    //    id data = [RDUserNotifyCenter loadDataFromGroup:keyurl];
     
-//    NSString *keyurl = [RDUserNotifyCenter getValueForKey:@"attach" inNotification:notification];
-//    id data = [RDUserNotifyCenter loadDataFromGroup:keyurl];
-    
+    //从group里边按照payload的key读取数据
     id data = [RDUserNotifyCenter loadDataFromGroup:@"attach" forNotification:notification];
     UIImage *image = [UIImage imageWithData:data];
-    int i=0;
+    
+    //放一个imageview，显示从group里边共享过来的图片
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+    imageView.image = image;
+    [self.view addSubview:imageView];
+    
+
+    //临时下载一段数据,显示出来 //测试结果，速度很慢
+    //    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+    //    [self.view addSubview:imageView];
+    //    
+    //    NSString *attachUrl = (NSString*)[RDUserNotifyCenter getValueForKey:@"attach" inNotification:notification];
+    //    [RDUserNotifyCenter downLoadData:attachUrl completion:^(id data) {
+    //        if(data)
+    //        {
+    //            UIImage *image = [UIImage imageWithData:data];
+    //            imageView.image = image;
+    //        }
+    //    }];
+
 }
 
 
