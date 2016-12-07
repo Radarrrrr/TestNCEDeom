@@ -51,3 +51,15 @@
 
 
 
+//单品测试数据
+http://product.mapi.dangdang.com/index.php?action=get_product&user_client=iphone&client_version=6.3.0&udid=C468039A2648F6CDC79E77EDAC68C4FE&time_code=08BD43CAAA3586463EB6FA43687A6069&timestamp=1481112463&union_id=537-50&permanent_id=20161107192044709529023687781578603&pid=1142174671&expand=1,2,3,4,5,6&is_abtest=1&img_size=h&lunbo_img_size=h&result_format=3
+
+//专题列表测试数据
+http://cms.mapi.dangdang.com/index.php?action=list_cms_info&user_client=iphone&client_version=6.3.0&udid=C468039A2648F6CDC79E77EDAC68C4FE&time_code=76C9480EA17E4251BBEE55B478014536&timestamp=1481112638&union_id=537-50&permanent_id=20161107192044709529023687781578603&pageid=117094&page_no=1&img_size=e&result_format=3
+
+
+
+
+
+
+
