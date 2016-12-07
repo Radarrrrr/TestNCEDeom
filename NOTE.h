@@ -57,7 +57,25 @@ http://product.mapi.dangdang.com/index.php?action=get_product&user_client=iphone
 //专题列表测试数据
 http://cms.mapi.dangdang.com/index.php?action=list_cms_info&user_client=iphone&client_version=6.3.0&udid=C468039A2648F6CDC79E77EDAC68C4FE&time_code=76C9480EA17E4251BBEE55B478014536&timestamp=1481112638&union_id=537-50&permanent_id=20161107192044709529023687781578603&pageid=117094&page_no=1&img_size=e&result_format=3
 
-
+//分类列表测试数据
+{
+    "aps":
+    {
+        "alert":
+        {
+            "title":"我是原装标题",
+            "subtitle":"我是副标题",
+            "body":"it is a beautiful day"
+        },
+        "badge":1,
+        "sound":"default",
+        "mutable-content":"1",
+        "category":"myNotificationCategory",
+        "attach":"https://picjumbo.imgix.net/HNCK8461.jpg?q=40&w=200&sharp=30"
+    },
+    "goto_page":"category://cid=4002778"
+}
+http://search.mapi.dangdang.com/index.php?action=list_category&user_client=iphone&client_version=6.3.0&udid=C468039A2648F6CDC79E77EDAC68C4FE&time_code=55029C0906B363E848DB2A969CF17E7A&timestamp=1481122253&union_id=537-50&permanent_id=20161107192044709529023687781578603&page=1&page_size=10&sort_type=default_0&cid=4002778&img_size=e&result_format=3
 
 
 
