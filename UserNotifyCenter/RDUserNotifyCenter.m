@@ -1047,27 +1047,6 @@
 }
 
 
-//+ (id)fuzzyLoadDataFromGroup:(NSString*)key forNotification:(id)notify
-//{
-//    //不能明确存储的时候用的key是什么，那么就模糊查找吧
-//    NSString *theKey = loadKey;
-//    
-//    //先看是否直接使用url读取
-////    if([urlorKey hasPrefix:@"http://"] || [urlorKey hasPrefix:@"https://"])
-////    {
-////        loadKey = urlorKey;
-////    }
-//    
-//    //如果不是url，就看是否是payload的key，获取到url以后再读取
-//    id value = [self getValueForKey:<#(NSString *)#> inNotification:<#(id)#>];
-//    
-//    
-//    //如果都不是，那可能是用户自定义的，那就直接用这个自定义key获取
-//}
-
-
-
-
 
 
 
