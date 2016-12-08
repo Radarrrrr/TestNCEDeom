@@ -32,8 +32,8 @@
 //    id data = [RDUserNotifyCenter loadDataFromGroup:keyurl];
     
     //从group里边按照payload的key读取数据
-    id data = [RDUserNotifyCenter loadDataFromGroup:@"attach" forNotification:notification];
-    UIImage *image = [UIImage imageWithData:data];
+//    id data = [RDUserNotifyCenter loadDataFromGroup:@"attach" forNotification:notification];
+//    UIImage *image = [UIImage imageWithData:data];
     
     //放一个imageview，显示从group里边共享过来的图片
 //    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
