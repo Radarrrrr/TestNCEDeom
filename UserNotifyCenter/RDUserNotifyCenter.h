@@ -234,7 +234,11 @@
 + (id)loadDataFromGroup:(NSString*)loadKey forNotification:(id)notify;  
 
 
+//数据移除
+//+ (id)removeDataFromGroupForKey:(NSString*)key;   //根据key从group里边移除对应的数据
 
+
+//TO DO: 问题在，新的数据下载以后，如果下载失败，不会存储到group，那么在contengExtension里边开启的时候，会调用上一次存储的数据。。。应该改为如果下载失败，删除已经存储的数据。
 
 
 @end
