@@ -56,11 +56,10 @@
     
     
     //获取数据
-    id ldata = [RDUserNotifyCenter loadDataFromGroup:@"goto_page" forNotification:notification];
-    NSDictionary *jdata = (NSDictionary*)[NSJSONSerialization JSONObjectWithData:ldata options:NSJSONReadingAllowFragments error:nil];
+//    id ldata = [RDUserNotifyCenter loadDataFromGroup:@"goto_page" forNotification:notification];
+//    NSDictionary *jdata = (NSDictionary*)[NSJSONSerialization JSONObjectWithData:ldata options:NSJSONReadingAllowFragments error:nil];
     
-    
-    int i=0;
+//    int i=0;
 
 }
 
