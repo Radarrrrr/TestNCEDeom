@@ -65,18 +65,10 @@
         }
         
         //接下来下载对应的数据
-        [RDUserNotifyCenter downLoadData:listUrl completion:^(id data) {
-            
-            if(data)
-            {
-                [RDUserNotifyCenter saveDataToGroup:data forKey:@"goto_page"];
-            }
-            
+        [RDUserNotifyCenter downAndSaveDataToGroup:listUrl forceKey:@"goto_page" completion:^(id data) {
             self.contentHandler(self.bestAttemptContent);
         }];
     }];
-    
-    
     
     
 }

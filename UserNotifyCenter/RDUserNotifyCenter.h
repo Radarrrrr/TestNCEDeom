@@ -225,7 +225,8 @@
 //数据下载和存储
 + (void)downLoadData:(NSString*)dataUrl completion:(void(^)(id data))completion;            //用dataUrl下载对应的数据并返回
 + (void)saveDataToGroup:(id)data forKey:(NSString*)key;                                     //根据通知的id存储数据到group里边
-+ (void)downAndSaveDataToGroup:(NSString *)dataUrl completion:(void(^)(id data))completion; //下载dataUrl对应的数据，并存储到Group里边，使用dataUrl作为key存储，返回下载的数据
++ (void)downAndSaveDataToGroup:(NSString *)dataUrl completion:(void(^)(id data))completion;                              //下载dataUrl对应的数据，并存储到Group里边，默认使用dataUrl作为key存储，返回下载的数据
++ (void)downAndSaveDataToGroup:(NSString *)dataUrl forceKey:(NSString*)forceKey completion:(void(^)(id data))completion; //下载dataUrl对应的数据，并存储到Group里边，优先使用forceKey作为key存储，如果forceKey不存在，则默认使用dataUrl作为key存储(此时效果同前一个方法)，返回下载的数据
 
 
 //数据读取

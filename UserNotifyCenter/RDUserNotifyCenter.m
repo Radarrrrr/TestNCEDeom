@@ -646,25 +646,25 @@
         {
             completion(NO);
         }
+        return;
     }
     
     [[UNUserNotificationCenter currentNotificationCenter] getPendingNotificationRequestsWithCompletionHandler:^(NSArray<UNNotificationRequest *> * _Nonnull requests) {
+        
+        BOOL bhave = NO;
         
         for(UNNotificationRequest *request in requests)
         {
             if([request.identifier isEqualToString:notifyid])
             {
-                if(completion)
-                {
-                    completion(YES);
-                }
-                return;
+                bhave = YES;
+                break;
             }
         }
         
         if(completion)
         {
-            completion(NO);
+            completion(bhave);
         }
     }];
 }
@@ -829,6 +829,7 @@
         {
             completion(nil);
         }
+        return;
     }
     
     //找到attach，虽然尽量限定aps里边，但是很难保证接口不任性，所以还是把所有的字段都检索一遍，找到attach字段，还得检查一下是否是url
@@ -840,6 +841,7 @@
         {
             completion(nil);
         }
+        return;
     }
     
     //检查一下是否http或者https的url，如果是，就读取url，如果不是，就当作本地文件处理，查找本地文件里边是否有该文件，
@@ -893,11 +895,25 @@
 
 + (void)downLoadDataForURL:(NSString*)dataUrl completion:(void(^)(NSURL *fileUrl))completion
 {
-    if(!UNCSTRVALID(dataUrl)) return;
+    if(!UNCSTRVALID(dataUrl))
+    {
+        if(completion)
+        {
+            completion(nil);
+        }
+        return;
+    }
     
     //下载数据，但不存储，返回fileurl文件地址路径
     NSURL *downUrl = [NSURL URLWithString:dataUrl];
-    if(!downUrl) return;
+    if(!downUrl)
+    {
+        if(completion)
+        {
+            completion(nil);
+        }
+        return;
+    }
     
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[session downloadTaskWithURL:downUrl
@@ -960,11 +976,25 @@
 #pragma mark - Extension间数据读取及共享相关方法
 + (void)downLoadData:(NSString*)dataUrl completion:(void(^)(id data))completion
 {
-    if(!UNCSTRVALID(dataUrl)) return;
+    if(!UNCSTRVALID(dataUrl))
+    {
+        if(completion)
+        {
+            completion(nil);
+        }
+        return;
+    }
     
     //下载数据
     NSURL *downUrl = [NSURL URLWithString:dataUrl];
-    if(!downUrl) return;
+    if(!downUrl)
+    {
+        if(completion)
+        {
+            completion(nil);
+        }
+        return;
+    }
     
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[session downloadTaskWithURL:downUrl
@@ -1000,10 +1030,44 @@
 }
 + (void)downAndSaveDataToGroup:(NSString *)dataUrl completion:(void(^)(id data))completion
 {
-    if(!UNCSTRVALID(dataUrl)) return;
+    if(!UNCSTRVALID(dataUrl))
+    {
+        if(completion)
+        {
+            completion(nil);
+        }
+        return;
+    }
     
     [self downLoadData:dataUrl completion:^(id data) {
         [self saveDataToGroup:data forKey:dataUrl];
+        
+        if(completion)
+        {
+            completion(data);
+        }
+    }];
+}
++ (void)downAndSaveDataToGroup:(NSString *)dataUrl forceKey:(NSString*)forceKey completion:(void(^)(id data))completion
+{
+    if(!UNCSTRVALID(dataUrl))
+    {
+        if(completion)
+        {
+            completion(nil);
+        }
+        return;
+    }
+    
+    [self downLoadData:dataUrl completion:^(id data) {
+        
+        NSString *useKey = dataUrl;
+        if(UNCSTRVALID(forceKey))
+        {
+            useKey = forceKey;
+        }
+            
+        [self saveDataToGroup:data forKey:useKey];
         
         if(completion)
         {
