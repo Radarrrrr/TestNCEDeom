@@ -987,9 +987,7 @@
 }
 + (void)saveDataToGroup:(id)data forKey:(NSString*)key
 {
-    if(!data) return;
     if(!UNCSTRVALID(key)) return;
-    
     
     //TO DO: 这里还没有处理清空，可能会因为通知越来越多而导致越存越大
     //TO DO: 需要调研是否每次返回的location都是固定地址，然后生成的fileurl是否相同，关系到存储的东西是否会被下一次的覆盖
@@ -1047,6 +1045,14 @@
 }
 
 
++ (void)removeDataFromGroupForKey:(NSString*)key
+{
+    if(!UNCSTRVALID(key)) return;
+    
+    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:RDUserNotifyCenter_app_group_suite];
+    [shared removeObjectForKey:key];
+    [shared synchronize];
+}
 
 
 
