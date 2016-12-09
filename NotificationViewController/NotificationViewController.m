@@ -27,6 +27,9 @@
 
 - (void)didReceiveNotification:(UNNotification *)notification {
    
+//-------------------------------------------------------------------------------------------------------------------
+//各种数据读取测试
+    
     //从group里边按照url读取数据
 //    NSString *keyurl = [RDUserNotifyCenter getValueForKey:@"attach" inNotification:notification];
 //    id data = [RDUserNotifyCenter loadDataFromGroup:keyurl];
@@ -61,6 +64,38 @@
     
 //    int i=0;
 
+//-------------------------------------------------------------------------------------------------------------------
+    
+    
+    
+    id data = [RDUserNotifyCenter loadDataFromGroup:@"attach" forNotification:notification];
+    UIImage *attachImg = [UIImage imageWithData:data];
+    
+    //放一个imageview，显示从group里边共享过来的图片
+    CGRect bounds = [UIScreen mainScreen].bounds;
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, bounds.size.width*0.75, bounds.size.width*0.75)];
+    imageView.image = attachImg;
+    [self.view addSubview:imageView];
+    
+    //显示标题和内容
+    UILabel *titleL = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(imageView.frame), 10, bounds.size.width*0.25, 20)];
+    titleL.font = [UIFont boldSystemFontOfSize:14];
+    titleL.textColor = [UIColor blackColor];
+    titleL.text = [RDUserNotifyCenter getValueForKey:@"title" inNotification:notification];
+    [self.view addSubview:titleL];
+
+    UILabel *subtL = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(imageView.frame), 50, bounds.size.width*0.25, 30)];
+    subtL.font = [UIFont systemFontOfSize:13];
+    subtL.textColor = [UIColor blackColor];
+    subtL.text = [RDUserNotifyCenter getValueForKey:@"subtitle" inNotification:notification];
+    [self.view addSubview:subtL];
+    
+    UITextView *bodyL = [[UITextView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(imageView.frame), 100, bounds.size.width*0.25, 50)];
+    bodyL.backgroundColor = [UIColor clearColor];
+    bodyL.font = [UIFont systemFontOfSize:12];
+    bodyL.textColor = [UIColor blackColor];
+    bodyL.text = [RDUserNotifyCenter getValueForKey:@"body" inNotification:notification];
+    [self.view addSubview:bodyL];
 }
 
 

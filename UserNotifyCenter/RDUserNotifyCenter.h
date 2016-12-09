@@ -6,6 +6,7 @@
 //  Copyright © 2016年 Radar. All rights reserved.
 //
 
+//本类使用相关的问题:
 //注1: 本类必须iOS10以上使用
 //注2: 获取devicetoken的方法，仍然是在appDelegate中使用:
 //   - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
@@ -16,8 +17,30 @@
 //注5: attach字段所带过来的url里边，一定要带上类型后缀，比如.jpg .png .gif .mp3 .m4a .mp4 .m4v，不一定在最后，中间也可以。
 //     本类会自动检测url中，只要出现了这几种类型，自会处理，如果什么都没带，按照.jpg处理
 
-//特别注意：必须在每个Target里面，点击buildSettings 然后把Require Only App-Extension-Safe API 然后把YES改为NO，否则可能遇到如下问题：
-//'sharedApplication' is unavailable: not available on iOS (App Extension) - Use view controller based
+//注6: 在ServcieEcxtensino修改过的内容，到ContentExtension里边用notification.request.content.xxx可以取到，但是不会修改到notification.request.content.userInfo里边
+//所以，尽量不要在这个地方进行content内容的修改，消息体内容尽量服务器来指定，包括挂载那个category，最好也是服务器指定
+//这个中间件的过程中，最好只用来下载attachment和其他需要下载的数据
+
+
+
+//编译及调试相关问题:
+//注1: 必须在每个Target里面，点击buildSettings 然后把Require Only App-Extension-Safe API 然后把YES改为NO，否则可能遇到如下问题：
+//    'sharedApplication' is unavailable: not available on iOS (App Extension) - Use view controller based
+
+//注2: 需要在container App的target->capabilities里边，打开如下三项：
+//     1. Push Notifications
+//     2. Background Modes -> Remote notifications
+//     3. App Groups
+
+//注3: 需要在每个Extension的target->capabilities里边，打开如下项:
+//     1. App Groups
+
+//注4: 要在每个target的info.plist里边添加app group项 //TO DO: 待定方案，暂时写在这里别忘了
+
+
+
+
+
 
 
 
@@ -70,8 +93,9 @@
     "goto_page":"cms://page_id=14374"
 }
  
- 
 */
+
+
 
 
 #import <Foundation/Foundation.h>
