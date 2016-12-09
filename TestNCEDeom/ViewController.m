@@ -25,7 +25,7 @@
     }];
     
     
-    
+    //TO DO: 是否可以把这个工作做到每个extension里边去绑定呢？ 或者放到payload里边，通过servcieExtension来绑定呢？
     //绑定action到category
     [[RDUserNotifyCenter sharedCenter] prepareBindingActions];
 

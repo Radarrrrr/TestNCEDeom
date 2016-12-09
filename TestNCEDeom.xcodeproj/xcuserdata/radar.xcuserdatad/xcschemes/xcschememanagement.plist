@@ -14,6 +14,11 @@
 			<key>orderHint</key>
 			<integer>1</integer>
 		</dict>
+		<key>NotifyExtensionList.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>4</integer>
+		</dict>
 		<key>NotifyExtensionProduct.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -43,6 +48,11 @@
 			<true/>
 		</dict>
 		<key>0C8B17B61DED5E3800FC3305</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>0CFAD5601DFAB2FC0080EFBE</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -21,6 +21,8 @@
 //所以，尽量不要在这个地方进行content内容的修改，消息体内容尽量服务器来指定，包括挂载那个category，最好也是服务器指定
 //这个中间件的过程中，最好只用来下载attachment和其他需要下载的数据
 
+//注7: 在info.plist里边添加 UNNotificationExtensionDefaultContentHidden项，并设定为YES，表示不显示原生alert信息，如果设定为NO，则显示原生alert信息
+
 
 
 //编译及调试相关问题:
