@@ -51,6 +51,47 @@
 
 
 
+//测试及演示相关推送payload数据结构------------------------------------------
+//推送一个默认Extension，原生状态展示图片
+{
+    "aps":
+    {
+        "alert":
+        {
+            "title":"我是原装标题",
+            "subtitle":"我是副标题",
+            "body":"it is a beautiful day"
+        },
+        "badge":1,
+        "sound":"default",
+        "mutable-content":"1",
+        "category":"",
+        "attach":"http://img3x2.ddimg.cn/29/14/1128514592-1_h_6.jpg"
+    },
+    "goto_page":""
+}
+
+//推送一个自定义Extension，使用category = myNotificationCategory来展示图片和信息
+{
+    "aps":
+    {
+        "alert":
+        {
+            "title":"我是原装标题",
+            "subtitle":"我是副标题",
+            "body":"it is a beautiful day"
+        },
+        "badge":1,
+        "sound":"default",
+        "mutable-content":"1",
+        "category":"myNotificationCategory",
+        "attach":"http://img3x2.ddimg.cn/29/14/1128514592-1_h_6.jpg"
+    },
+    "goto_page":""
+}
+
+
+
 //单品测试数据
 http://product.mapi.dangdang.com/index.php?action=get_product&user_client=iphone&client_version=6.3.0&udid=C468039A2648F6CDC79E77EDAC68C4FE&time_code=08BD43CAAA3586463EB6FA43687A6069&timestamp=1481112463&union_id=537-50&permanent_id=20161107192044709529023687781578603&pid=1142174671&expand=1,2,3,4,5,6&is_abtest=1&img_size=h&lunbo_img_size=h&result_format=3
 
