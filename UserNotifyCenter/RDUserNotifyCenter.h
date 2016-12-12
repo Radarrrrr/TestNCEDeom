@@ -10,7 +10,7 @@
 //使用前，请先仔细阅读本类使用的相关说明，谢谢
 
 //本类使用相关的问题:
-//注1: 本类必须iOS10以上使用, 暂时不支持可输入文字形式的extension
+//注1: 本类必须iOS10以上使用
 //注2: 获取devicetoken的方法，仍然是在appDelegate中使用:
 //   - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 
@@ -28,6 +28,12 @@
 
 //注8: 绑定Action的工作放在containerApp是最合适的，因为需要在主工程中接收消息点击事件，然后在主工程中进行其他操作，actionid-categoryid-接收者，三者在同一个类中实现，比较合理，建议如此操作。
 //     另外，在contentExtension被唤起之前，必须完成绑定，否则是看不到action的
+
+//注9: 暂时不支持可输入文字形式的extension
+
+//注10: 本类不是下载工具，只能简单下载一些固定URL的东西，比如数据或者图片，HTTP的header设定那些东西，不在本类范围内。如果需要使用，外面自行使用就行了。
+
+
 
 
 
@@ -264,7 +270,7 @@
 + (void)saveDataToGroup:(id)data forKey:(NSString*)key;                                     //根据通知的id存储数据到group里边
 + (void)downAndSaveDataToGroup:(NSString *)dataUrl completion:(void(^)(id data))completion;                              //下载dataUrl对应的数据，并存储到Group里边，默认使用dataUrl作为key存储，返回下载的数据
 + (void)downAndSaveDataToGroup:(NSString *)dataUrl forceKey:(NSString*)forceKey completion:(void(^)(id data))completion; //下载dataUrl对应的数据，并存储到Group里边，优先使用forceKey作为key存储，如果forceKey不存在，则默认使用dataUrl作为key存储(此时效果同前一个方法)，返回下载的数据
-
++ (void)downAndSaveDatasToGroup:(NSArray *)dataUrls completion:(void(^)(void))completion;    //下载一个数组的url对应的数据，并存储到Group里边，用每一个数据的url作为key存储，下载完成统一返回一次完成。
 
 //数据读取
 //根据key从group里边取出存储的数据，key有可能是url也可能是自定义的, 如果明确知道存储的时候用的是什么key，那么notify字段可以设定为nil，反之则会模糊查找，使用key对应的url来读取。

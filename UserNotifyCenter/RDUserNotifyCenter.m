@@ -1019,6 +1019,7 @@
 {
     if(!UNCSTRVALID(key)) return;
     
+    //对于推送来说，每次都推一样的东西是没意义的，所以根据url判断是否已经存在然后如果已经下载就不再下载的方式没有必要做。每次都下载并存储就对了。
     //TO DO: 这里还没有处理清空，可能会因为通知越来越多而导致越存越大
     //TO DO: 需要调研是否每次返回的location都是固定地址，然后生成的fileurl是否相同，关系到存储的东西是否会被下一次的覆盖
     //- (void)removePersistentDomainForName:(NSString *)domainName;
@@ -1074,6 +1075,43 @@
             completion(data);
         }
     }];
+}
++ (void)downAndSaveDatasToGroup:(NSArray *)dataUrls completion:(void(^)(void))completion
+{
+    if(!dataUrls || [dataUrls count] == 0) 
+    {
+        if(completion)
+        {
+            completion();
+        }
+        return;
+    }
+    
+    //group下载
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_group_t group = dispatch_group_create();
+    
+    for(NSString *url in dataUrls)
+    {
+        if(!UNCSTRVALID(url)) break;
+        
+        dispatch_group_async(group, queue, ^{
+            id data = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
+            [self saveDataToGroup:data forKey:url];
+            
+            NSLog(@"下载并保存完成: %@", url);
+        });
+    }
+    
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        NSLog(@"数组URL全部下载并保存完成!");
+        
+        if(completion)
+        {
+            completion();
+        }
+    });
+        
 }
 
 

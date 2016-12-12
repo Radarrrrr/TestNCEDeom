@@ -83,6 +83,21 @@
 //    [[UNUserNotificationCenter currentNotificationCenter] getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> * _Nonnull categories) {
 //        NSLog(@"%ld", categories.count);
 //    }];
+    
+    
+    //------一些测试
+//    NSArray *urls = @[
+//                      @"http://img50.ddimg.cn/39570025270550_y.jpg",
+//                      @"http://img57.ddimg.cn/95680028860097_y.jpg",
+//                      @"http://img35.ddimg.cn/imgother/201611/28_0/20161128155608105.jpg",
+//                      @"http://img58.ddimg.cn/106640020843798_y.jpg",
+//                      @"http://img39.ddimg.cn/imgother/201611/29_0/20161129151121169.jpg"
+//                      ];
+//    
+//    [RDUserNotifyCenter downAndSaveDatasToGroup:urls completion:^{
+//        NSLog(@"接收到全部数组下载完成了");
+//    }];
+    //------------
 }
 
 

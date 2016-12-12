@@ -50,7 +50,21 @@
         
         //接下来下载对应的数据
         [RDUserNotifyCenter downAndSaveDataToGroup:dataUrl forceKey:@"goto_page" completion:^(id data) {
-            self.contentHandler(self.bestAttemptContent);
+            
+            //分析并下载存储图片资源
+            NSArray *downUrls = [self urlsAnalysedFormData:data forLink:link];
+            if(downUrls)
+            {
+                [RDUserNotifyCenter downAndSaveDatasToGroup:downUrls completion:^{
+                    NSLog(@"ServiceExtension 拦截操作完成，返回通知上层");
+                    self.contentHandler(self.bestAttemptContent);
+                }];
+            }
+            else
+            {
+                NSLog(@"ServiceExtension 拦截操作完成，返回通知上层");
+                self.contentHandler(self.bestAttemptContent);
+            }
         }];
     }];
     
@@ -60,11 +74,17 @@
 - (void)serviceExtensionTimeWillExpire {
     // Called just before the extension will be terminated by the system.
     // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
+    NSLog(@"ServiceExtension 拦截操作超时！直接返回通知上层");
     self.contentHandler(self.bestAttemptContent);
 }
 
 
-- (NSString*)dataUrlForLink:(NSString*)link
+
+
+
+#pragma mark -
+#pragma mark 一些配套方法
+- (NSString *)dataUrlForLink:(NSString *)link
 {
     if(!link || ![link isKindOfClass:[NSString class]] || [link isEqualToString:@""])
     {
@@ -80,6 +100,37 @@
     
     return dataUrl;
 }
+
+- (NSArray *)urlsAnalysedFormData:(id)data forLink:(NSString *)link
+{
+    if(!data) return nil;
+    if(!link || ![link isKindOfClass:[NSString class]] || [link isEqualToString:@""]) return nil;
+    
+    NSMutableArray *urls = [[NSMutableArray alloc] init];
+    
+    if([link hasPrefix:@"category://"])
+    {
+        //分析并下载存储图片资源
+        NSDictionary *dataDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        if(![dataDic isKindOfClass:[NSDictionary class]]) return nil;
+        
+        NSArray *products = [dataDic objectForKey:@"products"];
+        if(!products || ![products isKindOfClass:[NSArray class]] || [products count] == 0) return nil;
+        
+        for(NSDictionary *pdic in products)
+        {
+            NSString *imgUrl = [pdic objectForKey:@"image_url"];
+            if(imgUrl && [imgUrl isKindOfClass:[NSString class]] && ![link isEqualToString:@""])
+            {
+                [urls addObject:imgUrl];
+            }
+        }
+    }
+    
+    return urls;
+}
+
+
 
 
 
