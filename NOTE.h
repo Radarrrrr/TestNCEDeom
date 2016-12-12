@@ -52,7 +52,7 @@
 
 
 //测试及演示相关推送payload数据结构------------------------------------------
-//推送一个默认Extension，原生状态展示图片
+//1. 推送一个默认Extension，原生状态展示图片
 {
     "aps":
     {
@@ -71,7 +71,7 @@
     "goto_page":""
 }
 
-//推送一个自定义Extension，使用category = myNotificationCategory来展示图片和信息
+//2. 推送一个自定义Extension，使用category = myNotificationCategory来展示图片和信息
 {
     "aps":
     {
@@ -90,7 +90,7 @@
     "goto_page":""
 }
 
-//推送一个自定义Extension，使用category = notification_category_list来展示列表图片信息
+//3. 推送一个自定义Extension，使用category = notification_category_list来展示列表图片信息
 {
     "aps":
     {
@@ -108,6 +108,8 @@
     },
     "goto_page":"category://cid=4002778"
 }
+
+
 
 
 //单品测试数据
@@ -137,6 +139,7 @@ http://cms.mapi.dangdang.com/index.php?action=list_cms_info&user_client=iphone&c
 http://search.mapi.dangdang.com/index.php?action=list_category&user_client=iphone&client_version=6.3.0&udid=C468039A2648F6CDC79E77EDAC68C4FE&time_code=55029C0906B363E848DB2A969CF17E7A&timestamp=1481122253&union_id=537-50&permanent_id=20161107192044709529023687781578603&page=1&page_size=10&sort_type=default_0&cid=4002778&img_size=e&result_format=3
 
 
-
+//搜索列表测试数据
+http://search.mapi.dangdang.com/index.php?action=all_search&user_client=iphone&client_version=6.3.0&udid=C468039A2648F6CDC79E77EDAC68C4FE&time_code=D859B3D061F614F9A893F2D732EA861E&timestamp=1481520394&union_id=537-50&permanent_id=20161107192044709529023687781578603&page=1&page_size=10&sort_type=default_0&keyword=Dog&img_size=e
 
 
