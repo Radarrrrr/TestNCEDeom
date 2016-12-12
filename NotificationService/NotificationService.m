@@ -49,7 +49,8 @@
         }
         
         //接下来下载对应的数据
-        [RDUserNotifyCenter downAndSaveDataToGroup:dataUrl forceKey:@"goto_page" completion:^(id data) {
+        NSString *dataForceKey = [NSString stringWithFormat:@"goto_page_%@", request.identifier];
+        [RDUserNotifyCenter downAndSaveDataToGroup:dataUrl forceKey:dataForceKey completion:^(id data) {
             
             //分析并下载存储图片资源
             NSArray *downUrls = [self urlsAnalysedFormData:data forLink:link];
@@ -95,7 +96,8 @@
     
     if([link hasPrefix:@"category://"])
     {
-        dataUrl = @"http://search.mapi.dangdang.com/index.php?action=list_category&user_client=iphone&client_version=6.3.0&udid=C468039A2648F6CDC79E77EDAC68C4FE&time_code=55029C0906B363E848DB2A969CF17E7A&timestamp=1481122253&union_id=537-50&permanent_id=20161107192044709529023687781578603&page=1&page_size=10&sort_type=default_0&cid=4002778&img_size=h";
+        NSString *cid = [self getProperty:@"cid" formLinkURL:link];
+        dataUrl = [NSString stringWithFormat:@"http://search.mapi.dangdang.com/index.php?action=list_category&user_client=iphone&client_version=6.3.0&udid=C468039A2648F6CDC79E77EDAC68C4FE&time_code=55029C0906B363E848DB2A969CF17E7A&timestamp=1481122253&union_id=537-50&permanent_id=20161107192044709529023687781578603&page=1&page_size=10&sort_type=default_0&cid=%@&img_size=h", cid];
     }
     
     return dataUrl;
@@ -130,7 +132,39 @@
     return urls;
 }
 
-
+- (NSString*)getProperty:(NSString*)propertyName formLinkURL:(NSString*)linkURL
+{
+    //从linkURL里拆分出pageID，如 cms://page_id=9527&seq=1,从中拆分出page_id的内容是9527
+    if(!linkURL || [linkURL compare:@""] == NSOrderedSame) return nil;
+    if(!propertyName || [propertyName compare:@""] == NSOrderedSame) return nil;
+    
+    //找到://后面的部分串
+    NSRange range = [linkURL rangeOfString:@"://"];
+    if(range.length == 0) return nil;
+    
+    NSString *paramsString = [linkURL substringFromIndex:(range.location+range.length)]; //page_id=9527&seq=1
+    if(!paramsString || [paramsString compare:@""] == NSOrderedSame) return nil;
+    
+    NSArray *params = [paramsString componentsSeparatedByString:@"&"];
+    if(!params || [params count] == 0) return nil;
+    
+    
+    NSString *property = nil;
+    
+    for(NSString *par in params) //page_id=9527 和 seq=1
+    {
+        
+        NSArray *keyAndValue = [par componentsSeparatedByString:@"="];
+        
+        if(!keyAndValue || [keyAndValue count] != 2) continue;
+        if([[keyAndValue objectAtIndex:0] isEqualToString:propertyName])
+        {
+            property = [keyAndValue objectAtIndex:1];
+        }
+    }
+    
+    return property;
+}
 
 
 

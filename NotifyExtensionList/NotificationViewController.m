@@ -59,7 +59,8 @@
     
     
     //测试方式1 做格子的方式
-    id data = [RDUserNotifyCenter loadDataFromGroup:@"goto_page" forNotification:notification];
+    NSString *dataForceKey = [NSString stringWithFormat:@"goto_page_%@", notification.request.identifier];
+    id data = [RDUserNotifyCenter loadDataFromGroup:dataForceKey forNotification:notification];
     NSDictionary *dataDic = (NSDictionary*)[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
     
     NSArray *products = [dataDic objectForKey:@"products"];
@@ -84,16 +85,9 @@
     
     
     
+
     
-    //不需要，一会删掉
-//    id pdata = [RDUserNotifyCenter loadDataFromGroup:@"first_pic" forNotification:notification];
-//    UIImage *attachImg = [UIImage imageWithData:pdata];
-//    _imageView.image = attachImg;
-    
-    
-    
-    
-    //测试方式2，通过写好imageView，然后读取data，组合图片，再安装到imageView里边的方式，效率很低，显示时间消耗太长, 瓶颈在UIImageView显示图片用时太长
+    //测试方式2，通过写好imageView，然后读取data，组合图片，再安装到imageView里边的方式，效率很低，显示时间消耗太长
 //    NSDictionary *pdic = [products firstObject];
 //    NSString *imgUrl = [pdic objectForKey:@"image_url"];
 //    NSLog(@"图片开始读取: %@", imgUrl);
@@ -108,7 +102,8 @@
 //            
 //        }
 //    }];
-//    
+
+    
     
 
 }
