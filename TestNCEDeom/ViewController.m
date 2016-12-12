@@ -25,15 +25,14 @@
     }];
     
     
-    //TO DO: 是否可以把这个工作做到每个extension里边去绑定呢？ 或者放到payload里边，通过servcieExtension来绑定呢？
     //绑定action到category
     [[RDUserNotifyCenter sharedCenter] prepareBindingActions];
 
-    [[RDUserNotifyCenter sharedCenter] appendAction:@"action1" actionTitle:@"进去看看" options:UNNotificationActionOptionForeground toCategory:@"myNotificationCategory"];
-    [[RDUserNotifyCenter sharedCenter] appendAction:@"action2" actionTitle:@"取消" options:UNNotificationActionOptionDestructive toCategory:@"myNotificationCategory"];
+    [[RDUserNotifyCenter sharedCenter] appendAction:@"action_enter" actionTitle:@"进去看看" options:UNNotificationActionOptionForeground toCategory:@"myNotificationCategory"];
+    [[RDUserNotifyCenter sharedCenter] appendAction:@"action_exit" actionTitle:@"关闭" options:UNNotificationActionOptionDestructive toCategory:@"myNotificationCategory"];
     
-//    [[RDUserNotifyCenter sharedCenter] appendAction:@"action11" actionTitle:@"第11个anction显示" options:UNNotificationActionOptionForeground toCategory:@"category_the_second"];
-//    [[RDUserNotifyCenter sharedCenter] appendAction:@"action12" actionTitle:@"第12个anction显示" options:UNNotificationActionOptionForeground toCategory:@"category_the_second"];
+    [[RDUserNotifyCenter sharedCenter] appendAction:@"action_enter" actionTitle:@"进去看看" options:UNNotificationActionOptionForeground toCategory:@"notification_category_list"];
+    [[RDUserNotifyCenter sharedCenter] appendAction:@"action_exit" actionTitle:@"关闭" options:UNNotificationActionOptionDestructive toCategory:@"notification_category_list"];
     
     [[RDUserNotifyCenter sharedCenter] bindingActions];
     
@@ -96,7 +95,7 @@
     NSDictionary *userInfo      = content.userInfo;
     
     
-    if([response.actionIdentifier isEqualToString:@"com.apple.UNNotificationDefaultActionIdentifier"])
+    if([actionID isEqualToString:@"com.apple.UNNotificationDefaultActionIdentifier"])
     {
         //点击内容窗口进来的
         NSLog(@"点击内容窗口进来的");
@@ -104,7 +103,7 @@
     else
     {
         //点击自定义Action按钮进来的
-        NSLog(@"点击自定义Action按钮进来的 actionID: %@", response.actionIdentifier);
+        NSLog(@"点击自定义Action按钮进来的 actionID: %@", actionID);
     }
     
 }

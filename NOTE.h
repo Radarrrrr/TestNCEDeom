@@ -90,6 +90,24 @@
     "goto_page":""
 }
 
+//推送一个自定义Extension，使用category = notification_category_list来展示列表图片信息
+{
+    "aps":
+    {
+        "alert":
+        {
+            "title":"我是原装标题",
+            "subtitle":"我是副标题",
+            "body":"it is a beautiful day"
+        },
+        "badge":1,
+        "sound":"default",
+        "mutable-content":"1",
+        "category":"notification_category_list",
+        "attach":"http://img3x2.ddimg.cn/29/14/1128514592-1_h_6.jpg"
+    },
+    "goto_page":"category://cid=4002778"
+}
 
 
 //单品测试数据

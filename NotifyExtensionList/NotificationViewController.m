@@ -9,6 +9,7 @@
 #import "NotificationViewController.h"
 #import <UserNotifications/UserNotifications.h>
 #import <UserNotificationsUI/UserNotificationsUI.h>
+#import "RDUserNotifyCenter.h"
 
 @interface NotificationViewController () <UNNotificationContentExtension>
 
@@ -21,6 +22,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any required interface initialization here.
+        
 }
 
 - (void)didReceiveNotification:(UNNotification *)notification {

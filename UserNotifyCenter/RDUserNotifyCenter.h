@@ -6,8 +6,11 @@
 //  Copyright © 2016年 Radar. All rights reserved.
 //
 
+
+//使用前，请先仔细阅读本类使用的相关说明，谢谢
+
 //本类使用相关的问题:
-//注1: 本类必须iOS10以上使用
+//注1: 本类必须iOS10以上使用, 暂时不支持可输入文字形式的extension
 //注2: 获取devicetoken的方法，仍然是在appDelegate中使用:
 //   - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 
@@ -17,11 +20,14 @@
 //注5: attach字段所带过来的url里边，一定要带上类型后缀，比如.jpg .png .gif .mp3 .m4a .mp4 .m4v，不一定在最后，中间也可以。
 //     本类会自动检测url中，只要出现了这几种类型，自会处理，如果什么都没带，按照.jpg处理
 
-//注6: 在ServcieEcxtensino修改过的内容，到ContentExtension里边用notification.request.content.xxx可以取到，但是不会修改到notification.request.content.userInfo里边
-//所以，尽量不要在这个地方进行content内容的修改，消息体内容尽量服务器来指定，包括挂载那个category，最好也是服务器指定
-//这个中间件的过程中，最好只用来下载attachment和其他需要下载的数据
+//注6: 在ServcieExtension修改过的内容，到ContentExtension里边用notification.request.content.xxx可以取到，但是不会修改到notification.request.content.userInfo里边
+//     所以，尽量不要在这个地方进行content内容的修改，消息体内容尽量服务器来指定，包括挂载哪个category，最好也是服务器指定，因为userInfo这个信息，会在程序内多次传递并作为重要数据使用，中途修改会引起不安全因素
+//     这个中间件的过程中，最好只用来下载attachment和其他需要下载的数据
 
 //注7: 在info.plist里边添加 UNNotificationExtensionDefaultContentHidden项，并设定为YES，表示不显示原生alert信息，如果设定为NO，则显示原生alert信息
+
+//注8: 绑定Action的工作放在containerApp是最合适的，因为需要在主工程中接收消息点击事件，然后在主工程中进行其他操作，actionid-categoryid-接收者，三者在同一个类中实现，比较合理，建议如此操作。
+//     另外，在contentExtension被唤起之前，必须完成绑定，否则是看不到action的
 
 
 
@@ -38,6 +44,11 @@
 //     1. App Groups
 
 //注4: 要在每个target的info.plist里边添加app group项 //TO DO: 待定方案，暂时写在这里别忘了
+
+//注5: 在本类之后新添加的contentExtension，需要把本类加入编译资源内，路径 contentExtension的target -> Build Phases -> Compile Sources 里边加入本类的编译
+
+
+
 
 
 
