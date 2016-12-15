@@ -17,7 +17,7 @@
 @property (nonatomic, strong) NSMutableDictionary *bindingActionsDic; //数据结构：@{@"categoryID":@[action1, action2, ....], ....}
 
 + (NSString *)fileExtForURL:(NSString *)dataUrl;
-+ (NSString *)getNotifyIdforNotification:(id)notify; //从通知中获取对应的notifyId，notify可以是UNNotificationRequest类型，也可以是UNNotification，也可以是UNNotificationContent类型，也可以直接就是字符串，方法内会自动检测
++ (NSString *)notifyIdforNotification:(id)notify; //从通知中获取对应的notifyId，notify可以是UNNotificationRequest类型，也可以是UNNotification，也可以是UNNotificationContent类型，也可以直接就是字符串，方法内会自动检测
 
 @end
 
