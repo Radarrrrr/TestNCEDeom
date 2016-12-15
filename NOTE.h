@@ -26,12 +26,7 @@
     "goto_page":"cms://page_id=14374"
 }
 
-<<<<<<< HEAD
- 
 
-b
-=======
-a
 
 
 >>>>>>> master
