@@ -109,7 +109,7 @@
     "goto_page":"category://cid=4002778"
 }
 
-//3. 推送一个自定义Extension，使用category = notification_category_product来展示单品信息
+//3. 推送一个自定义Extension，使用category = notification_category_product来展示单品信息 1129549420  1142174671  1092437691 1478346305
 {
     "aps":
     {

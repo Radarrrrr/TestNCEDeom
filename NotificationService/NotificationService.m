@@ -37,7 +37,7 @@
     //截获attach和其他数据，下载并存储    
     NSString *link = [RDUserNotifyCenter getValueForKey:@"goto_page" inNotification:request];
     NSString *dataUrl = [self dataUrlForLink:link]; 
-    
+    NSLog(@"dataUrl: %@", dataUrl);
     
     //获取attachment并且存入group
     [RDUserNotifyCenter downAndSaveAttachmentForNotifyRequest:request completion:^(UNNotificationAttachment *attach) {
@@ -53,7 +53,7 @@
         
             //分析并下载存储图片资源
             NSArray *downUrls = [self urlsAnalysedFormData:data forLink:link];
-            if(downUrls)
+            if(downUrls && [downUrls count] != 0)
             {
                 [RDUserNotifyCenter downAndSaveDatasToGroup:downUrls completion:^{
                     NSLog(@"ServiceExtension 拦截操作完成，返回通知上层");
@@ -98,6 +98,11 @@
         NSString *cid = [self getProperty:@"cid" formLinkURL:link];
         dataUrl = [NSString stringWithFormat:@"http://search.mapi.dangdang.com/index.php?action=list_category&user_client=iphone&client_version=6.3.0&udid=C468039A2648F6CDC79E77EDAC68C4FE&time_code=55029C0906B363E848DB2A969CF17E7A&timestamp=1481122253&union_id=537-50&permanent_id=20161107192044709529023687781578603&page=1&page_size=10&sort_type=default_0&cid=%@&img_size=h", cid];
     }
+    else if([link hasPrefix:@"product://"])
+    {
+        NSString *pid = [self getProperty:@"pid" formLinkURL:link];
+        dataUrl = [NSString stringWithFormat:@"http://product.mapi.dangdang.com/index.php?action=get_product&user_client=iphone&client_version=6.3.0&udid=C468039A2648F6CDC79E77EDAC68C4FE&time_code=08BD43CAAA3586463EB6FA43687A6069&timestamp=1481112463&union_id=537-50&permanent_id=20161107192044709529023687781578603&pid=%@&expand=1,2,3,4,5,6&is_abtest=1&img_size=h&lunbo_img_size=h", pid];
+    }
     
     return dataUrl;
 }
@@ -107,14 +112,14 @@
     if(!data) return nil;
     if(!link || ![link isKindOfClass:[NSString class]] || [link isEqualToString:@""]) return nil;
     
+    NSDictionary *dataDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+    if(!dataDic || ![dataDic isKindOfClass:[NSDictionary class]]) return nil;
+    
     NSMutableArray *urls = [[NSMutableArray alloc] init];
     
     if([link hasPrefix:@"category://"])
     {
         //分析并下载存储图片资源
-        NSDictionary *dataDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-        if(![dataDic isKindOfClass:[NSDictionary class]]) return nil;
-        
         NSArray *products = [dataDic objectForKey:@"products"];
         if(!products || ![products isKindOfClass:[NSArray class]] || [products count] == 0) return nil;
         
@@ -125,6 +130,24 @@
             {
                 [urls addObject:imgUrl];
             }
+        }
+    }
+    else if([link hasPrefix:@"product://"])
+    {
+        //获取4张轮播图
+        NSDictionary *infoDic = [dataDic objectForKey:@"product_info_new"];
+        NSArray *images = [infoDic objectForKey:@"images_big"];
+        if(images && images.count != 0)
+        {
+            urls = [NSMutableArray arrayWithArray:images];
+        }
+        
+        //追加一张店铺logo图
+        NSDictionary *shopDic = [dataDic objectForKey:@"shop_info"];
+        NSString *logoUrl = [shopDic objectForKey:@"shop_logo"];
+        if(logoUrl)
+        {
+            [urls addObject:logoUrl];
         }
     }
     
