@@ -48,10 +48,9 @@
             self.bestAttemptContent.attachments = [NSArray arrayWithObject:attach];
         }
         
-        //接下来下载对应的数据
-        NSString *dataForceKey = [NSString stringWithFormat:@"goto_page_%@", request.identifier];
-        [RDUserNotifyCenter downAndSaveDataToGroup:dataUrl forceKey:dataForceKey completion:^(id data) {
-            
+        //接下来下载对应的数据        
+        [RDUserNotifyCenter downAndSaveDataToGroup:dataUrl forceKey:@"goto_page" forNotification:request completion:^(id data) {
+        
             //分析并下载存储图片资源
             NSArray *downUrls = [self urlsAnalysedFormData:data forLink:link];
             if(downUrls)

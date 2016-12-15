@@ -16,6 +16,9 @@
 
 @property (nonatomic, strong) NSMutableDictionary *bindingActionsDic; //数据结构：@{@"categoryID":@[action1, action2, ....], ....}
 
++ (NSString *)fileExtForURL:(NSString *)dataUrl;
++ (NSString *)getNotifyIdforNotification:(id)notify; //从通知中获取对应的notifyId，notify可以是UNNotificationRequest类型，也可以是UNNotification，也可以是UNNotificationContent类型，也可以直接就是字符串，方法内会自动检测
+
 @end
 
 
@@ -968,7 +971,27 @@
     return ext;
 }
 
-
++ (NSString *)notifyIdforNotification:(id)notify
+{
+    if(!notify) return nil;
+ 
+    NSString *notifyId = nil;
+    
+    if([notify isKindOfClass:[UNNotificationRequest class]])
+    {
+        notifyId = [(UNNotificationRequest*)notify identifier];
+    }
+    else if([notify isKindOfClass:[UNNotification class]])
+    {
+        notifyId = [(UNNotification*)notify request].identifier;
+    }
+    else if([notify isKindOfClass:[NSString class]])
+    {
+        notifyId = (NSString*)notify;
+    }
+    
+    return notifyId;
+}
 
 
 
@@ -1076,6 +1099,45 @@
         }
     }];
 }
++ (void)downAndSaveDataToGroup:(NSString *)dataUrl forceKey:(NSString*)forceKey forNotification:(id)notify completion:(void(^)(id data))completion
+{
+    if(!UNCSTRVALID(dataUrl))
+    {
+        if(completion)
+        {
+            completion(nil);
+        }
+        return;
+    }
+    
+    [self downLoadData:dataUrl completion:^(id data) {
+        
+        NSString *useKey = dataUrl;
+        
+        NSString *notifyId = [self notifyIdforNotification:notify];
+        
+        if(UNCSTRVALID(forceKey) && UNCSTRVALID(notifyId))
+        {
+            useKey = [NSString stringWithFormat:@"%@_%@", forceKey, notifyId];
+        }
+        else if(UNCSTRVALID(forceKey))
+        {
+            useKey = forceKey;
+        }
+        else if(UNCSTRVALID(notifyId))
+        {
+            useKey = notifyId;
+        }
+        
+        [self saveDataToGroup:data forKey:useKey];
+        
+        if(completion)
+        {
+            completion(data);
+        }
+    }];
+}
+
 + (void)downAndSaveDatasToGroup:(NSArray *)dataUrls completion:(void(^)(void))completion
 {
     if(!dataUrls || [dataUrls count] == 0) 
@@ -1128,12 +1190,35 @@
 
 
 + (id)loadDataFromGroup:(NSString*)loadKey forNotification:(id)notify
-{
-    if(!UNCSTRVALID(loadKey)) return nil;
+{    
+    id data = nil;
     
-    //先按照直接key存储的读取
-    id data = [self loadDataFromGroup:loadKey];
-    if(!data && notify)
+    NSString *notifyId = [self notifyIdforNotification:notify];
+    
+    //先按照loadkey+notifyId的组合判断条件来读取
+    if(UNCSTRVALID(loadKey) && UNCSTRVALID(notifyId))
+    {
+        NSString *useKey = [NSString stringWithFormat:@"%@_%@", loadKey, notifyId];
+        data = [self loadDataFromGroup:useKey];
+        if(data) return data;
+    }
+    
+    //如果组合的没有，再按照直接key存储的读取
+    if(UNCSTRVALID(loadKey))
+    {
+        data = [self loadDataFromGroup:loadKey];
+        if(data) return data;
+    }
+    
+    //loadKey也没有，看看notifyId有没有
+    if(UNCSTRVALID(notifyId))
+    {
+        data = [self loadDataFromGroup:notifyId];
+        if(data) return data;
+    }
+    
+    //如果直接读取不出来，再通过url读取
+    if(UNCSTRVALID(loadKey) && notify)
     {
         //看是不是按照url存的，找到loadkey对应的url，如果loadkey也不是payload里边的key，那么就返回空了
         id value = [RDUserNotifyCenter getValueForKey:loadKey inNotification:notify];

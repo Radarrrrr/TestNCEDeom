@@ -59,8 +59,7 @@
     
     
     //测试方式1 做格子的方式
-    NSString *dataForceKey = [NSString stringWithFormat:@"goto_page_%@", notification.request.identifier];
-    id data = [RDUserNotifyCenter loadDataFromGroup:dataForceKey forNotification:notification];
+    id data = [RDUserNotifyCenter loadDataFromGroup:@"goto_page" forNotification:notification];
     NSDictionary *dataDic = (NSDictionary*)[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
     
     NSArray *products = [dataDic objectForKey:@"products"];

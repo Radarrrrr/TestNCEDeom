@@ -163,22 +163,24 @@
 
 
 
-#pragma mark - 注册通知，绑定action，规划本地通知
+#pragma mark - 注册通知
 //注册通知，本地+远程，需要在适当的时候调用一次本方法，app才会开启通知功能 //特别注意，此方法必须在程序启动的时候调用一次，不管以前是否注册过，否则会收不到通知 //单独写此方法是因为很多app在第一次使用的时候，要紧跟着开启定位，通知，数据，三个提醒，太烦人了以至于用户很容易点错。
 - (void)registerUserNotification:(id)delegate completion:(void (^)(BOOL success))completion;
 
 
+
+#pragma mark - 绑定action
 //绑定action到指定的category上    //PS:目前暂不支持可以输入文字的anction样式   //PS:必须成套使用且只能使用一次，第二次使用会覆盖第一次
 - (void)prepareBindingActions;
 - (void)appendAction:(NSString *)actionID actionTitle:(NSString *)title options:(UNNotificationActionOptions)options toCategory:(NSString *)categoryID;
 - (void)bindingActions; //prepare和binding必须配套使用
 
 
-
-//规划本地通知
+#pragma mark - 规划本地通知
+//直接食用request规划本地通知
 - (void)scheduleLocalNotify:(UNNotificationRequest *)request; //直接使用request规划本地通知，可以从外面直接做一个request调用。
 
-//输入各种属性来规划本地通知的方法  //PS: 全量方法，不建议使用这个
+//输入各种属性来规划本地通知  //PS: 全量方法，不建议使用这个
 - (void)scheduleLocalNotify:(NSDateComponents *)fireDate        //触发日期安排        //注意：前三个是互斥的触发方式，只能有一个存在，同时共存当作没有处理，三个都不存在则返回规划失败
                timeInterval:(NSString *)fireTimeInterval        //触发延后时间安排
                     repeats:(BOOL)repeats
@@ -260,6 +262,7 @@
 
 
 
+
 #pragma mark - 给UNNotificationServiceExtension配套的方法
 //从通知中获取attachment，默认使用aps字典中的"attach"字段当作attachment，类型会自动检测，获取完成以后会用"attach"作为key来存储到group里边，
 //PS: "attach" 由宏 RDUserNotifyCenter_default_attach_key指定，可通过修改宏来自定义attach的字段使用哪个，不需要指定路径，方法内部会自动检索
@@ -268,13 +271,24 @@
 
 
 
+
 #pragma mark - Extension间数据读取及共享相关方法
 //数据下载和存储
 + (void)downLoadData:(NSString*)dataUrl completion:(void(^)(id data))completion;            //用dataUrl下载对应的数据并返回
 + (void)saveDataToGroup:(id)data forKey:(NSString*)key;                                     //根据通知的id存储数据到group里边
-+ (void)downAndSaveDataToGroup:(NSString *)dataUrl completion:(void(^)(id data))completion;                              //下载dataUrl对应的数据，并存储到Group里边，默认使用dataUrl作为key存储，返回下载的数据
-+ (void)downAndSaveDataToGroup:(NSString *)dataUrl forceKey:(NSString*)forceKey completion:(void(^)(id data))completion; //下载dataUrl对应的数据，并存储到Group里边，优先使用forceKey作为key存储，如果forceKey不存在，则默认使用dataUrl作为key存储(此时效果同前一个方法)，返回下载的数据
-+ (void)downAndSaveDatasToGroup:(NSArray *)dataUrls completion:(void(^)(void))completion;    //下载一个数组的url对应的数据，并存储到Group里边，用每一个数据的url作为key存储，下载完成统一返回一次完成。
+
+//下载dataUrl对应的数据，并存储到Group里边，默认使用dataUrl作为key存储，返回下载的数据
++ (void)downAndSaveDataToGroup:(NSString *)dataUrl completion:(void(^)(id data))completion;  
+
+//下载dataUrl对应的数据，并存储到Group里边，优先使用forceKey作为key存储，如果forceKey不存在，则默认使用dataUrl作为key存储(此时效果同前一个方法)，返回下载的数据
++ (void)downAndSaveDataToGroup:(NSString *)dataUrl forceKey:(NSString*)forceKey completion:(void(^)(id data))completion; 
+
+//下载dataUrl对应的数据，并存储到Group里边，优先使用forceKey+notifyid作为key存储，如果两者只存在其一，则使用存在的作为key存储，如果两者都不存在，则默认使用dataUrl作为key存储，然后返回下载的数据
++ (void)downAndSaveDataToGroup:(NSString *)dataUrl forceKey:(NSString*)forceKey forNotification:(id)notify completion:(void(^)(id data))completion; 
+
+//下载一个数组的url对应的数据，并存储到Group里边，用每一个数据的url作为key存储，下载完成统一返回一次完成。
++ (void)downAndSaveDatasToGroup:(NSArray *)dataUrls completion:(void(^)(void))completion;    
+
 
 //数据读取
 //根据key从group里边取出存储的数据，key有可能是url也可能是自定义的, 如果明确知道存储的时候用的是什么key，那么notify字段可以设定为nil，反之则会模糊查找，使用key对应的url来读取。
@@ -282,8 +296,11 @@
 + (id)loadDataFromGroup:(NSString*)loadKey forNotification:(id)notify;  
 
 
+
 //数据移除
 + (void)removeDataFromGroupForKey:(NSString*)key;   //根据key从group里边移除对应的数据
+
+
 
 
 

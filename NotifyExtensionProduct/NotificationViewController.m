@@ -25,6 +25,10 @@
 
 - (void)didReceiveNotification:(UNNotification *)notification {
     
+    id data = [RDUserNotifyCenter loadDataFromGroup:@"goto_page" forNotification:notification];
+    NSDictionary *dataDic = (NSDictionary*)[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+    
+    
 }
 
 @end

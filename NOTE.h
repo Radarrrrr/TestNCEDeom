@@ -90,7 +90,7 @@
     "goto_page":""
 }
 
-//3. 推送一个自定义Extension，使用category = notification_category_list来展示列表图片信息
+//3. 推送一个自定义Extension，使用category = notification_category_list来展示列表图片信息 4002778  10010412  4010621  4010623 
 {
     "aps":
     {
