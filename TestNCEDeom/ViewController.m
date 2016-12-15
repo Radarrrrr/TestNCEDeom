@@ -64,7 +64,7 @@
 //                                                  subtitle:@"这是一个副标题"
 //                                                      body:@"这是通知文本正文" 
 //                                                attachment:@"attach_image.png" 
-//                                                lauchImage:@"launch_image@2x.jpg" 
+//                                                lauchImage:@"launch_image@2x.jpg" //TO DO: 这个地方还一直没有看到过效果，启动图片到底是什么？还需要确认一下
 //                                                     sound:nil 
 //                                                     badge:1 
 //                                                      info:nil 

@@ -382,7 +382,7 @@
         }
         else
         {
-            //没写后缀，默认就是.png
+            //没写后缀，默认就是.jpg
             name = attachmentName;
             type = @"jpg";
         }
@@ -834,7 +834,7 @@
     
     //找到attach，虽然尽量限定aps里边，但是很难保证接口不任性，所以还是把所有的字段都检索一遍，找到attach字段，还得检查一下是否是url
     NSString *attachStr = [self getValueForKey:RDUserNotifyCenter_default_attach_key inNotification:request];
-    if(!attachStr || ![attachStr isKindOfClass:[NSString class]] || [attachStr isEqualToString:@""]) 
+    if(!UNCSTRVALID(attachStr))    
     {
         //attach的数据value必须得是字符串
         if(completion)
@@ -878,7 +878,7 @@
         }
         else
         {
-            //没写后缀，默认就是.png
+            //没写后缀，默认就是.jpg
             name = attachStr;
             type = @"jpg";
         }
@@ -1137,7 +1137,7 @@
     {
         //看是不是按照url存的，找到loadkey对应的url，如果loadkey也不是payload里边的key，那么就返回空了
         id value = [RDUserNotifyCenter getValueForKey:loadKey inNotification:notify];
-        if(value && [value isKindOfClass:[NSString class]] && ![(NSString*)value isEqualToString:@""])
+        if(UNCSTRVALID(value))
         {
             data = [self loadDataFromGroup:(NSString*)value];
         }

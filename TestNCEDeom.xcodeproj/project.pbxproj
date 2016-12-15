@@ -32,6 +32,9 @@
 		0C879C0C1DD4C2B400C3E86E /* RDUserNotifyCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C879C0B1DD4C2B400C3E86E /* RDUserNotifyCenter.m */; };
 		0C8B17BB1DED5E3800FC3305 /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C8B17BA1DED5E3800FC3305 /* NotificationService.m */; };
 		0C8B17BF1DED5E3800FC3305 /* NotificationService.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 0C8B17B71DED5E3800FC3305 /* NotificationService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		0CF3CC251E01A54F005B2AEF /* launch_image@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0C35221B1DEFD54300D9DBEF /* launch_image@2x.jpg */; };
+		0CF3CC271E01A747005B2AEF /* attach_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C3522441DF5586800D9DBEF /* attach_image.png */; };
+		0CF3CC2A1E025FFE005B2AEF /* googview.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0CF3CC291E025FFE005B2AEF /* googview.jpg */; };
 		0CFAD5621DFAB2FC0080EFBE /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C879BD71DD4692900C3E86E /* UserNotifications.framework */; };
 		0CFAD5631DFAB2FC0080EFBE /* UserNotificationsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C879BD91DD4692900C3E86E /* UserNotificationsUI.framework */; };
 		0CFAD5671DFAB2FC0080EFBE /* NotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CFAD5661DFAB2FC0080EFBE /* NotificationViewController.m */; };
@@ -123,6 +126,7 @@
 		0C8B17B91DED5E3800FC3305 /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
 		0C8B17BA1DED5E3800FC3305 /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
 		0C8B17BC1DED5E3800FC3305 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0CF3CC291E025FFE005B2AEF /* googview.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = googview.jpg; sourceTree = "<group>"; };
 		0CFAD5611DFAB2FC0080EFBE /* NotifyExtensionList.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotifyExtensionList.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CFAD5651DFAB2FC0080EFBE /* NotificationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationViewController.h; sourceTree = "<group>"; };
 		0CFAD5661DFAB2FC0080EFBE /* NotificationViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationViewController.m; sourceTree = "<group>"; };
@@ -283,6 +287,7 @@
 		0C8B17B81DED5E3800FC3305 /* NotificationService */ = {
 			isa = PBXGroup;
 			children = (
+				0CF3CC291E025FFE005B2AEF /* googview.jpg */,
 				0C35221E1DF0065600D9DBEF /* NotificationService.entitlements */,
 				0C8B17B91DED5E3800FC3305 /* NotificationService.h */,
 				0C8B17BA1DED5E3800FC3305 /* NotificationService.m */,
@@ -524,6 +529,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0CF3CC2A1E025FFE005B2AEF /* googview.jpg in Resources */,
+				0CF3CC271E01A747005B2AEF /* attach_image.png in Resources */,
+				0CF3CC251E01A54F005B2AEF /* launch_image@2x.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

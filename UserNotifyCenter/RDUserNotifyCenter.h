@@ -1,6 +1,7 @@
 //
 //  RDUserNotifyCenter.h
 //  TestNCEDeom
+//  version 1.0
 //
 //  Created by Radar on 2016/11/10.
 //  Copyright © 2016年 Radar. All rights reserved.
@@ -19,6 +20,7 @@
 
 //注5: attach字段所带过来的url里边，一定要带上类型后缀，比如.jpg .png .gif .mp3 .m4a .mp4 .m4v，不一定在最后，中间也可以。
 //     本类会自动检测url中，只要出现了这几种类型，自会处理，如果什么都没带，按照.jpg处理
+//     本类目前只处理图片类型，暂不支持视频和音频，以后版本升级再说
 
 //注6: 在ServcieExtension修改过的内容，到ContentExtension里边用notification.request.content.xxx可以取到，但是不会修改到notification.request.content.userInfo里边
 //     所以，尽量不要在这个地方进行content内容的修改，消息体内容尽量服务器来指定，包括挂载哪个category，最好也是服务器指定，因为userInfo这个信息，会在程序内多次传递并作为重要数据使用，中途修改会引起不安全因素
@@ -33,7 +35,9 @@
 
 //注10: 本类不是下载工具，只能简单下载一些固定URL的东西，比如数据或者图片，HTTP的header设定那些东西，不在本类范围内。如果需要使用，外面自行使用就行了。
 
-
+//注11: 如果需要通过远程通知来使用本地图片做attachment，有两种处理方式：
+//      1. 把该图片的 Target Membership 勾选上ServiceExtension. (用于同一张图片主app和扩展app都需要使用的情况)
+//      2. 直接把要推送的图片在extension里边添加. (用于该图片只给扩展app使用)
 
 
 
