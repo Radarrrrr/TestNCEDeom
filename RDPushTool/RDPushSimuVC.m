@@ -21,6 +21,10 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     
+    //注册消息监听器
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveConnectStateNotify:) name:NOTIFICATION_RDPUSHTOOL_REPORT object:nil];
+    
+    
     //连接按钮
     UIButton *connectBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     connectBtn.frame = CGRectMake(20, 50, 200, 50);
@@ -44,18 +48,33 @@
     
 }
 
+- (void)dealloc
+{
+    //在dealloc里边注销监听器
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_RDPUSHTOOL_REPORT object:nil];
+}
+
 
 - (void)connectAction:(id)sender
 {
-    [[RDPushTool sharedTool] connect];
+    //[[RDPushTool sharedTool] connect];
 }
 
 - (void)disConnectAction:(id)sender
 {
-    [[RDPushTool sharedTool] disconnect];
+    //[[RDPushTool sharedTool] disconnect];
 }
 
-
+- (void)receiveConnectStateNotify:(NSNotification*)notification
+{
+    if(!notification) return;
+    
+    NSString *report = (NSString*)notification.object;
+    if(!report) return;
+    
+    //TO DO: 根据report的内容，修改界面显示内容log
+    
+}
 
 
 @end

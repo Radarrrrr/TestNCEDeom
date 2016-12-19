@@ -13,6 +13,10 @@
 #define PTSTRVALID(str)   [RDPushTool checkStringValid:str]   //检查一个字符串是否有效
 
 
+
+
+#pragma mark -
+#pragma mark 主类
 @interface RDPushTool ()
 
 @property (nonatomic, strong) NWHub *hub;
@@ -89,12 +93,19 @@
     return dic;
 }
 
+- (void)broadCastReport:(NSString *)report
+{
+    if(!PTSTRVALID(report)) return;
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RDPUSHTOOL_REPORT object:report userInfo:nil];
+}
+
+
 
 
 
 
 #pragma mark -
-#pragma mark 内部初始化方法
+#pragma mark 内部使用的数据相关方法
 - (void)initProperties
 {
     //初始化一些属性
@@ -111,6 +122,10 @@
     NSArray *ids = [NWSecTools identitiesWithPKCS12Data:pkcs12 password:pkcs12Password error:&error];
     if (!ids) {
         NSLog(@"Unable to read p12 file: %@", error.localizedDescription);
+        
+        NSString *report = [NSString stringWithFormat:@"读取P12文件失败...: %@", error.localizedDescription];
+        [self broadCastReport:report];
+        
         return;
     }
     for (NWIdentityRef identity in ids) {
@@ -118,6 +133,10 @@
         NWCertificateRef certificate = [NWSecTools certificateWithIdentity:identity error:&error];
         if (!certificate) {
             NSLog(@"Unable to import p12 file: %@", error.localizedDescription);
+            
+            NSString *report = [NSString stringWithFormat:@"加载P12文件失败...: %@", error.localizedDescription];
+            [self broadCastReport:report];
+            
             return;
         }
         
@@ -132,13 +151,25 @@
 
 #pragma mark -
 #pragma mark 连结及推送操作相关
-- (void)connect
+- (void)connect:(void(^)(BOOL success))completion
 {
     //连结APNs
-    if(_hub) return; //TO DO: 这个地方还得再考虑，是否如果有了hub，就算是连结状态呢？
+    if(_hub)   //TO DO: 这个地方还得再考虑，是否如果有了hub，就算是连结状态呢？
+    {
+        if(completion)
+        {
+            completion(YES);
+        }
+        return; 
+    }
     
     NWEnvironment preferredEnvironment = [self preferredEnvironmentForCertificate:_certificate];
-    [self connectingToEnvironment:preferredEnvironment];
+    [self connectingToEnvironment:preferredEnvironment completion:^(BOOL success) {
+        if(completion)
+        {
+            completion(success);
+        }
+    }];
 }
 
 - (void)disconnect
@@ -150,6 +181,8 @@
         _hub = nil;
     }
     NSLog(@"Disconnected");
+    [self broadCastReport:@"断开连接"];
+    
 }
 
 //- (void)sanboxCheckBoxDidPressed
@@ -174,26 +207,48 @@
     return (environmentOptions & NWEnvironmentOptionSandbox) ? NWEnvironmentSandbox : NWEnvironmentProduction;
 }
 
-- (void)connectingToEnvironment:(NWEnvironment)environment
+- (void)connectingToEnvironment:(NWEnvironment)environment completion:(void(^)(BOOL success))completion
 {    
-    //连接到对应的环境
+    //连接到对应的环境    
     NSLog(@"Connecting..");
+    
+    NSString *apnsServer = [NWSecTools summaryWithCertificate:_certificate];
+    NSString *apnsEnviro = descriptionForEnvironent(environment);
+    NSString *summary = [NSString stringWithFormat:@"%@ (%@)", apnsServer, apnsEnviro];
+    
+    NSString *report = [NSString stringWithFormat:@"正在连接... %@", summary];
+    [self broadCastReport:report];
+    
     dispatch_async(_serial, ^{
         NSError *error = nil;
         
         NWHub *hub = [NWHub connectWithDelegate:self identity:_identity environment:environment error:&error];
         
         dispatch_async(dispatch_get_main_queue(), ^{
+            
+            BOOL bsuccess = NO;
+            NSString *report = nil;
             if(hub) 
-            {
-                NSString *summary = [NWSecTools summaryWithCertificate:_certificate];
-                NSLog(@"Connected to APN: %@ (%@)", summary, descriptionForEnvironent(environment));
+            {                
                 _hub = hub;
+                bsuccess = YES;
+                NSLog(@"Connected to APN: %@", summary);
+                report = [NSString stringWithFormat:@"APNs连接成功!... %@", summary];
             } 
             else 
             {
+                bsuccess = NO;
                 NSLog(@"Unable to connect: %@", error.localizedDescription);
+                report = [NSString stringWithFormat:@"APNs连接失败...: %@", error.localizedDescription];
             }
+            
+            [self broadCastReport:report];
+            
+            if(completion)
+            {
+                completion(bsuccess);
+            }
+            
         });
     });
 }
@@ -212,9 +267,12 @@
     
     //NSString *payload = [NSString stringWithFormat:@"{\"aps\":{\"alert\":\"%@\",\"badge\":1,\"sound\":\"default\"}}", _textField.text];
     NSString *payload = [RDPushTool jsonFromDictionary:payloadDic];
-    NSString *token = deviceToken;
+    NSString *token = kdeviceToken;
     
     NSLog(@"Pushing..");
+    
+    NSString *report = [NSString stringWithFormat:@"payload推送中..."];
+    [self broadCastReport:report];
     
     dispatch_async(_serial, ^{
         NSUInteger failed = [_hub pushPayload:payload token:token];
@@ -222,13 +280,17 @@
         dispatch_after(popTime, _serial, ^(void){
             
             BOOL pushed = NO;
+            NSString *report = [NSString stringWithFormat:@"推送失败..."];
             
             NSUInteger failed2 = failed + [_hub readFailed];
             if(!failed2) 
             {
-                NSLog(@"Payload has been pushed");
                 pushed = YES;
+                NSLog(@"Payload has been pushed");
+                report = [NSString stringWithFormat:@"推送成功!..."];
             }
+            
+            [self broadCastReport:report];
             
             if(completion)
             {
@@ -249,6 +311,10 @@
     //推送失败进这里
     dispatch_async(dispatch_get_main_queue(), ^{
         NSLog(@"Notification error: %@", error.localizedDescription);
+        
+        NSString *report = [NSString stringWithFormat:@"推送失败...: %@", error.localizedDescription];
+        [self broadCastReport:report];
+        
     });
 }
 
