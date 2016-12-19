@@ -18,7 +18,23 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    
+    self.navigationItem.title = @"Main";
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    
+    //推送模拟器入口
+    UIButton *pushSimuBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    pushSimuBtn.frame = CGRectMake([UIScreen mainScreen].bounds.size.width-150, 0, 150, 50);
+    pushSimuBtn.backgroundColor = [UIColor clearColor];
+    [pushSimuBtn setTitle:@"推送模拟器-> " forState:UIControlStateNormal];
+    [pushSimuBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    pushSimuBtn.titleLabel.font = [UIFont boldSystemFontOfSize:20];
+    [pushSimuBtn addTarget:self action:@selector(pushSimuAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:pushSimuBtn];
+    
+    
+    
     
     //注册和使用本地通知相关-----------------------------------------------------------------------------------------------------
     //注册
@@ -74,21 +90,6 @@
 //                                                    //do sth...
 //                                                }
 //     ];
-    
-    
-    
-    
-    
-    
-    //推送界面相关-----------------------------------------------------------------------------------------------------
-    UIButton *pushSimuBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    pushSimuBtn.frame = CGRectMake(20, 50, 200, 50);
-    [pushSimuBtn setTitle:@"推送模拟器->" forState:UIControlStateNormal];
-    [pushSimuBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    pushSimuBtn.titleLabel.font = [UIFont boldSystemFontOfSize:20];
-    [pushSimuBtn addTarget:self action:@selector(pushSimuAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:pushSimuBtn];
-    
     
 }
 

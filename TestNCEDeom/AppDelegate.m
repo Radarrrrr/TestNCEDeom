@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import <UserNotifications/UserNotifications.h>
+#import "ViewController.h"
 
 @interface AppDelegate ()
 
@@ -19,6 +20,18 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
 
+    //创建框架
+    ViewController *mainVC = [[ViewController alloc] init];
+    UINavigationController *mainNav = [[UINavigationController alloc] initWithRootViewController:mainVC];
+    mainNav.navigationBarHidden = NO;
+    mainNav.navigationBar.translucent = NO; //不要导航条模糊，为了让页面从导航条下部是0开始，如果为YES，则从屏幕顶部开始是0
+    self.window.rootViewController = mainNav;
+    
+    
+    //清空本地通知badge数量
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    
+    
     return YES;
 }
 

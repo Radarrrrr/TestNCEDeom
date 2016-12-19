@@ -17,6 +17,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.navigationItem.title = @"RDPush Simulator";
+    self.view.backgroundColor = [UIColor whiteColor];
+    
     UIButton *connectBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     connectBtn.frame = CGRectMake(20, 50, 200, 50);
     [connectBtn setTitle:@"connect" forState:UIControlStateNormal];
