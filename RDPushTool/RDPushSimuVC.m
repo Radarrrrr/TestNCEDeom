@@ -20,6 +20,8 @@
     self.navigationItem.title = @"RDPush Simulator";
     self.view.backgroundColor = [UIColor whiteColor];
     
+    
+    //连接按钮
     UIButton *connectBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     connectBtn.frame = CGRectMake(20, 50, 200, 50);
     [connectBtn setTitle:@"connect" forState:UIControlStateNormal];
@@ -35,6 +37,10 @@
     disConnectBtn.titleLabel.font = [UIFont boldSystemFontOfSize:20];
     [disConnectBtn addTarget:self action:@selector(disConnectAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:disConnectBtn];
+    
+    
+    //状态显示
+    
     
 }
 
