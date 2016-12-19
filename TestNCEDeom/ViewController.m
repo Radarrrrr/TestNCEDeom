@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "RDUserNotifyCenter.h"
+#import "RDPushSimuVC.h"
 
 @interface ViewController () <RDUserNotifyCenterDelegate>
 
@@ -19,6 +20,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
+    //注册和使用本地通知相关-----------------------------------------------------------------------------------------------------
     //注册
     [[RDUserNotifyCenter sharedCenter] registerUserNotification:self completion:^(BOOL success) {
         //do sth..
@@ -35,8 +37,6 @@
     [[RDUserNotifyCenter sharedCenter] appendAction:@"action_exit" actionTitle:@"关闭" options:UNNotificationActionOptionDestructive toCategory:@"notification_category_list"];
     
     [[RDUserNotifyCenter sharedCenter] bindingActions];
-    
-    
     
     
     //规划本地通知
@@ -76,6 +76,20 @@
 //     ];
     
     
+    
+    
+    
+    
+    //推送界面相关-----------------------------------------------------------------------------------------------------
+    UIButton *pushSimuBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    pushSimuBtn.frame = CGRectMake(20, 50, 200, 50);
+    [pushSimuBtn setTitle:@"推送模拟器->" forState:UIControlStateNormal];
+    [pushSimuBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    pushSimuBtn.titleLabel.font = [UIFont boldSystemFontOfSize:20];
+    [pushSimuBtn addTarget:self action:@selector(pushSimuAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:pushSimuBtn];
+    
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -103,6 +117,8 @@
 
 
 
+#pragma mark -
+#pragma mark RDUserNotifyCenterDelegate 相关返回方法
 - (void)didReceiveNotificationResponse:(UNNotificationResponse*)response content:(UNNotificationContent*)content isLocal:(BOOL)blocal
 {
     NSString     *actionID      = response.actionIdentifier;
@@ -120,7 +136,22 @@
         //点击自定义Action按钮进来的
         NSLog(@"点击自定义Action按钮进来的 actionID: %@", actionID);
     }
-    
 }
+
+
+
+
+#pragma mark -
+#pragma mark 推送界面相关
+- (void)pushSimuAction:(id)sender
+{
+    RDPushSimuVC *simuVC = [[RDPushSimuVC alloc] init];
+    [self.navigationController pushViewController:simuVC animated:YES];
+}
+
+
+
+
+
 
 @end

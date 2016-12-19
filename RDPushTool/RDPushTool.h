@@ -39,5 +39,7 @@ static NSString * const deviceToken = @"c79b18192ea895c33a58bd411dd4309d01f6ae6b
 - (void)pushPayload:(NSDictionary *)payloadDic completion:(void(^)(BOOL success))completion; //推送消息，返回是否推送成功，可以连续推送，里边有队列，//TO DO: 需要再考虑如何锁定连续操作的情况
 
 
+//TO DO: 需要调研是否可以检测当前的连结状态，是否正在连接或者是否断开连结了
+
 
 @end

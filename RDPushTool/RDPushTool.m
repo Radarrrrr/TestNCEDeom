@@ -110,14 +110,14 @@
     
     NSArray *ids = [NWSecTools identitiesWithPKCS12Data:pkcs12 password:pkcs12Password error:&error];
     if (!ids) {
-        NWLogWarn(@"Unable to read p12 file: %@", error.localizedDescription);
+        NSLog(@"Unable to read p12 file: %@", error.localizedDescription);
         return;
     }
     for (NWIdentityRef identity in ids) {
         NSError *error = nil;
         NWCertificateRef certificate = [NWSecTools certificateWithIdentity:identity error:&error];
         if (!certificate) {
-            NWLogWarn(@"Unable to import p12 file: %@", error.localizedDescription);
+            NSLog(@"Unable to import p12 file: %@", error.localizedDescription);
             return;
         }
         
@@ -149,7 +149,7 @@
         [_hub disconnect]; 
         _hub = nil;
     }
-    NWLogInfo(@"Disconnected");
+    NSLog(@"Disconnected");
 }
 
 //- (void)sanboxCheckBoxDidPressed
@@ -177,7 +177,7 @@
 - (void)connectingToEnvironment:(NWEnvironment)environment
 {    
     //连接到对应的环境
-    NWLogInfo(@"Connecting..");
+    NSLog(@"Connecting..");
     dispatch_async(_serial, ^{
         NSError *error = nil;
         
@@ -187,12 +187,12 @@
             if(hub) 
             {
                 NSString *summary = [NWSecTools summaryWithCertificate:_certificate];
-                NWLogInfo(@"Connected to APN: %@ (%@)", summary, descriptionForEnvironent(environment));
+                NSLog(@"Connected to APN: %@ (%@)", summary, descriptionForEnvironent(environment));
                 _hub = hub;
             } 
             else 
             {
-                NWLogWarn(@"Unable to connect: %@", error.localizedDescription);
+                NSLog(@"Unable to connect: %@", error.localizedDescription);
             }
         });
     });
@@ -214,7 +214,7 @@
     NSString *payload = [RDPushTool jsonFromDictionary:payloadDic];
     NSString *token = deviceToken;
     
-    NWLogInfo(@"Pushing..");
+    NSLog(@"Pushing..");
     
     dispatch_async(_serial, ^{
         NSUInteger failed = [_hub pushPayload:payload token:token];
@@ -226,7 +226,7 @@
             NSUInteger failed2 = failed + [_hub readFailed];
             if(!failed2) 
             {
-                NWLogInfo(@"Payload has been pushed");
+                NSLog(@"Payload has been pushed");
                 pushed = YES;
             }
             
@@ -248,7 +248,7 @@
 {
     //推送失败进这里
     dispatch_async(dispatch_get_main_queue(), ^{
-        NWLogWarn(@"Notification error: %@", error.localizedDescription);
+        NSLog(@"Notification error: %@", error.localizedDescription);
     });
 }
 

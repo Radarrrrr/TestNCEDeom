@@ -45,6 +45,7 @@
 		0CF3CC791E02BB62005B2AEF /* pusher.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 0CF3CC711E02BB62005B2AEF /* pusher.p12 */; };
 		0CF3CC7C1E02BBDB005B2AEF /* RDPushTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CF3CC7B1E02BBDB005B2AEF /* RDPushTool.m */; };
 		0CF3CC7F1E02BCEE005B2AEF /* NWLCore.c in Sources */ = {isa = PBXBuildFile; fileRef = 0CF3CC7D1E02BCEE005B2AEF /* NWLCore.c */; };
+		0CF3CC821E07B552005B2AEF /* RDPushSimuVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CF3CC811E07B552005B2AEF /* RDPushSimuVC.m */; };
 		0CFAD5621DFAB2FC0080EFBE /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C879BD71DD4692900C3E86E /* UserNotifications.framework */; };
 		0CFAD5631DFAB2FC0080EFBE /* UserNotificationsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C879BD91DD4692900C3E86E /* UserNotificationsUI.framework */; };
 		0CFAD5671DFAB2FC0080EFBE /* NotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CFAD5661DFAB2FC0080EFBE /* NotificationViewController.m */; };
@@ -156,6 +157,8 @@
 		0CF3CC7B1E02BBDB005B2AEF /* RDPushTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDPushTool.m; sourceTree = "<group>"; };
 		0CF3CC7D1E02BCEE005B2AEF /* NWLCore.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = NWLCore.c; sourceTree = "<group>"; };
 		0CF3CC7E1E02BCEE005B2AEF /* NWLCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NWLCore.h; sourceTree = "<group>"; };
+		0CF3CC801E07B552005B2AEF /* RDPushSimuVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDPushSimuVC.h; sourceTree = "<group>"; };
+		0CF3CC811E07B552005B2AEF /* RDPushSimuVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDPushSimuVC.m; sourceTree = "<group>"; };
 		0CFAD5611DFAB2FC0080EFBE /* NotifyExtensionList.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotifyExtensionList.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CFAD5651DFAB2FC0080EFBE /* NotificationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationViewController.h; sourceTree = "<group>"; };
 		0CFAD5661DFAB2FC0080EFBE /* NotificationViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationViewController.m; sourceTree = "<group>"; };
@@ -332,6 +335,8 @@
 				0CF3CC711E02BB62005B2AEF /* pusher.p12 */,
 				0CF3CC7A1E02BBDB005B2AEF /* RDPushTool.h */,
 				0CF3CC7B1E02BBDB005B2AEF /* RDPushTool.m */,
+				0CF3CC801E07B552005B2AEF /* RDPushSimuVC.h */,
+				0CF3CC811E07B552005B2AEF /* RDPushSimuVC.m */,
 				0CF3CC611E02BB62005B2AEF /* NWPusher */,
 			);
 			path = RDPushTool;
@@ -636,6 +641,7 @@
 				0CF3CC721E02BB62005B2AEF /* NWHub.m in Sources */,
 				0C879C0C1DD4C2B400C3E86E /* RDUserNotifyCenter.m in Sources */,
 				0CF3CC7F1E02BCEE005B2AEF /* NWLCore.c in Sources */,
+				0CF3CC821E07B552005B2AEF /* RDPushSimuVC.m in Sources */,
 				0CF3CC7C1E02BBDB005B2AEF /* RDPushTool.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
