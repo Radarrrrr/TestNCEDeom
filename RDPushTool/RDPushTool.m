@@ -9,8 +9,15 @@
 #import "RDPushTool.h"
 
 
-
+//工具宏
 #define PTSTRVALID(str)   [RDPushTool checkStringValid:str]   //检查一个字符串是否有效
+
+
+
+#pragma mark -
+#pragma mark PTPushReport类  
+@implementation PTPushReport 
+@end
 
 
 
@@ -25,6 +32,8 @@
 
 @property (nonatomic) NWIdentityRef identity;
 @property (nonatomic) NWCertificateRef certificate;
+
+@property (nonatomic, strong) void(^pushCompletionBlock)(PTPushReport *report);
 
 @end
 
@@ -93,10 +102,10 @@
     return dic;
 }
 
-- (void)broadCastReport:(NSString *)report
+- (void)broadCastReportMsg:(NSString *)reportMsg
 {
-    if(!PTSTRVALID(report)) return;
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RDPUSHTOOL_REPORT object:report userInfo:nil];
+    if(!PTSTRVALID(reportMsg)) return;
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RDPUSHTOOL_REPORT object:reportMsg userInfo:nil];
 }
 
 
@@ -123,8 +132,8 @@
     if (!ids) {
         NSLog(@"Unable to read p12 file: %@", error.localizedDescription);
         
-        NSString *report = [NSString stringWithFormat:@"读取P12文件失败...: %@", error.localizedDescription];
-        [self broadCastReport:report];
+        NSString *reportMsg = [NSString stringWithFormat:@"读取P12文件失败...: %@", error.localizedDescription];
+        [self broadCastReportMsg:reportMsg];
         
         return;
     }
@@ -134,8 +143,8 @@
         if (!certificate) {
             NSLog(@"Unable to import p12 file: %@", error.localizedDescription);
             
-            NSString *report = [NSString stringWithFormat:@"加载P12文件失败...: %@", error.localizedDescription];
-            [self broadCastReport:report];
+            NSString *reportMsg = [NSString stringWithFormat:@"加载P12文件失败...: %@", error.localizedDescription];
+            [self broadCastReportMsg:reportMsg];
             
             return;
         }
@@ -181,7 +190,7 @@
         _hub = nil;
     }
     NSLog(@"Disconnected");
-    [self broadCastReport:@"断开连接"];
+    [self broadCastReportMsg:@"断开连接"];
     
 }
 
@@ -216,8 +225,8 @@
     NSString *apnsEnviro = descriptionForEnvironent(environment);
     NSString *summary = [NSString stringWithFormat:@"%@ (%@)", apnsServer, apnsEnviro];
     
-    NSString *report = [NSString stringWithFormat:@"正在连接... %@", summary];
-    [self broadCastReport:report];
+    NSString *reportMsg = [NSString stringWithFormat:@"正在连接... %@", summary];
+    [self broadCastReportMsg:reportMsg];
     
     dispatch_async(_serial, ^{
         NSError *error = nil;
@@ -227,22 +236,22 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             
             BOOL bsuccess = NO;
-            NSString *report = nil;
+            NSString *reportMsg = nil;
             if(hub) 
             {                
                 _hub = hub;
                 bsuccess = YES;
                 NSLog(@"Connected to APN: %@", summary);
-                report = [NSString stringWithFormat:@"APNs连接成功!... %@", summary];
+                reportMsg = [NSString stringWithFormat:@"APNs连接成功!... %@", summary];
             } 
             else 
             {
                 bsuccess = NO;
                 NSLog(@"Unable to connect: %@", error.localizedDescription);
-                report = [NSString stringWithFormat:@"APNs连接失败...: %@", error.localizedDescription];
+                reportMsg = [NSString stringWithFormat:@"APNs连接失败...: %@", error.localizedDescription];
             }
             
-            [self broadCastReport:report];
+            [self broadCastReportMsg:reportMsg];
             
             if(completion)
             {
@@ -253,54 +262,91 @@
     });
 }
 
-- (void)pushPayload:(NSDictionary *)payloadDic completion:(void(^)(BOOL success))completion
+- (void)pushPayload:(NSDictionary *)payloadDic toToken:(NSString *)deviceToken completion:(void(^)(PTPushReport *report))completion
 {
+    //接一下block
+    self.pushCompletionBlock = completion;
+    
+    //创建report
+    __block PTPushReport *report = [[PTPushReport alloc] init];
+    report.payload = payloadDic;
+    report.deviceToken = deviceToken;
+    
     //推送payload
-    if(!payloadDic || ![payloadDic isKindOfClass:[NSDictionary class]]) 
+    if(!payloadDic || ![payloadDic isKindOfClass:[NSDictionary class]] || !PTSTRVALID(deviceToken)) 
     {
+        NSLog(@"push failure...input parameters error");
+        
+        report.status = PTPushReportStatusPushFailure;
+        report.summary = @"push failure，input parameters error!";
         if(completion)
         {
-            completion(NO);
+            completion(report);
         }
+
+        NSString *reportMsg = [NSString stringWithFormat:@"推送失败...: 传入参数错误"];
+        [self broadCastReportMsg:reportMsg];
+        
         return;
     }
     
-    //NSString *payload = [NSString stringWithFormat:@"{\"aps\":{\"alert\":\"%@\",\"badge\":1,\"sound\":\"default\"}}", _textField.text];
-    NSString *payload = [RDPushTool jsonFromDictionary:payloadDic];
-    NSString *token = kdeviceToken;
     
+    //设定参数
+    //NSString *payload = [NSString stringWithFormat:@"{\"aps\":{\"alert\":\"%@\",\"badge\":1,\"sound\":\"default\"}}", _textField.text];
+    //NSString *token = kdeviceToken;
+    
+    NSString *payload = [RDPushTool jsonFromDictionary:payloadDic];
+    NSString *token = deviceToken;
+    
+    
+    //开始推送
     NSLog(@"Pushing..");
     
-    NSString *report = [NSString stringWithFormat:@"payload推送中..."];
-    [self broadCastReport:report];
+    report.status = PTPushReportStatusPushing;
+    report.summary = @"payload pushing...";
+    if(completion)
+    {
+        completion(report);
+    }
     
+    NSString *reportMsg = [NSString stringWithFormat:@"payload推送中..."];
+    [self broadCastReportMsg:reportMsg];
+    
+    
+    //获取推送结果
     dispatch_async(_serial, ^{
         NSUInteger failed = [_hub pushPayload:payload token:token];
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC));
         dispatch_after(popTime, _serial, ^(void){
             
             BOOL pushed = NO;
-            NSString *report = [NSString stringWithFormat:@"推送失败..."];
+            NSString *reportMsg = [NSString stringWithFormat:@"推送失败..."];
+            
+            report.status = PTPushReportStatusPushFailure;
+            report.summary = @"payload push failure...";
             
             NSUInteger failed2 = failed + [_hub readFailed];
             if(!failed2) 
             {
                 pushed = YES;
+                
                 NSLog(@"Payload has been pushed");
-                report = [NSString stringWithFormat:@"推送成功!..."];
+                reportMsg = [NSString stringWithFormat:@"推送成功!..."];
+                
+                report.status = PTPushReportStatusPushSuccess;
+                report.summary = @"payload push success!...";
             }
             
-            [self broadCastReport:report];
+            [self broadCastReportMsg:reportMsg];
             
             if(completion)
             {
-                completion(pushed);
+                completion(report);
             }
             
         });
     });
 }
-
 
 
 
@@ -312,8 +358,23 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         NSLog(@"Notification error: %@", error.localizedDescription);
         
-        NSString *report = [NSString stringWithFormat:@"推送失败...: %@", error.localizedDescription];
-        [self broadCastReport:report];
+        PTPushReport *report = [[PTPushReport alloc] init];
+        report.status = PTPushReportStatusPushFailure;
+        report.summary = error.localizedDescription;
+        
+        if(notification)
+        {
+            report.payload = [RDPushTool dictionaryFromJson:notification.payload];
+            report.deviceToken = notification.token;
+        }
+        
+        if(_pushCompletionBlock)
+        {
+            _pushCompletionBlock(report);
+        }
+        
+        NSString *reportMsg = [NSString stringWithFormat:@"推送失败...: %@", error.localizedDescription];
+        [self broadCastReportMsg:reportMsg];
         
     });
 }

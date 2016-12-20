@@ -5,6 +5,11 @@
 //  Created by Radar on 2016/12/15.
 //  Copyright © 2016年 Radar. All rights reserved.
 //
+// 消息推送工具类
+// 本类为单实例，api很简单不多介绍了
+
+//注1: 通过接收NOTIFICATION_RDPUSHTOOL_REPORT对应的广播来获取
+
 
 #import <Foundation/Foundation.h>
 #import "NWHub.h"
@@ -33,16 +38,30 @@ static NSString * const kdeviceToken = @"c79b18192ea895c33a58bd411dd4309d01f6ae6
 
 
 
-
+//用来做本类的report的广播标志宏
 #define NOTIFICATION_RDPUSHTOOL_REPORT @"notification_rdpushtool_report"
 
 
 
 
-//TO DO: 需要对推送的消息进行返回内容的整理，不仅包括成功失败，还得包括推送的devicetoken，summary，推送的内容，等等，全部都要返回，上层肯定需要使用的到
 #pragma mark -
 #pragma mark PTPushReport类  
-//@property (nonatomic, copy) NSString *deviceToken;        //app当前推送的devicetoken
+typedef enum {
+    PTPushReportStatusPushing       = 0,
+    PTPushReportStatusPushSuccess   = 1,
+    PTPushReportStatusPushFailure   = 2
+} PTPushReportStatus;
+
+@interface PTPushReport : NSObject
+
+@property (nonatomic)       PTPushReportStatus status;  //当前推送状态
+@property (nonatomic, copy) NSDictionary *payload;      //推送的内容payload
+@property (nonatomic, copy) NSString *deviceToken;      //当前推送目标的devicetoken
+@property (nonatomic, copy) NSString *summary;          //当前推送状态的描述文字
+
+@end
+
+
 
 
 
@@ -60,7 +79,7 @@ static NSString * const kdeviceToken = @"c79b18192ea895c33a58bd411dd4309d01f6ae6
 - (void)connect:(void(^)(BOOL success))completion; //连接到APNs，异步完成，通过返回状态判断是否连接成功
 - (void)disconnect;                                //从APNs断开连结, 顺序完成，不需要异步处理
 
-- (void)pushPayload:(NSDictionary *)payloadDic completion:(void(^)(BOOL success))completion; //推送消息，返回是否推送成功，可以连续推送，里边有队列，//TO DO: 需要再考虑如何锁定连续操作的情况
+- (void)pushPayload:(NSDictionary *)payloadDic toToken:(NSString *)deviceToken completion:(void(^)(PTPushReport *report))completion; //推送消息，返回是否推送成功，可以连续推送，里边有队列，//TO DO: 需要再考虑如何锁定连续操作的情况
 
 
 //TO DO: 需要调研是否可以检测当前的连结状态，是否正在连接或者是否断开连结了
