@@ -80,7 +80,9 @@
     _payloadTextView.editable = YES;
     _payloadTextView.textColor = PSRGBS(100);
     _payloadTextView.font = [UIFont systemFontOfSize:14.0];
+    _payloadTextView.text = [self getDefalutPayload];
     [self.view addSubview:_payloadTextView];
+    
     
     
     //devicetoken显示区域
@@ -226,15 +228,32 @@
     }];
 }
 
+
+
+
+#pragma mark -
+#pragma mark - 一些配套方法
 - (NSDictionary *)getPayloadDic
 {
     NSString *payloadStr = _payloadTextView.text;
-    //if(!payloadStr)
+    if(!payloadStr || [payloadStr isEqualToString:@""]) return nil;
     
-    return nil;
+    payloadStr = [payloadStr stringByReplacingOccurrencesOfString:@" " withString:@""];
+    payloadStr = [payloadStr stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    payloadStr = [payloadStr stringByReplacingOccurrencesOfString:@"\t" withString:@""];
+    
+    NSData *jsonData = [payloadStr dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:kNilOptions error:nil];
+    
+    return dic;
 }
 
-
+- (NSString *)getDefalutPayload
+{
+    //TO DO: 要把payload做成一个json串。当成placeholder放倒payloadtextview里边去。
+    NSString *payloadStr = @"{\n\t\"aps\":{\"alert\":{\"title\":\"我是原装标题\",\"subtitle\":\"我是副标题\",\"body\":\"it is a beautiful day\"},\"badge\":1,\"sound\":\"default\",\"mutable-content\":\"1\",\"category\":\"myNotificationCategory\",\"attach\":\"https://picjumbo.imgix.net/HNCK8461.jpg?q=40&w=200&sharp=30\"},\"goto_page\":\"cms://page_id=14374\"}";
+    return payloadStr;
+}
 
 
 
