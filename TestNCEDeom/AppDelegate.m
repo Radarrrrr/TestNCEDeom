@@ -75,11 +75,11 @@
 //    //NSString *newToken3 = [newToken2 stringByReplacingOccurrencesOfString:@" " withString:@""];
 //    NSLog(@"Received token from Apple: %@",newToken1);
     
-    NSString *deviceTokenSt = [[[[deviceToken description]
+    NSString *deviceTokenStr = [[[[deviceToken description]
                                  stringByReplacingOccurrencesOfString:@"<" withString:@""]
                                  stringByReplacingOccurrencesOfString:@">" withString:@""]
                                  stringByReplacingOccurrencesOfString:@" " withString:@""];
-    NSLog(@"deviceTokenSt:%@",deviceTokenSt);
+    NSLog(@"deviceTokenSt:%@",deviceTokenStr);
     
 }
 
