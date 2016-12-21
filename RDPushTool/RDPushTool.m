@@ -15,6 +15,12 @@
 
 
 #pragma mark -
+#pragma mark PTConnectReport类  
+@implementation PTConnectReport 
+@end
+
+
+#pragma mark -
 #pragma mark PTPushReport类  
 @implementation PTPushReport 
 @end
@@ -160,23 +166,27 @@
 
 #pragma mark -
 #pragma mark 连结及推送操作相关
-- (void)connect:(void(^)(BOOL success))completion
-{
+- (void)connect:(void(^)(PTConnectReport *report))completion
+{    
     //连结APNs
     if(_hub)   //TO DO: 这个地方还得再考虑，是否如果有了hub，就算是连结状态呢？
     {
         if(completion)
         {
-            completion(YES);
+            PTConnectReport *report = [[PTConnectReport alloc] init];
+            report.status = PTConnectReportStatusConnectSuccess;
+            report.summary = @"connect success!...";
+            
+            completion(report);
         }
         return; 
     }
     
     NWEnvironment preferredEnvironment = [self preferredEnvironmentForCertificate:_certificate];
-    [self connectingToEnvironment:preferredEnvironment completion:^(BOOL success) {
+    [self connectingToEnvironment:preferredEnvironment completion:^(PTConnectReport *report) {
         if(completion)
         {
-            completion(success);
+            completion(report);
         }
     }];
 }
@@ -187,7 +197,7 @@
     if(_hub)
     {
         [_hub disconnect]; 
-        _hub = nil;
+        self.hub = nil;
     }
     NSLog(@"Disconnected");
     [self broadCastReportMsg:@"断开连接"];
@@ -216,8 +226,10 @@
     return (environmentOptions & NWEnvironmentOptionSandbox) ? NWEnvironmentSandbox : NWEnvironmentProduction;
 }
 
-- (void)connectingToEnvironment:(NWEnvironment)environment completion:(void(^)(BOOL success))completion
+- (void)connectingToEnvironment:(NWEnvironment)environment completion:(void(^)(PTConnectReport *report))completion
 {    
+    __block PTConnectReport *report = [[PTConnectReport alloc] init];
+    
     //连接到对应的环境    
     NSLog(@"Connecting..");
     
@@ -225,9 +237,18 @@
     NSString *apnsEnviro = descriptionForEnvironent(environment);
     NSString *summary = [NSString stringWithFormat:@"%@ (%@)", apnsServer, apnsEnviro];
     
+    report.status = PTConnectReportStatusConnecting;
+    report.summary = summary;
+    if(completion)
+    {
+        completion(report);
+    }
+    
     NSString *reportMsg = [NSString stringWithFormat:@"正在连接... %@", summary];
     [self broadCastReportMsg:reportMsg];
     
+    
+    //连接结果
     dispatch_async(_serial, ^{
         NSError *error = nil;
         
@@ -235,29 +256,31 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            BOOL bsuccess = NO;
             NSString *reportMsg = nil;
             if(hub) 
             {                
-                _hub = hub;
-                bsuccess = YES;
+                self.hub = hub;
                 NSLog(@"Connected to APN: %@", summary);
                 reportMsg = [NSString stringWithFormat:@"APNs连接成功!... %@", summary];
+                
+                report.status = PTConnectReportStatusConnectSuccess;
+                report.summary = summary;
             } 
             else 
             {
-                bsuccess = NO;
                 NSLog(@"Unable to connect: %@", error.localizedDescription);
                 reportMsg = [NSString stringWithFormat:@"APNs连接失败...: %@", error.localizedDescription];
+                
+                report.status = PTConnectReportStatusConnectFailure;
+                report.summary = error.localizedDescription;
             }
-            
-            [self broadCastReportMsg:reportMsg];
             
             if(completion)
             {
-                completion(bsuccess);
+                completion(report);
             }
             
+            [self broadCastReportMsg:reportMsg];
         });
     });
 }

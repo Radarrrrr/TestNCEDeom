@@ -44,6 +44,24 @@ static NSString * const kdeviceToken = @"c79b18192ea895c33a58bd411dd4309d01f6ae6
 
 
 
+
+#pragma mark -
+#pragma mark PTConnectReport类  
+typedef enum {
+    PTConnectReportStatusConnecting       = 0,
+    PTConnectReportStatusConnectSuccess   = 1,
+    PTConnectReportStatusConnectFailure   = 2
+} PTConnectReportStatus;
+
+@interface PTConnectReport : NSObject
+
+@property (nonatomic)       PTConnectReportStatus status;  //当前连接状态
+@property (nonatomic, copy) NSString *summary;             //当前连接状态的描述文字
+
+@end
+
+
+
 #pragma mark -
 #pragma mark PTPushReport类  
 typedef enum {
@@ -76,10 +94,10 @@ typedef enum {
 + (instancetype)sharedTool;
 
 
-- (void)connect:(void(^)(BOOL success))completion; //连接到APNs，异步完成，通过返回状态判断是否连接成功
+- (void)connect:(void(^)(PTConnectReport *report))completion; //连接到APNs，异步完成，通过返回状态判断是否连接成功 //PS: report不会为nil，外部可以不用判断容错
 - (void)disconnect;                                //从APNs断开连结, 顺序完成，不需要异步处理
 
-- (void)pushPayload:(NSDictionary *)payloadDic toToken:(NSString *)deviceToken completion:(void(^)(PTPushReport *report))completion; //推送消息，返回是否推送成功，可以连续推送，里边有队列，//TO DO: 需要再考虑如何锁定连续操作的情况
+- (void)pushPayload:(NSDictionary *)payloadDic toToken:(NSString *)deviceToken completion:(void(^)(PTPushReport *report))completion; //推送消息，返回是否推送成功，可以连续推送，里边有队列，//PS: report不会为nil，外部可以不用判断容错  //TO DO: 需要再考虑如何锁定连续操作的情况 
 
 
 //TO DO: 需要调研是否可以检测当前的连结状态，是否正在连接或者是否断开连结了
