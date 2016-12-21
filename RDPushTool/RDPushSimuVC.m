@@ -218,9 +218,21 @@
 - (void)pushAction:(id)sender
 {
     //TO DO: 推送消息，并显示推送状态和summary
+    NSString *deviceToken = _tokenField.text;
+    NSDictionary *payloadDic = [self getPayloadDic];
+    
+    [[RDPushTool sharedTool] pushPayload:payloadDic toToken:deviceToken completion:^(PTPushReport *report) {
+        
+    }];
 }
 
-
+- (NSDictionary *)getPayloadDic
+{
+    NSString *payloadStr = _payloadTextView.text;
+    //if(!payloadStr)
+    
+    return nil;
+}
 
 
 
