@@ -28,7 +28,7 @@
 @property (nonatomic, strong) UILabel *tokenField;
 @property (nonatomic, strong) UIButton *pushBtn;
 @property (nonatomic, strong) UITextView *logTextView;
-@property (nonatomic, strong) UIButton *keyBoardBtn;
+//@property (nonatomic, strong) UIButton *keyBoardBtn;
 
 @end
 
@@ -49,10 +49,7 @@
     
     //注册消息监听器
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveConnectStateNotify:) name:NOTIFICATION_RDPUSHTOOL_REPORT object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillChangeFrameNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-    
+        
     //连接按钮
     self.connectBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     _connectBtn.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 35);
@@ -81,7 +78,7 @@
     payloadL.font = [UIFont boldSystemFontOfSize:14.0];
     [self.view addSubview:payloadL];
     
-    self.payloadTextView = [[UITextView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(payloadL.frame)-5, [UIScreen mainScreen].bounds.size.width-30, 296)];
+    self.payloadTextView = [[UITextView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(payloadL.frame)-5, [UIScreen mainScreen].bounds.size.width-25, 296)];
     _payloadTextView.backgroundColor = [UIColor clearColor];//PSRGBS(230);
     _payloadTextView.editable = YES;
     _payloadTextView.textColor = PSRGBS(100);
@@ -91,9 +88,9 @@
     [self.view addSubview:_payloadTextView];
     
     self.recoverPayloadBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    _recoverPayloadBtn.frame = CGRectMake([UIScreen mainScreen].bounds.size.width-130, CGRectGetMinY(_payloadTextView.frame), 130, 30);
+    _recoverPayloadBtn.frame = CGRectMake(CGRectGetMaxX(_payloadTextView.frame)-100, CGRectGetMaxY(_payloadTextView.frame)-30, 100, 30);
     _recoverPayloadBtn.backgroundColor = PSRGBS(200);
-    [_recoverPayloadBtn setTitle:@"use default payload" forState:UIControlStateNormal];
+    [_recoverPayloadBtn setTitle:@"default payload" forState:UIControlStateNormal];
     [_recoverPayloadBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     _recoverPayloadBtn.titleLabel.font = [UIFont boldSystemFontOfSize:12];
     [_recoverPayloadBtn addTarget:self action:@selector(recoverPayloadAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -111,9 +108,9 @@
     tokenL.font = [UIFont boldSystemFontOfSize:14.0];
     [self.view addSubview:tokenL];
     
-    self.tokenField = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(tokenL.frame), 220, 35)];
+    self.tokenField = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(tokenL.frame), 250, 35)];
     _tokenField.backgroundColor = [UIColor clearColor];
-    _tokenField.textColor = PSRGBS(150);//[UIColor whiteColor];
+    _tokenField.textColor = PSRGBS(150);
     _tokenField.font = [UIFont systemFontOfSize:11.5];
     _tokenField.numberOfLines = 0;
     _tokenField.text = [self getUseableDeviceToken];
@@ -122,7 +119,7 @@
     
     UIButton *pasteTokenBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     pasteTokenBtn.frame = CGRectMake(CGRectGetMaxX(_tokenField.frame)+10, CGRectGetMaxY(_payloadTextView.frame), ([UIScreen mainScreen].bounds.size.width-CGRectGetMaxX(_tokenField.frame)-10)/2, 55);
-    pasteTokenBtn.backgroundColor = [UIColor clearColor];//PSRGBS(200);
+    pasteTokenBtn.backgroundColor = [UIColor clearColor];
     [pasteTokenBtn setTitle:@"paste" forState:UIControlStateNormal];
     [pasteTokenBtn setTitleColor:PSRGBS(100) forState:UIControlStateNormal];
     pasteTokenBtn.titleLabel.font = [UIFont boldSystemFontOfSize:13];
@@ -133,7 +130,7 @@
     
     UIButton *recoverTokenBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     recoverTokenBtn.frame = CGRectMake(CGRectGetMaxX(pasteTokenBtn.frame), CGRectGetMinY(pasteTokenBtn.frame), CGRectGetWidth(pasteTokenBtn.frame), CGRectGetHeight(pasteTokenBtn.frame));
-    recoverTokenBtn.backgroundColor = [UIColor clearColor];//PSRGBS(200);
+    recoverTokenBtn.backgroundColor = [UIColor clearColor];
     [recoverTokenBtn setTitle:@"default" forState:UIControlStateNormal];
     [recoverTokenBtn setTitleColor:PSRGBS(100) forState:UIControlStateNormal];
     recoverTokenBtn.titleLabel.font = [UIFont boldSystemFontOfSize:13];
@@ -146,7 +143,7 @@
     //push按钮
     self.pushBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     _pushBtn.frame = CGRectMake(0, CGRectGetMaxY(_tokenField.frame), [UIScreen mainScreen].bounds.size.width, 50);
-    _pushBtn.backgroundColor = PSRGBS(150);//PSRGB(50, 220, 210);
+    _pushBtn.backgroundColor = PSRGBS(150);
     [_pushBtn setTitle:@"PUSH" forState:UIControlStateNormal];
     [_pushBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     _pushBtn.titleLabel.font = [UIFont boldSystemFontOfSize:16];
@@ -169,16 +166,26 @@
     [self.view addSubview:_logTextView];
     
     
-    //收起键盘按钮
-    self.keyBoardBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    _keyBoardBtn.frame = CGRectMake(CGRectGetMaxX(_payloadTextView.frame)-140, CGRectGetMaxY(_payloadTextView.frame)-40, 140, 40); 
-    _keyBoardBtn.backgroundColor = [UIColor darkGrayColor];
-    [_keyBoardBtn setTitle:@"keyboard dismiss" forState:UIControlStateNormal];
-    [_keyBoardBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    _keyBoardBtn.titleLabel.font = [UIFont systemFontOfSize:14];
-    [_keyBoardBtn addTarget:self action:@selector(keyboardDismissAction:) forControlEvents:UIControlEventTouchUpInside];
-    _keyBoardBtn.alpha = 0.0;
-    [self.view addSubview:_keyBoardBtn];
+    //收起键盘滑动条
+    UIView *slipView = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_payloadTextView.frame), CGRectGetMaxY(_connectBtn.frame), 25, CGRectGetHeight(_payloadTextView.frame)+15)];
+    slipView.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:slipView];
+    
+    UILabel *vL = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(slipView.frame), CGRectGetHeight(slipView.frame))];
+    vL.text = @"v\nv\nv\n\n\nv\nv\nv\n\n\nv\nv\nv";
+    vL.textColor = PSRGBS(150);
+    vL.numberOfLines = 0;
+    vL.textAlignment = NSTextAlignmentCenter;
+    vL.font = [UIFont systemFontOfSize:15.0];
+    vL.backgroundColor = [UIColor clearColor];
+    vL.userInteractionEnabled = NO;
+    [slipView addSubview:vL];
+    
+    UISwipeGestureRecognizer *swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeGesture:)];
+    swipeGesture.direction = UISwipeGestureRecognizerDirectionDown;
+    [slipView addGestureRecognizer:swipeGesture];
+    
+    
     
 }
 
@@ -280,6 +287,9 @@
 }
 
 
+
+
+
 - (void)showDiscConnectBtn:(BOOL)bshow
 {
     if(bshow)
@@ -299,14 +309,6 @@
             _connectBtn.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 35);
             _disConnectBtn.frame = CGRectMake([UIScreen mainScreen].bounds.size.width, 0, 70, 35);
         }];
-    }
-}
-
-- (void)keyboardDismissAction:(id)sender
-{
-    if([_payloadTextView isFirstResponder])
-    {
-        [_payloadTextView resignFirstResponder];
     }
 }
 
@@ -347,6 +349,16 @@
     
     _tokenField.text = [self getUseableDeviceToken];
 }
+
+- (void)handleSwipeGesture:(id)sender
+{
+    if([_payloadTextView isFirstResponder])
+    {
+        [_payloadTextView resignFirstResponder];
+    }
+}
+
+
 
 
 #pragma mark -
@@ -408,38 +420,6 @@
 
 
 
-#pragma mark -
-#pragma mark - key board notification
-- (void)keyboardWillShow:(NSNotification *)notification 
-{
-    NSDictionary *userInfo = [notification userInfo];
-    
-    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    NSTimeInterval animationDuration;
-    [animationDurationValue getValue:&animationDuration];
-    
-    [UIView animateWithDuration:animationDuration animations:^{
-        _keyBoardBtn.alpha = 1;
-    }];
-}
-
-- (void)keyboardWillHide:(NSNotification *)notification 
-{    
-    NSDictionary* userInfo = [notification userInfo];
-    
-    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    NSTimeInterval animationDuration;
-    [animationDurationValue getValue:&animationDuration];
-    
-    [UIView animateWithDuration:animationDuration animations:^{
-        _keyBoardBtn.alpha = 0;
-    }];
-}
-
-
-
-
-
 
 #pragma mark -
 #pragma mark NOTIFICATION_RDPUSHTOOL_REPORT消息监听获取当前连接及推送状态的log
@@ -453,8 +433,6 @@
     //TO DO: 根据report的内容，修改界面显示内容log
     
 }
-
-
 
 
 
