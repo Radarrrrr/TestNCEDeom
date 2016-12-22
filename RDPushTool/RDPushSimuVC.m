@@ -13,7 +13,10 @@
 #define PSRGB(r, g, b)        [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1.0]
 #define PSRGBS(x)             [UIColor colorWithRed:x/255.0 green:x/255.0 blue:x/255.0 alpha:1.0]
 
-#define savekey_payload_customize @"savekey payload customize"
+#define savekey_payload_customize     @"savekey payload customize"      //自定义payload存储key
+#define savekey_devicetoken_customize @"savekey devicetoken customize"  //自定义devicetoken存储key
+#define savekey_localapp_devicetoken  @"savekey localapp devicetoken"   //本机自己app获取的devicetoken存储key
+
 
 
 @interface RDPushSimuVC () <UITextViewDelegate>
@@ -113,6 +116,7 @@
     _tokenField.textColor = [UIColor whiteColor];
     _tokenField.font = [UIFont systemFontOfSize:13.0];
     _tokenField.placeholder = @"input a devicetoken...";
+    _tokenField.text = [self getUseableDeviceToken];
     [self.view addSubview:_tokenField];
     
     
@@ -159,6 +163,21 @@
 {
     //在dealloc里边注销监听器
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_RDPUSHTOOL_REPORT object:nil];
+}
+
+
+
+
+
+
+#pragma mark -
+#pragma mark - 对外方法
++ (void)saveAppDeviceToken:(NSString *)deviceToken
+{
+    if(!deviceToken || [deviceToken isEqualToString:@""]) return;
+    
+    [[NSUserDefaults standardUserDefaults] setObject:deviceToken forKey:savekey_localapp_devicetoken];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 
@@ -287,7 +306,16 @@
     _payloadTextView.text = [self getUseablePayload];
 }
 
-
+- (void)recoverDeviceTokenAction:(id)sender
+{
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:savekey_devicetoken_customize];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    _payloadTextView.text = [self getUseablePayload];
+    
+    //TO DO: 需要对self token按钮做隐藏操作
+    
+}
 
 
 
@@ -322,6 +350,26 @@
     return defaultPayload;
 }
 
+- (NSString *)getUseableDeviceToken
+{
+    //取用户指定的
+    NSString *deviceToken = nil;
+    
+    deviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:savekey_devicetoken_customize];
+    if(deviceToken && ![deviceToken isEqualToString:@""])
+    {
+        return deviceToken;
+    }
+    
+    //取本机app的
+    deviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:savekey_localapp_devicetoken];
+    if(deviceToken && ![deviceToken isEqualToString:@""])
+    {
+        return deviceToken;
+    }
+    
+    return deviceToken;
+}
 
 
 
