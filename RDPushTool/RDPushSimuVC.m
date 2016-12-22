@@ -79,7 +79,7 @@
     _payloadTextView.backgroundColor = PSRGBS(230);
     _payloadTextView.editable = YES;
     _payloadTextView.textColor = PSRGBS(100);
-    _payloadTextView.font = [UIFont systemFontOfSize:14.0];
+    _payloadTextView.font = [UIFont systemFontOfSize:13.0];
     _payloadTextView.text = [self getDefalutPayload];
     [self.view addSubview:_payloadTextView];
     
@@ -241,6 +241,7 @@
     payloadStr = [payloadStr stringByReplacingOccurrencesOfString:@" " withString:@""];
     payloadStr = [payloadStr stringByReplacingOccurrencesOfString:@"\n" withString:@""];
     payloadStr = [payloadStr stringByReplacingOccurrencesOfString:@"\t" withString:@""];
+    payloadStr = [payloadStr stringByReplacingOccurrencesOfString:@"\r" withString:@""];
     
     NSData *jsonData = [payloadStr dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:kNilOptions error:nil];
@@ -251,7 +252,7 @@
 - (NSString *)getDefalutPayload
 {
     //TO DO: 要把payload做成一个json串。当成placeholder放倒payloadtextview里边去。
-    NSString *payloadStr = @"{\n\t\"aps\":{\"alert\":{\"title\":\"我是原装标题\",\"subtitle\":\"我是副标题\",\"body\":\"it is a beautiful day\"},\"badge\":1,\"sound\":\"default\",\"mutable-content\":\"1\",\"category\":\"myNotificationCategory\",\"attach\":\"https://picjumbo.imgix.net/HNCK8461.jpg?q=40&w=200&sharp=30\"},\"goto_page\":\"cms://page_id=14374\"}";
+    NSString *payloadStr = @"{\n\t\"aps\":\n\t{\n\t\t\"alert\":\n\t\t{\n\t\t\t\"title\":\"我是原装标题\",\n\t\t\t\"subtitle\":\"我是副标题\",\n\t\t\t\"body\":\"it is a beautiful day\"\n\t\t},\n\t\t\"badge\":1,\n\t\t\"sound\":\"default\",\n\t\t\"mutable-content\":\"1\",\n\t\t\"category\":\"myNotificationCategory\",\n\t\t\"attach\":\"http://img3x2.ddimg.cn/29/14/1128514592-1_h_6.jpg\"\n\t},\n\t\"goto_page\":\"link://page=14374\"\n}";
     return payloadStr;
 }
 
