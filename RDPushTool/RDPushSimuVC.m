@@ -139,10 +139,32 @@
     recoverTokenBtn.layer.borderWidth = 0.5f;
     [self.view addSubview:recoverTokenBtn];
     
+    [self addLineBelow:_tokenField];
+    
+    
+    //状态显示
+    UILabel *logL = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(_tokenField.frame)+3, [UIScreen mainScreen].bounds.size.width, 20)];
+    logL.text = @"console:";
+    logL.textColor = PSRGBS(50);
+    logL.font = [UIFont boldSystemFontOfSize:14.0];
+    [self.view addSubview:logL];
+    
+    self.logTextView = [[UITextView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(logL.frame), [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-64-CGRectGetMaxY(logL.frame)-50)];
+    _logTextView.backgroundColor = PSRGBS(240);
+    _logTextView.editable = NO;
+    _logTextView.textColor = PSRGBS(100);
+    _logTextView.font = [UIFont systemFontOfSize:12.0];
+    [self.view addSubview:_logTextView];
+    
+    self.logString = @"welcome to push simulator!";
+    _logTextView.text = _logString;
+    
+    
+    
     
     //push按钮
     self.pushBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    _pushBtn.frame = CGRectMake(0, CGRectGetMaxY(_tokenField.frame), [UIScreen mainScreen].bounds.size.width, 50);
+    _pushBtn.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height-64-50, [UIScreen mainScreen].bounds.size.width, 50);
     _pushBtn.backgroundColor = PSRGBS(150);
     [_pushBtn setTitle:@"PUSH" forState:UIControlStateNormal];
     [_pushBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -151,22 +173,7 @@
     [self.view addSubview:_pushBtn];
     
     
-    //状态显示
-    UILabel *logL = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(_pushBtn.frame), [UIScreen mainScreen].bounds.size.width, 20)];
-    logL.text = @"console:";
-    logL.textColor = PSRGBS(50);
-    logL.font = [UIFont boldSystemFontOfSize:14.0];
-    [self.view addSubview:logL];
     
-    self.logTextView = [[UITextView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(logL.frame), [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-64-CGRectGetMaxY(logL.frame))];
-    _logTextView.backgroundColor = PSRGBS(230);
-    _logTextView.editable = NO;
-    _logTextView.textColor = PSRGBS(100);
-    _logTextView.font = [UIFont systemFontOfSize:12.0];
-    [self.view addSubview:_logTextView];
-    
-    self.logString = @"welcome to push simulator!";
-    _logTextView.text = _logString;
     
     //收起键盘滑动条
     UIView *slipView = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_payloadTextView.frame), CGRectGetMaxY(_connectBtn.frame), 25, CGRectGetHeight(_payloadTextView.frame)+15)];
