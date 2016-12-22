@@ -28,7 +28,7 @@
 @property (nonatomic, strong) UILabel *tokenField;
 @property (nonatomic, strong) UIButton *pushBtn;
 @property (nonatomic, strong) UITextView *logTextView;
-//@property (nonatomic, strong) UIButton *keyBoardBtn;
+@property (nonatomic, strong) NSString *logString;
 
 @end
 
@@ -162,9 +162,11 @@
     _logTextView.backgroundColor = PSRGBS(230);
     _logTextView.editable = NO;
     _logTextView.textColor = PSRGBS(100);
-    _logTextView.font = [UIFont systemFontOfSize:13.0];
+    _logTextView.font = [UIFont systemFontOfSize:12.0];
     [self.view addSubview:_logTextView];
     
+    self.logString = @"welcome to push simulator!";
+    _logTextView.text = _logString;
     
     //收起键盘滑动条
     UIView *slipView = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_payloadTextView.frame), CGRectGetMaxY(_connectBtn.frame), 25, CGRectGetHeight(_payloadTextView.frame)+15)];
@@ -430,11 +432,34 @@
     NSString *report = (NSString*)notification.object;
     if(!report) return;
     
-    //TO DO: 根据report的内容，修改界面显示内容log
+    //根据report的内容，修改界面显示内容log
+    NSString *time = [self stringFromDate:[NSDate date] useFormat:@"hh:mm:ss"];
+    self.logString = [_logString stringByAppendingFormat:@"\n%@ > %@", time, report];
     
+    _logTextView.text = _logString;
+    
+    //滚动到最下面
+    CGSize size = _logTextView.contentSize;
+    float y = size.height - _logTextView.frame.size.height;
+    if(y < 0) y =0;
+    
+    [_logTextView setContentOffset:CGPointMake(0, y) animated:YES];
 }
 
-
+- (NSString*)stringFromDate:(NSDate*)date useFormat:(NSString*)format
+{
+    //转化为要显示的时间格式如：@"YY-MM-dd HH:mm:ss"
+    if(!date) return nil;
+    if(!format || [format isEqualToString:@""]) return nil;
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setTimeZone:[NSTimeZone defaultTimeZone]];
+    [formatter setDateFormat:format];
+    
+    NSString *dateString = [formatter stringFromDate:date];
+    
+    return dateString;
+}
 
 
 

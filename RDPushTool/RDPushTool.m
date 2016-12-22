@@ -342,30 +342,58 @@
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC));
         dispatch_after(popTime, _serial, ^(void){
             
-            BOOL pushed = NO;
-            NSString *reportMsg = [NSString stringWithFormat:@"推送失败..."];
-            
-            report.status = PTPushReportStatusPushFailure;
-            report.summary = @"payload push failure...";
-            
-            NSUInteger failed2 = failed + [_hub readFailed];
-            if(!failed2) 
-            {
-                pushed = YES;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                BOOL pushed = NO;
+                NSString *reportMsg = [NSString stringWithFormat:@"推送失败..."];
                 
-                NSLog(@"Payload has been pushed");
-                reportMsg = [NSString stringWithFormat:@"推送成功!..."];
+                report.status = PTPushReportStatusPushFailure;
+                report.summary = @"payload push failure...";
                 
-                report.status = PTPushReportStatusPushSuccess;
-                report.summary = @"payload push success!...";
-            }
-            
-            [self broadCastReportMsg:reportMsg];
-            
-            if(completion)
-            {
-                completion(report);
-            }
+                NSUInteger failed2 = failed + [_hub readFailed];
+                if(!failed2) 
+                {
+                    pushed = YES;
+                    
+                    NSLog(@"Payload has been pushed");
+                    reportMsg = [NSString stringWithFormat:@"推送成功!..."];
+                    
+                    report.status = PTPushReportStatusPushSuccess;
+                    report.summary = @"payload push success!...";
+                }
+                
+                [self broadCastReportMsg:reportMsg];
+                
+                if(completion)
+                {
+                    completion(report);
+                }
+            });
+                
+                
+//            BOOL pushed = NO;
+//            NSString *reportMsg = [NSString stringWithFormat:@"推送失败..."];
+//            
+//            report.status = PTPushReportStatusPushFailure;
+//            report.summary = @"payload push failure...";
+//            
+//            NSUInteger failed2 = failed + [_hub readFailed];
+//            if(!failed2) 
+//            {
+//                pushed = YES;
+//                
+//                NSLog(@"Payload has been pushed");
+//                reportMsg = [NSString stringWithFormat:@"推送成功!..."];
+//                
+//                report.status = PTPushReportStatusPushSuccess;
+//                report.summary = @"payload push success!...";
+//            }
+//            
+//            [self broadCastReportMsg:reportMsg];
+//            
+//            if(completion)
+//            {
+//                completion(report);
+//            }
             
         });
     });
