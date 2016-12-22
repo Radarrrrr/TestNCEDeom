@@ -40,4 +40,19 @@
 
 @interface RDPushSimuVC : UIViewController
 
+//@property (nonatomic, copy) NSString *deviceTokenForPush;  //从外面设定的参数，用来指定要推送到的设备的deviceToken
+
 @end
+
+
+
+
+
+
+
+
+
+
+
+
+

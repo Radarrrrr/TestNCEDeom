@@ -222,6 +222,8 @@
                 [[NSUserDefaults standardUserDefaults] synchronize];
             }
             
+            //处理推送成功
+            
             
         }
     }];
