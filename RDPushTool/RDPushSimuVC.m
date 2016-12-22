@@ -25,7 +25,7 @@
 @property (nonatomic, strong) UIButton *disConnectBtn;
 @property (nonatomic, strong) UITextView *payloadTextView;
 @property (nonatomic, strong) UIButton *recoverPayloadBtn;
-@property (nonatomic, strong) UITextField *tokenField;
+@property (nonatomic, strong) UILabel *tokenField;
 @property (nonatomic, strong) UIButton *pushBtn;
 @property (nonatomic, strong) UITextView *logTextView;
 @property (nonatomic, strong) UIButton *keyBoardBtn;
@@ -55,7 +55,7 @@
     
     //连接按钮
     self.connectBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    _connectBtn.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 40);
+    _connectBtn.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 35);
     _connectBtn.backgroundColor = PSRGBS(130);
     [_connectBtn setTitle:@"Connect to APNs." forState:UIControlStateNormal];
     [_connectBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -65,7 +65,7 @@
     
     //断开连接按钮
     self.disConnectBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    _disConnectBtn.frame = CGRectMake([UIScreen mainScreen].bounds.size.width, 0, 70, 40);
+    _disConnectBtn.frame = CGRectMake([UIScreen mainScreen].bounds.size.width, 0, 70, 35);
     _disConnectBtn.backgroundColor = [UIColor darkGrayColor];
     [_disConnectBtn setTitle:@"disconnect" forState:UIControlStateNormal];
     [_disConnectBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -75,14 +75,14 @@
     
     
     //payload内容输入
-    UILabel *payloadL = [[UILabel alloc] initWithFrame:CGRectMake(10, 40, 200, 25)];
-    payloadL.text = @"Payload:";
+    UILabel *payloadL = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(_connectBtn.frame), 200, 20)];
+    payloadL.text = @"payload:";
     payloadL.textColor = PSRGBS(50);
     payloadL.font = [UIFont boldSystemFontOfSize:14.0];
     [self.view addSubview:payloadL];
     
-    self.payloadTextView = [[UITextView alloc] initWithFrame:CGRectMake(0, 65, [UIScreen mainScreen].bounds.size.width, 306)];
-    _payloadTextView.backgroundColor = PSRGBS(230);
+    self.payloadTextView = [[UITextView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(payloadL.frame)-5, [UIScreen mainScreen].bounds.size.width-30, 296)];
+    _payloadTextView.backgroundColor = [UIColor clearColor];//PSRGBS(230);
     _payloadTextView.editable = YES;
     _payloadTextView.textColor = PSRGBS(100);
     _payloadTextView.font = [UIFont systemFontOfSize:13.0];
@@ -100,24 +100,47 @@
     _recoverPayloadBtn.alpha = 0.0;
     [self.view addSubview:_recoverPayloadBtn];
     
+    [self addLineBelow:_payloadTextView];
     
-    
+
     //devicetoken显示区域
-    UILabel *tokenL = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_payloadTextView.frame), 95, 30)];
-    tokenL.text = @"push to Token: ";
-    tokenL.textColor = [UIColor whiteColor];
-    tokenL.textAlignment = NSTextAlignmentCenter;
-    tokenL.backgroundColor = [UIColor lightGrayColor];
-    tokenL.font = [UIFont boldSystemFontOfSize:12.0];
+    UILabel *tokenL = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(_payloadTextView.frame)+5, 120, 15)];
+    tokenL.text = @"token to push:";
+    tokenL.textColor = PSRGBS(50);
+    tokenL.backgroundColor = [UIColor clearColor];
+    tokenL.font = [UIFont boldSystemFontOfSize:14.0];
     [self.view addSubview:tokenL];
     
-    self.tokenField = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMaxX(tokenL.frame), CGRectGetMaxY(_payloadTextView.frame), [UIScreen mainScreen].bounds.size.width-CGRectGetWidth(tokenL.frame), 30)];
-    _tokenField.backgroundColor = [UIColor lightGrayColor];
-    _tokenField.textColor = [UIColor whiteColor];
-    _tokenField.font = [UIFont systemFontOfSize:13.0];
-    _tokenField.placeholder = @"input a devicetoken...";
+    self.tokenField = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(tokenL.frame), 220, 35)];
+    _tokenField.backgroundColor = [UIColor clearColor];
+    _tokenField.textColor = PSRGBS(150);//[UIColor whiteColor];
+    _tokenField.font = [UIFont systemFontOfSize:11.5];
+    _tokenField.numberOfLines = 0;
     _tokenField.text = [self getUseableDeviceToken];
     [self.view addSubview:_tokenField];
+    
+    
+    UIButton *pasteTokenBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    pasteTokenBtn.frame = CGRectMake(CGRectGetMaxX(_tokenField.frame)+10, CGRectGetMaxY(_payloadTextView.frame), ([UIScreen mainScreen].bounds.size.width-CGRectGetMaxX(_tokenField.frame)-10)/2, 55);
+    pasteTokenBtn.backgroundColor = [UIColor clearColor];//PSRGBS(200);
+    [pasteTokenBtn setTitle:@"paste" forState:UIControlStateNormal];
+    [pasteTokenBtn setTitleColor:PSRGBS(100) forState:UIControlStateNormal];
+    pasteTokenBtn.titleLabel.font = [UIFont boldSystemFontOfSize:13];
+    [pasteTokenBtn addTarget:self action:@selector(pasteTokenAction:) forControlEvents:UIControlEventTouchUpInside];
+    pasteTokenBtn.layer.borderColor = [UIColor colorWithWhite:0.9f alpha:0.9f].CGColor;
+    pasteTokenBtn.layer.borderWidth = 0.5f;
+    [self.view addSubview:pasteTokenBtn];
+    
+    UIButton *recoverTokenBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    recoverTokenBtn.frame = CGRectMake(CGRectGetMaxX(pasteTokenBtn.frame), CGRectGetMinY(pasteTokenBtn.frame), CGRectGetWidth(pasteTokenBtn.frame), CGRectGetHeight(pasteTokenBtn.frame));
+    recoverTokenBtn.backgroundColor = [UIColor clearColor];//PSRGBS(200);
+    [recoverTokenBtn setTitle:@"default" forState:UIControlStateNormal];
+    [recoverTokenBtn setTitleColor:PSRGBS(100) forState:UIControlStateNormal];
+    recoverTokenBtn.titleLabel.font = [UIFont boldSystemFontOfSize:13];
+    [recoverTokenBtn addTarget:self action:@selector(recoverTokenAction:) forControlEvents:UIControlEventTouchUpInside];
+    recoverTokenBtn.layer.borderColor = [UIColor colorWithWhite:0.9f alpha:0.9f].CGColor;
+    recoverTokenBtn.layer.borderWidth = 0.5f;
+    [self.view addSubview:recoverTokenBtn];
     
     
     //push按钮
@@ -132,7 +155,7 @@
     
     
     //状态显示
-    UILabel *logL = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(_pushBtn.frame), [UIScreen mainScreen].bounds.size.width, 25)];
+    UILabel *logL = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(_pushBtn.frame), [UIScreen mainScreen].bounds.size.width, 20)];
     logL.text = @"console:";
     logL.textColor = PSRGBS(50);
     logL.font = [UIFont boldSystemFontOfSize:14.0];
@@ -241,6 +264,14 @@
                 [[NSUserDefaults standardUserDefaults] synchronize];
             }
             
+            //推送成功以后，才把token存起来
+            NSString *token = _tokenField.text;
+            if(token && ![token isEqualToString:@""])
+            {
+                [[NSUserDefaults standardUserDefaults] setObject:token forKey:savekey_devicetoken_customize];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+            
             //处理推送成功
             
             
@@ -256,8 +287,8 @@
         _connectBtn.enabled = NO;
         _connectBtn.backgroundColor = PSRGBS(170);
         [UIView animateWithDuration:0.25 animations:^{
-            _connectBtn.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width-70, 40);
-            _disConnectBtn.frame = CGRectMake([UIScreen mainScreen].bounds.size.width-70, 0, 70, 40);
+            _connectBtn.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width-70, 35);
+            _disConnectBtn.frame = CGRectMake([UIScreen mainScreen].bounds.size.width-70, 0, 70, 35);
         }];
     }
     else
@@ -265,8 +296,8 @@
         _connectBtn.enabled = YES;
         _connectBtn.backgroundColor = PSRGBS(130);
         [UIView animateWithDuration:0.25 animations:^{
-            _connectBtn.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 40);
-            _disConnectBtn.frame = CGRectMake([UIScreen mainScreen].bounds.size.width, 0, 70, 40);
+            _connectBtn.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 35);
+            _disConnectBtn.frame = CGRectMake([UIScreen mainScreen].bounds.size.width, 0, 70, 35);
         }];
     }
 }
@@ -276,10 +307,6 @@
     if([_payloadTextView isFirstResponder])
     {
         [_payloadTextView resignFirstResponder];
-    }
-    else if([_tokenField isFirstResponder])
-    {
-        [_tokenField resignFirstResponder];
     }
 }
 
@@ -306,22 +333,30 @@
     _payloadTextView.text = [self getUseablePayload];
 }
 
-- (void)recoverDeviceTokenAction:(id)sender
+
+- (void)pasteTokenAction:(id)sender
+{
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    _tokenField.text = pasteboard.string;
+}
+
+- (void)recoverTokenAction:(id)sender
 {
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:savekey_devicetoken_customize];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    _payloadTextView.text = [self getUseablePayload];
-    
-    //TO DO: 需要对self token按钮做隐藏操作
-    
+    _tokenField.text = [self getUseableDeviceToken];
 }
-
-
 
 
 #pragma mark -
 #pragma mark - 一些配套方法
+- (void)addLineBelow:(UIView *)viewObj
+{
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(viewObj.frame), [UIScreen mainScreen].bounds.size.width, 0.5)];
+    line.backgroundColor = PSRGBS(220);
+    [self.view addSubview:line];
+}
 - (NSDictionary *)getPayloadDic
 {
     NSString *payloadStr = _payloadTextView.text;

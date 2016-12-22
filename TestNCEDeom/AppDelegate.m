@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import <UserNotifications/UserNotifications.h>
 #import "ViewController.h"
+#import "RDPushSimuVC.h"
 
 @interface AppDelegate ()
 
@@ -81,6 +82,8 @@
                                  stringByReplacingOccurrencesOfString:@" " withString:@""];
     NSLog(@"deviceTokenSt:%@",deviceTokenStr);
     
+    //给推送模拟器存一份
+    [RDPushSimuVC saveAppDeviceToken:deviceTokenStr];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error 

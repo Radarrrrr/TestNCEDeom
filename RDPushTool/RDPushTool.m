@@ -338,7 +338,7 @@
     
     //获取推送结果
     dispatch_async(_serial, ^{
-        NSUInteger failed = [_hub pushPayload:payload token:token];
+        NSUInteger failed = [_hub pushPayload:payload token:token]; //TO DO: 这个地方需要调整， _hub为nil，竟然也能进来，然后竟然返回推送成功。。。。
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC));
         dispatch_after(popTime, _serial, ^(void){
             
