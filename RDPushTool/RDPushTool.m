@@ -169,7 +169,7 @@
 - (void)connect:(void(^)(PTConnectReport *report))completion
 {    
     //连结APNs
-    if(_hub)   //TO DO: 这个地方还得再考虑，是否如果有了hub，就算是连结状态呢？有hub也可能没有连接成功因为有可能写连接失败，这个地方需要调研一下，是否有check连接状态的api存在，如果没有，就只能根据推送失败的report，自己断开连接再重连了
+    if(_hub)
     {
         if(completion)
         {
@@ -237,15 +237,15 @@
     NSString *apnsEnviro = descriptionForEnvironent(environment);
     NSString *summary = [NSString stringWithFormat:@"%@ (%@)", apnsServer, apnsEnviro];
     
+    NSString *reportMsg = [NSString stringWithFormat:@"正在连接... %@", summary];
+    [self broadCastReportMsg:reportMsg];
+    
     report.status = PTConnectReportStatusConnecting;
     report.summary = summary;
     if(completion)
     {
         completion(report);
     }
-    
-    NSString *reportMsg = [NSString stringWithFormat:@"正在连接... %@", summary];
-    [self broadCastReportMsg:reportMsg];
     
     
     //连接结果
@@ -275,17 +275,19 @@
                 report.summary = error.localizedDescription;
             }
             
+            [self broadCastReportMsg:reportMsg];
+            
             if(completion)
             {
                 completion(report);
             }
-            
-            [self broadCastReportMsg:reportMsg];
+    
         });
     });
 }
 
-- (void)pushPayload:(NSDictionary *)payloadDic toToken:(NSString *)deviceToken completion:(void(^)(PTPushReport *report))completion
+
+- (void)pushThePayload:(NSDictionary *)payloadDic toToken:(NSString *)deviceToken completion:(void(^)(PTPushReport *report))completion
 {
     //如果连接都没有建立起来
     if(!_hub)
@@ -298,13 +300,13 @@
         report.status = PTPushReportStatusPushFailure;
         report.summary = @"push failure，no connection with apns!";
         
+        NSString *reportMsg = [NSString stringWithFormat:@"推送失败...: 没有与APNs建立连接"];
+        [self broadCastReportMsg:reportMsg];
+        
         if(completion)
         {
             completion(report);
         }
-        
-        NSString *reportMsg = [NSString stringWithFormat:@"推送失败...: 没有与APNs建立连接"];
-        [self broadCastReportMsg:reportMsg];
         
         return;
     }
@@ -323,15 +325,15 @@
     {
         NSLog(@"push failure...input parameters error!");
         
+        NSString *reportMsg = [NSString stringWithFormat:@"推送失败...: 传入参数错误"];
+        [self broadCastReportMsg:reportMsg];
+        
         report.status = PTPushReportStatusPushFailure;
         report.summary = @"push failure，input parameters error!";
         if(completion)
         {
             completion(report);
         }
-
-        NSString *reportMsg = [NSString stringWithFormat:@"推送失败...: 传入参数错误"];
-        [self broadCastReportMsg:reportMsg];
         
         return;
     }
@@ -345,15 +347,15 @@
     //开始推送
     NSLog(@"Pushing..");
     
+    NSString *reportMsg = [NSString stringWithFormat:@"payload推送中..."];
+    [self broadCastReportMsg:reportMsg];
+    
     report.status = PTPushReportStatusPushing;
     report.summary = @"payload pushing...";
     if(completion)
     {
         completion(report);
     }
-    
-    NSString *reportMsg = [NSString stringWithFormat:@"payload推送中..."];
-    [self broadCastReportMsg:reportMsg];
     
     
     //获取推送结果
@@ -394,6 +396,53 @@
 }
 
 
+- (void)pushPayload:(NSDictionary *)payloadDic toToken:(NSString *)deviceToken completion:(void(^)(PTPushReport *report))completion
+{
+    [self pushThePayload:payloadDic toToken:deviceToken completion:^(PTPushReport *pushReport) {
+                
+        if(pushReport.status == PTPushReportStatusPushing || pushReport.status == PTPushReportStatusPushSuccess)
+        {
+            //推送中或者推送成功，直接返回
+            if(completion)
+            {
+                completion(pushReport);
+            }
+        }
+        else
+        {
+            //如果推送失败，则重连一次，重新推送
+            [self disconnect];
+            [self connect:^(PTConnectReport *connectReport) {
+                if(connectReport.status == PTConnectReportStatusConnectSuccess)
+                {
+                    //如果重连成功，则再次推送，这次不管推送成功与否，都返回
+                    [self pushThePayload:payloadDic toToken:deviceToken completion:^(PTPushReport *report) {
+                        if(completion)
+                        {
+                            completion(report);
+                        }
+                    }];
+                }
+                else if(connectReport.status == PTConnectReportStatusConnectFailure)
+                {
+                    //如果重连失败，则返回推送失败
+                    if(completion)
+                    {
+                        completion(pushReport);
+                    }
+                }
+                else
+                {
+                    //do nothing
+                }
+            }];
+        }
+    }];
+    
+}
+
+
+
 
 #pragma mark -
 #pragma mark NWHubDelegate返回方法
@@ -402,6 +451,10 @@
     //推送失败进这里
     dispatch_async(dispatch_get_main_queue(), ^{
         NSLog(@"Notification error: %@", error.localizedDescription);
+        
+        NSString *reportMsg = [NSString stringWithFormat:@"推送失败...: %@", error.localizedDescription];
+        [self broadCastReportMsg:reportMsg];
+        
         
         PTPushReport *report = [[PTPushReport alloc] init];
         report.status = PTPushReportStatusPushFailure;
@@ -417,9 +470,6 @@
         {
             _pushCompletionBlock(report);
         }
-        
-        NSString *reportMsg = [NSString stringWithFormat:@"推送失败...: %@", error.localizedDescription];
-        [self broadCastReportMsg:reportMsg];
         
     });
 }
