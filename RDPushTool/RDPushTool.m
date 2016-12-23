@@ -287,6 +287,29 @@
 
 - (void)pushPayload:(NSDictionary *)payloadDic toToken:(NSString *)deviceToken completion:(void(^)(PTPushReport *report))completion
 {
+    //如果连接都没有建立起来
+    if(!_hub)
+    {
+        NSLog(@"push failure...no connection with apns!");
+        
+        PTPushReport *report = [[PTPushReport alloc] init];
+        report.payload = payloadDic;
+        report.deviceToken = deviceToken;
+        report.status = PTPushReportStatusPushFailure;
+        report.summary = @"push failure，no connection with apns!";
+        
+        if(completion)
+        {
+            completion(report);
+        }
+        
+        NSString *reportMsg = [NSString stringWithFormat:@"推送失败...: 没有与APNs建立连接"];
+        [self broadCastReportMsg:reportMsg];
+        
+        return;
+    }
+    
+    
     //接一下block
     self.pushCompletionBlock = completion;
     
@@ -298,7 +321,7 @@
     //推送payload
     if(!payloadDic || ![payloadDic isKindOfClass:[NSDictionary class]] || !PTSTRVALID(deviceToken)) 
     {
-        NSLog(@"push failure...input parameters error");
+        NSLog(@"push failure...input parameters error!");
         
         report.status = PTPushReportStatusPushFailure;
         report.summary = @"push failure，input parameters error!";
@@ -335,7 +358,7 @@
     
     //获取推送结果
     dispatch_async(_serial, ^{
-        NSUInteger failed = [_hub pushPayload:payload token:token]; //TO DO: 这个地方需要调整， _hub为nil，竟然也能进来，然后竟然返回推送成功。。。。
+        NSUInteger failed = [_hub pushPayload:payload token:token]; 
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC));
         dispatch_after(popTime, _serial, ^(void){
             
