@@ -169,7 +169,7 @@
 - (void)connect:(void(^)(PTConnectReport *report))completion
 {    
     //连结APNs
-    if(_hub)   //TO DO: 这个地方还得再考虑，是否如果有了hub，就算是连结状态呢？
+    if(_hub)   //TO DO: 这个地方还得再考虑，是否如果有了hub，就算是连结状态呢？有hub也可能没有连接成功因为有可能写连接失败，这个地方需要调研一下，是否有check连接状态的api存在，如果没有，就只能根据推送失败的report，自己断开连接再重连了
     {
         if(completion)
         {
