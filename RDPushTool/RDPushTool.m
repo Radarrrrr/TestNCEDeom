@@ -314,10 +314,7 @@
     }
     
     
-    //设定参数
-    //NSString *payload = [NSString stringWithFormat:@"{\"aps\":{\"alert\":\"%@\",\"badge\":1,\"sound\":\"default\"}}", _textField.text];
-    //NSString *token = kdeviceToken;
-    
+    //设定参数    
     NSString *payload = [RDPushTool jsonFromDictionary:payloadDic];
     NSString *token = deviceToken;
     
@@ -368,32 +365,6 @@
                     completion(report);
                 }
             });
-                
-                
-//            BOOL pushed = NO;
-//            NSString *reportMsg = [NSString stringWithFormat:@"推送失败..."];
-//            
-//            report.status = PTPushReportStatusPushFailure;
-//            report.summary = @"payload push failure...";
-//            
-//            NSUInteger failed2 = failed + [_hub readFailed];
-//            if(!failed2) 
-//            {
-//                pushed = YES;
-//                
-//                NSLog(@"Payload has been pushed");
-//                reportMsg = [NSString stringWithFormat:@"推送成功!..."];
-//                
-//                report.status = PTPushReportStatusPushSuccess;
-//                report.summary = @"payload push success!...";
-//            }
-//            
-//            [self broadCastReportMsg:reportMsg];
-//            
-//            if(completion)
-//            {
-//                completion(report);
-//            }
             
         });
     });
