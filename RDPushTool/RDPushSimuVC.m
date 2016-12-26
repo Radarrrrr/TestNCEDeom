@@ -239,27 +239,29 @@
 {
     [[RDPushTool sharedTool] connect:^(PTConnectReport *report) {
         
-        NSString *stateStr = @"";
+//        NSString *stateStr = @"";
+//        
+//        if(report.status == PTConnectReportStatusConnecting)
+//        {
+//            _connectBtn.enabled = NO;
+//            stateStr = [NSString stringWithFormat:@"Connecting to APNs... : %@", report.summary];
+//        }
+//        else if(report.status == PTConnectReportStatusConnectSuccess)
+//        {
+//            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+//            
+//            stateStr = [NSString stringWithFormat:@"APNs Connected: %@", report.summary];
+//            [self showDiscConnectBtn:YES];
+//        }
+//        else if(report.status == PTConnectReportStatusConnectFailure)
+//        {
+//            stateStr = [NSString stringWithFormat:@"Connect failure...: %@, Press to reconnect.", report.summary];
+//            [self showDiscConnectBtn:NO];
+//        }
+//        
+//        [_connectBtn setTitle:stateStr forState:UIControlStateNormal];
         
-        if(report.status == PTConnectReportStatusConnecting)
-        {
-            _connectBtn.enabled = NO;
-            stateStr = [NSString stringWithFormat:@"Connecting to APNs... : %@", report.summary];
-        }
-        else if(report.status == PTConnectReportStatusConnectSuccess)
-        {
-            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-            
-            stateStr = [NSString stringWithFormat:@"APNs Connected: %@", report.summary];
-            [self showDiscConnectBtn:YES];
-        }
-        else if(report.status == PTConnectReportStatusConnectFailure)
-        {
-            stateStr = [NSString stringWithFormat:@"Connect failure...: %@, Press to reconnect.", report.summary];
-            [self showDiscConnectBtn:NO];
-        }
-        
-        [_connectBtn setTitle:stateStr forState:UIControlStateNormal];
+        [self changeConnectBtnStateForStatus:report.status andSummary:report.summary];
         
     }];
 }
@@ -307,7 +309,30 @@
 
 
 
-
+- (void)changeConnectBtnStateForStatus:(PTConnectReportStatus)status andSummary:(NSString *)summary
+{
+    NSString *stateStr = @"";
+    
+    if(status == PTConnectReportStatusConnecting)
+    {
+        _connectBtn.enabled = NO;
+        stateStr = [NSString stringWithFormat:@"Connecting to APNs... : %@", summary];
+    }
+    else if(status == PTConnectReportStatusConnectSuccess)
+    {
+        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+        
+        stateStr = [NSString stringWithFormat:@"APNs Connected: %@", summary];
+        [self showDiscConnectBtn:YES];
+    }
+    else if(status == PTConnectReportStatusConnectFailure)
+    {
+        stateStr = [NSString stringWithFormat:@"Connect failure...: %@, Press to reconnect.", summary];
+        [self showDiscConnectBtn:NO];
+    }
+    
+    [_connectBtn setTitle:stateStr forState:UIControlStateNormal];
+}
 
 - (void)showDiscConnectBtn:(BOOL)bshow
 {
@@ -458,11 +483,34 @@
     
     NSDictionary *report = (NSDictionary*)notification.object;
     if(!report) return;
-    
-    //根据report的内容，修改界面显示内容log
+
+    //根据report的内容
     NSString *status = [report objectForKey:@"status"];
     NSString *summary = [report objectForKey:@"summary"];
     
+    //处理一下连接按钮显示状态
+    if([status isEqualToString:RDPushTool_report_status_connecting] ||
+       [status isEqualToString:RDPushTool_report_status_Connectsuccess]||
+       [status isEqualToString:RDPushTool_report_status_Connectfailure])
+    {
+        PTConnectReportStatus connectStatus = PTConnectReportStatusConnecting;
+        if([status isEqualToString:RDPushTool_report_status_connecting])
+        {
+            connectStatus = PTConnectReportStatusConnecting;
+        }
+        else if([status isEqualToString:RDPushTool_report_status_Connectsuccess])
+        {
+            connectStatus = PTConnectReportStatusConnectSuccess;
+        }
+        else if([status isEqualToString:RDPushTool_report_status_Connectfailure])
+        {
+            connectStatus = PTConnectReportStatusConnectFailure;
+        }
+        
+        [self changeConnectBtnStateForStatus:connectStatus andSummary:summary];
+    }
+    
+    //修改界面显示内容log
     NSString *log = [NSString stringWithFormat:@"%@... ", status];
     if(summary)
     {
