@@ -159,6 +159,16 @@
     self.logString = @"welcome to push simulator!";
     _logTextView.text = _logString;
     
+    UIButton *clearLogBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    clearLogBtn.frame = CGRectMake(CGRectGetMaxX(_logTextView.frame)-30, CGRectGetMinY(_logTextView.frame), 30, 30);
+    clearLogBtn.backgroundColor = [UIColor clearColor];
+    [clearLogBtn setTitle:@"X" forState:UIControlStateNormal];
+    [clearLogBtn setTitleColor:PSRGBS(100) forState:UIControlStateNormal];
+    clearLogBtn.titleLabel.font = [UIFont boldSystemFontOfSize:13];
+    [clearLogBtn addTarget:self action:@selector(clearLogViewAction:) forControlEvents:UIControlEventTouchUpInside];
+    clearLogBtn.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:0.8f].CGColor;
+    clearLogBtn.layer.borderWidth = 0.5f;
+    [self.view addSubview:clearLogBtn];
     
     
     
@@ -264,7 +274,8 @@
 
 - (void)pushAction:(id)sender
 {
-    //TO DO: 推送消息，并显示推送状态和summary
+    [self addLogToLogView:@"-----------------------------"];
+    
     NSString *deviceToken = _tokenField.text;
     NSDictionary *payloadDic = [self getPayloadDic];
     
@@ -288,8 +299,7 @@
                 [[NSUserDefaults standardUserDefaults] synchronize];
             }
             
-            //处理推送成功
-            
+            //TO DO: 处理推送成功
             
         }
     }];
@@ -367,6 +377,16 @@
     }
 }
 
+- (void)clearLogViewAction:(id)sender
+{
+    self.logString = @"";
+    _logTextView.text = _logString;
+        
+    //滚动到最顶
+    [_logTextView setContentOffset:CGPointMake(0, 0) animated:NO];
+}
+
+
 
 
 
@@ -440,8 +460,15 @@
     if(!report) return;
     
     //根据report的内容，修改界面显示内容log
+    [self addLogToLogView:report];
+}
+
+- (void)addLogToLogView:(NSString*)log
+{
+    if(!log) return;
+    
     NSString *time = [self stringFromDate:[NSDate date] useFormat:@"hh:mm:ss"];
-    self.logString = [_logString stringByAppendingFormat:@"\n%@ > %@", time, report];
+    self.logString = [_logString stringByAppendingFormat:@"\n%@ > %@", time, log];
     
     _logTextView.text = _logString;
     
