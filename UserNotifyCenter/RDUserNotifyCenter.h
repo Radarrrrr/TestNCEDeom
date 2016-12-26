@@ -134,7 +134,7 @@
 #pragma mark 一些通用的宏，用来全局使用，统一改动
 //TO DO: 用程序获得group suit,才能全自动！
 //TO DO: 想办法把这两个宏都弄成自动的才行
-#define RDUserNotifyCenter_app_group_suite      @"group.com.dangdang.app"       //app group的suitname，必须和设置里边制定的相同
+#define RDUserNotifyCenter_app_group_suite      @"group.com.dangdang.app"       //app group的suitname，必须和设置里边指定的相同
 #define RDUserNotifyCenter_default_attach_key   @"attach"                       //通知payload里边，默认的attachment文件的字段，建议接口端按照这个字段设定，否则需要客户端由此宏修改来指定
 
 

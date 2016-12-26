@@ -108,10 +108,7 @@ typedef enum {
 - (void)connect:(void(^)(PTConnectReport *report))completion; //连接到APNs，异步完成，通过返回状态判断是否连接成功 //PS: report不会为nil，外部可以不用判断容错
 - (void)disconnect;                                //从APNs断开连结, 顺序完成，不需要异步处理
 
-- (void)pushPayload:(NSDictionary *)payloadDic toToken:(NSString *)deviceToken completion:(void(^)(PTPushReport *report))completion; //推送消息，返回是否推送成功，可以连续推送，里边有队列，//PS: report不会为nil，外部可以不用判断容错  //TO DO: 需要再考虑如何锁定连续操作的情况 
-
-
-//TO DO: 需要调研是否可以检测当前的连结状态，是否正在连接或者是否断开连结了
+- (void)pushPayload:(NSDictionary *)payloadDic toToken:(NSString *)deviceToken completion:(void(^)(PTPushReport *report))completion; //推送消息，返回是否推送成功，可以连续推送，里边有队列，//PS: report不会为nil，外部可以不用判断容错  
 
 
 //TO DO: 需要考虑沙盒与正式环境两种情况的切换，尽量简洁,可考虑从配置里边抓去debug还是appstore或adhoc来自动选择对应的证书
