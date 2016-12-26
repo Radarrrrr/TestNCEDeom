@@ -38,8 +38,19 @@ static NSString * const kdeviceToken = @"c79b18192ea895c33a58bd411dd4309d01f6ae6
 
 
 
-//用来做本类的report的广播标志宏
+//log report的广播发送和接收标志宏
 #define NOTIFICATION_RDPUSHTOOL_REPORT @"notification_rdpushtool_report"
+
+//log report的状态宏
+#define RDPushTool_report_status_readP12fail        @"读取P12文件失败"
+#define RDPushTool_report_status_importP12fail      @"加载P12文件失败"
+#define RDPushTool_report_status_disonnected        @"断开连接"
+#define RDPushTool_report_status_connecting         @"正在连接"
+#define RDPushTool_report_status_Connectsuccess     @"APNs连接成功"
+#define RDPushTool_report_status_Connectfailure     @"APNs连接失败"
+#define RDPushTool_report_status_pushing            @"payload推送中"
+#define RDPushTool_report_status_pushsuccess        @"推送成功"
+#define RDPushTool_report_status_pushfailure        @"推送失败"
 
 
 

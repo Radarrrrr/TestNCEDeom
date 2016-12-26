@@ -456,11 +456,20 @@
 {
     if(!notification) return;
     
-    NSString *report = (NSString*)notification.object;
+    NSDictionary *report = (NSDictionary*)notification.object;
     if(!report) return;
     
     //根据report的内容，修改界面显示内容log
-    [self addLogToLogView:report];
+    NSString *status = [report objectForKey:@"status"];
+    NSString *summary = [report objectForKey:@"summary"];
+    
+    NSString *log = [NSString stringWithFormat:@"%@... ", status];
+    if(summary)
+    {
+        log = [log stringByAppendingFormat:@":%@", summary];
+    }
+    
+    [self addLogToLogView:log];
 }
 
 - (void)addLogToLogView:(NSString*)log
