@@ -33,7 +33,7 @@ static NSString * const pkcs12Password = @"123456";
 
 // TODO: Set the device token of the device you want to push to, see
 //       `-application:didRegisterForRemoteNotificationsWithDeviceToken:` for more details.
-static NSString * const kdeviceToken = @"c79b18192ea895c33a58bd411dd4309d01f6ae6b8fd8804def2ecad4510a40c7";
+//static NSString * const kdeviceToken = @"c79b18192ea895c33a58bd411dd4309d01f6ae6b8fd8804def2ecad4510a40c7";
 
 
 
