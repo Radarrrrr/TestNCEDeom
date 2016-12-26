@@ -39,7 +39,7 @@
 @property (nonatomic) NWIdentityRef identity;
 @property (nonatomic) NWCertificateRef certificate;
 
-@property (nonatomic, strong) void(^pushCompletionBlock)(PTPushReport *report);
+@property (nonatomic, copy) void(^pushCompletionBlock)(PTPushReport *report);
 
 @end
 
@@ -398,8 +398,11 @@
 
 - (void)pushPayload:(NSDictionary *)payloadDic toToken:(NSString *)deviceToken completion:(void(^)(PTPushReport *report))completion
 {
+    __weak RDPushTool *weakSelf = self;
+    
     [self pushThePayload:payloadDic toToken:deviceToken completion:^(PTPushReport *pushReport) {
-                
+        
+        __strong RDPushTool *sSelf = weakSelf;
         if(pushReport.status == PTPushReportStatusPushing || pushReport.status == PTPushReportStatusPushSuccess)
         {
             //推送中或者推送成功，直接返回
@@ -411,12 +414,14 @@
         else
         {
             //如果推送失败，则重连一次，重新推送
-            [self disconnect];
-            [self connect:^(PTConnectReport *connectReport) {
+            [sSelf disconnect];
+            [sSelf connect:^(PTConnectReport *connectReport) {
+                
+                __strong RDPushTool *ssSelf = sSelf;
                 if(connectReport.status == PTConnectReportStatusConnectSuccess)
                 {
                     //如果重连成功，则再次推送，这次不管推送成功与否，都返回
-                    [self pushThePayload:payloadDic toToken:deviceToken completion:^(PTPushReport *report) {
+                    [ssSelf pushThePayload:payloadDic toToken:deviceToken completion:^(PTPushReport *report) {
                         if(completion)
                         {
                             completion(report);
