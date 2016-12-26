@@ -7,6 +7,13 @@
 //
 
 #import "RDPushTool.h"
+#import "NWHub.h"
+#import "NWLCore.h"
+#import "NWNotification.h"
+#import "NWPusher.h"
+#import "NWSSLConnection.h"
+#import "NWSecTools.h"
+
 
 
 //工具宏
@@ -30,7 +37,7 @@
 
 #pragma mark -
 #pragma mark 主类
-@interface RDPushTool ()
+@interface RDPushTool () <NWHubDelegate>
 
 @property (nonatomic, strong) NWHub *hub;
 @property (nonatomic) NSUInteger index;
@@ -139,11 +146,23 @@
 }
 - (void)loadCertificate
 {
-    NSURL *url = [NSBundle.mainBundle URLForResource:pkcs12FileName withExtension:nil];
+    NSString *p12FileName = nil;
+    NSString *p12Password = nil;
+    
+#ifdef DEBUG
+    p12FileName = pkcs12FileName_development;
+    p12Password = pkcs12Password_development;
+#else
+    p12FileName = pkcs12FileName_production;
+    p12Password = pkcs12Password_production;
+#endif
+    
+    
+    NSURL *url = [NSBundle.mainBundle URLForResource:p12FileName withExtension:nil];
     NSData *pkcs12 = [NSData dataWithContentsOfURL:url];
     NSError *error = nil;
     
-    NSArray *ids = [NWSecTools identitiesWithPKCS12Data:pkcs12 password:pkcs12Password error:&error];
+    NSArray *ids = [NWSecTools identitiesWithPKCS12Data:pkcs12 password:p12Password error:&error];
     if (!ids) {
         NSLog(@"Unable to read p12 file: %@", error.localizedDescription);
         
@@ -212,20 +231,6 @@
     
 }
 
-//- (void)sanboxCheckBoxDidPressed
-//{
-//    //连结沙盒，暂不知道何用
-//    if(_certificate)
-//    {
-//        [self disconnect];
-//        [self connectingToEnvironment:[self selectedEnvironmentForCertificate:_certificate]];
-//    }
-//}
-//
-//- (NWEnvironment)selectedEnvironmentForCertificate:(NWCertificateRef)certificate
-//{
-//    return _sanboxSwitch.isOn ? NWEnvironmentSandbox : NWEnvironmentProduction;
-//}
 
 - (NWEnvironment)preferredEnvironmentForCertificate:(NWCertificateRef)certificate
 {

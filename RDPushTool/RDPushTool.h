@@ -8,32 +8,25 @@
 // 消息推送工具类
 // 本类为单实例，api很简单不多介绍了
 
-//注1: 通过接收NOTIFICATION_RDPUSHTOOL_REPORT对应的广播来获取
+//注1: 必须修改本类初始化参数，设定开发和发布证书的文件名称和密码，并将该证书放在本类目录下面或者主工程目录下面，随工程一起打包
+//注2: 通过接收NOTIFICATION_RDPUSHTOOL_REPORT对应的广播来获取连接、推送等状态的log
+//注3: 通过appDelegate类中的 -application:didRegisterForRemoteNotificationsWithDeviceToken: 方法来获取deviceToken
+
+
 
 
 #import <Foundation/Foundation.h>
-#import "NWHub.h"
-#import "NWLCore.h"
-#import "NWNotification.h"
-#import "NWPusher.h"
-#import "NWSSLConnection.h"
-#import "NWSecTools.h"
-
 
 
 
 
 #pragma mark -
 #pragma mark 一些初始化参数配置
-// TODO: Export your push certificate and key in PKCS12 format to pusher.p12 in the root of the project directory.
-static NSString * const pkcs12FileName = @"pusher.p12";
+static NSString * const pkcs12FileName_development = @"pusher.p12";         //开发证书名      //Export your push certificate and key in PKCS12 format to pusher.p12 in the root of the project directory.
+static NSString * const pkcs12Password_development = @"123456";             //证书密码      //Set the password of this .p12 file
 
-// TODO: Set the password of this .p12 file below, but be careful *not* to commit passwords to a (public) repository.
-static NSString * const pkcs12Password = @"123456";
-
-// TODO: Set the device token of the device you want to push to, see
-//       `-application:didRegisterForRemoteNotificationsWithDeviceToken:` for more details.
-//static NSString * const kdeviceToken = @"c79b18192ea895c33a58bd411dd4309d01f6ae6b8fd8804def2ecad4510a40c7";
+static NSString * const pkcs12FileName_production  = @"pusher_production.p12";  //发布证书名
+static NSString * const pkcs12Password_production  = @"123456";                 //证书密码
 
 
 
@@ -51,7 +44,6 @@ static NSString * const pkcs12Password = @"123456";
 #define RDPushTool_report_status_pushing            @"payload推送中"
 #define RDPushTool_report_status_pushsuccess        @"推送成功"
 #define RDPushTool_report_status_pushfailure        @"推送失败"
-
 
 
 
@@ -97,10 +89,8 @@ typedef enum {
 
 #pragma mark -
 #pragma mark 主类
-@interface RDPushTool : NSObject <NWHubDelegate> {
+@interface RDPushTool : NSObject  
     
-}
-
 //单实例
 + (instancetype)sharedTool;
 
@@ -108,10 +98,14 @@ typedef enum {
 - (void)connect:(void(^)(PTConnectReport *report))completion; //连接到APNs，异步完成，通过返回状态判断是否连接成功 //PS: report不会为nil，外部可以不用判断容错
 - (void)disconnect;                                //从APNs断开连结, 顺序完成，不需要异步处理
 
-- (void)pushPayload:(NSDictionary *)payloadDic toToken:(NSString *)deviceToken completion:(void(^)(PTPushReport *report))completion; //推送消息，返回是否推送成功，可以连续推送，里边有队列，//PS: report不会为nil，外部可以不用判断容错  
-
-
-//TO DO: 需要考虑沙盒与正式环境两种情况的切换，尽量简洁,可考虑从配置里边抓去debug还是appstore或adhoc来自动选择对应的证书
+- (void)pushPayload:(NSDictionary *)payloadDic toToken:(NSString *)deviceToken completion:(void(^)(PTPushReport *report))completion; //推送消息，返回是否推送成功，可以连续推送，里边有队列，//PS: report不会为nil，外部可以不用判断容错
 
 
 @end
+
+
+
+
+
+
+
